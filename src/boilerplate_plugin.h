@@ -14,7 +14,7 @@
 #define PLUGIN_NAME "Boilerplate"
 
 #define TOKEN_SENT_FOUND     1
-#define TOKEN_RECEIVED_FOUND 1 << 1
+#define TOKEN_RECEIVED_FOUND (1 << 1)
 
 // Should follow the array declared in main.c
 typedef enum {
@@ -64,6 +64,8 @@ typedef struct boilerplate_parameters_t {
     uint8_t decimals_received;
     uint8_t selectorIndex;
 } boilerplate_parameters_t;
+
+_Static_assert(sizeof(boilerplate_parameters_t) <= 5 * 32, "Structure of parameters too big.");
 
 void handle_provide_parameter(void *parameters);
 void handle_query_contract_ui(void *parameters);
