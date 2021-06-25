@@ -24,7 +24,7 @@ jobs:
 
       - name: Build Boilerplate plugin
         run: |
-          make DEBUG=1
+          make 
 
       - name: Upload Boilerplate binary
         uses: actions/upload-artifact@v2
