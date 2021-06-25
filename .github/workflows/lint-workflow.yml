@@ -3,10 +3,10 @@ name: Code style check
 on:
   push:
     branches:
-    - master
+    - main
   pull_request:
     branches:
-    - master
+    - main
 
 jobs:
   job_lint:
