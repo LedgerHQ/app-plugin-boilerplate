@@ -16,6 +16,7 @@
 #define TOKEN_SENT_FOUND     1
 #define TOKEN_RECEIVED_FOUND 1 << 1
 
+// Should follow the array declared in main.c
 typedef enum {
     BOILERPLATE_DUMMY_1,
     BOILERPLATE_DUMMY_2,

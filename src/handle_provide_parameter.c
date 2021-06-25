@@ -125,7 +125,7 @@ static void handle_dummy_two(ethPluginProvideParameter_t *msg, boilerplate_param
 void handle_provide_parameter(void *parameters) {
     ethPluginProvideParameter_t *msg = (ethPluginProvideParameter_t *) parameters;
     boilerplate_parameters_t *context = (boilerplate_parameters_t *) msg->pluginContext;
-    PRINTF("eth2 plugin provide parameter %d %.*H\n",
+    PRINTF("plugin provide parameter %d %.*H\n",
            msg->parameterOffset,
            PARAMETER_LENGTH,
            msg->parameter);
