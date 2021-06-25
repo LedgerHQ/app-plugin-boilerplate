@@ -10,3 +10,4 @@ TODO:
 - [ ] Add link to examples
 - [ ] Add CI
 - [ ] Find a real smart-contract ? Or at least explain
+- [ ] Rebrand icons
