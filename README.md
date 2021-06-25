@@ -8,3 +8,4 @@ TODO:
 - [ ] Use defines or variable names to easily adapt plugin
 - [ ] Add link to documentation
 - [ ] Add link to examples
+- [ ] Add CI
