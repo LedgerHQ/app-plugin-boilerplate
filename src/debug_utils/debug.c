@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include "printf.h"
 
+// Writes the string buf using QEMU's semi-hosting features. Only usable with speculos, the device emulator!
 void debug_write(const char *buf) {
     asm volatile(
         "movs r0, #0x04\n"
@@ -11,6 +12,7 @@ void debug_write(const char *buf) {
         : "r0", "r1");
 }
 
+// Special printf function using the `debug_write` function.
 int semihosted_printf(const char *format, ...) {
     char buf[128+1];
 
