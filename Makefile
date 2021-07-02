@@ -71,17 +71,28 @@ else
 DEFINES   += IO_SEPROXYHAL_BUFFER_SIZE_B=128
 endif
 
+
 # Enabling debug PRINTF
-DEBUG:= 0
+DEBUG:= 10
 ifneq ($(DEBUG),0)
-DEFINES += HAVE_STACK_OVERFLOW_CHECK
-ifeq ($(TARGET_NAME),TARGET_NANOX)
-DEFINES   += HAVE_PRINTF PRINTF=mcu_usb_printf
+        DEFINES += HAVE_STACK_OVERFLOW_CHECK
+        SDK_SOURCE_PATH  += lib_stusb lib_stusb_impl lib_u2f
+        DEFINES   += HAVE_IO_USB HAVE_L4_USBLIB IO_USB_MAX_ENDPOINTS=4 IO_HID_EP_LENGTH=64 HAVE_USB_APDU
+
+        ifeq ($(DEBUG),10)
+                $(warning Using semihosted PRINTF. Only run with speculos!)
+                CFLAGS    += -include src/debug_utils/debug.h
+                DEFINES   += HAVE_PRINTF PRINTF=semihosted_printf
+        else
+                ifeq ($(TARGET_NAME),TARGET_NANOX)
+                        DEFINES   += HAVE_PRINTF PRINTF=mcu_usb_printf
+                else
+                        DEFINES   += HAVE_PRINTF PRINTF=screen_printf
+                endif
+
+        endif
 else
-DEFINES   += HAVE_PRINTF PRINTF=screen_printf
-endif
-else
-DEFINES   += PRINTF\(...\)=
+        DEFINES   += PRINTF\(...\)=
 endif
 
 ##############
