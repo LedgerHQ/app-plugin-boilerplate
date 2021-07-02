@@ -2,12 +2,10 @@
 
 Boilerplate repo to get your plugin started!
 
+This is WIP, here's a small list of what still needs to be done:
 TODO:
-- [ ] Add stub code
 - [ ] Add test folder
-- [ ] Use defines or variable names to easily adapt plugin
-- [ ] Add link to documentation
-- [ ] Add link to examples
+- [ ] Add links to documentation
+- [ ] Add links to examples
 - [ ] Add CI
-- [ ] Find a real smart-contract ? Or at least explain
 - [ ] Rebrand icons
