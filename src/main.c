@@ -31,7 +31,8 @@ static const uint8_t BOILERPLATE_DUMMY_SELECTOR_1[SELECTOR_SIZE] = {0xde, 0xad, 
 // Example of selector 2
 static const uint8_t BOILERPLATE_DUMMY_SELECTOR_2[SELECTOR_SIZE] = {0x13, 0x37, 0x42, 0x42};
 
-// Array of all the different boilerplate selectors. Make sure this follows the same order as the enum defined in `boilerplate_plugin.h`
+// Array of all the different boilerplate selectors. Make sure this follows the same order as the
+// enum defined in `boilerplate_plugin.h`
 const uint8_t *const BOILERPLATE_SELECTORS[NUM_BOILERPLATE_SELECTORS] = {
     BOILERPLATE_DUMMY_SELECTOR_1,
     BOILERPLATE_DUMMY_SELECTOR_2,
