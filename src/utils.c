@@ -21,5 +21,5 @@ void get_public_key(uint8_t bip32PathLength,
     cx_ecfp_generate_pair(CX_CURVE_256K1, &publicKey, &privateKey, 1);
     explicit_bzero(&privateKey, sizeof(privateKey));
     explicit_bzero(privateKeyData, sizeof(privateKeyData));
-    getEthAddressStringFromKey(&publicKey, (uint8_t *) out, &sha3Context, chain_config);
+    getEthAddressFromKey(&publicKey, (uint8_t *) out, &sha3Context, chain_config);
 }
