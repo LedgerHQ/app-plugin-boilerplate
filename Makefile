@@ -22,6 +22,11 @@ endif
 include $(BOLOS_SDK)/Makefile.defines
 
 APP_LOAD_PARAMS += --appFlags 0x800
+
+# Add a random path because if the application has no path then it can derive on any path.
+# In the future, apps with no path specified won't be able to derive on any path. We will the remove this param.
+APP_LOAD_PARAMS += --path "42/42/13/37"
+
 APP_LOAD_PARAMS += $(COMMON_LOAD_PARAMS)
 
 APPVERSION_M     = 1
@@ -73,7 +78,7 @@ endif
 
 
 # Enabling debug PRINTF
-DEBUG:= 10
+DEBUG:= 0
 ifneq ($(DEBUG),0)
         DEFINES += HAVE_STACK_OVERFLOW_CHECK
         SDK_SOURCE_PATH  += lib_stusb lib_stusb_impl lib_u2f
