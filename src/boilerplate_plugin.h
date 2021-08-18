@@ -4,19 +4,7 @@
 #include "eth_plugin_interface.h"
 #include <string.h>
 
-// Size of parameters passed in by the Ethereum app. No need to modify it. TODO: mov eit to
-// `eth_plugin_interals.h`.
-#define PARAMETER_LENGTH 32
-
-// Size of the smart-contract method. No need to modify it. TODO: mov eit to
-// `eth_plugin_interals.h`.
-#define SELECTOR_SIZE 4
-
-// Value to be passed in as parameter when calling the Ethereum app. TODO: mov eit to
-// `eth_plugin_interals.h`.
-#define RUN_APPLICATION 1
-
-// Number of selectors defined in this plugin.
+// Number of selectors defined in this plugin. Should match the enum `boilerPlateSelector_t`.
 #define NUM_BOILERPLATE_SELECTORS 2
 
 // Name of the plugin.
@@ -80,7 +68,6 @@ typedef struct boilerplate_parameters_t {
 
 // Piece of code that will check that the above structure is not bigger than 5 * 32. Do not remove
 // this check.
-// TODO: unify this with the check in ethPluginInitContract.
 _Static_assert(sizeof(boilerplate_parameters_t) <= 5 * 32, "Structure of parameters too big.");
 
 void handle_provide_parameter(void *parameters);
