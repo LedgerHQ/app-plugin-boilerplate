@@ -27,12 +27,13 @@
 // Define here all the selectors you wish to support.
 
 // Example of selector 1
+// EDIT THIS: Adapt the variable names and change the `0x` values to match your selectors.
 static const uint8_t BOILERPLATE_DUMMY_SELECTOR_1[SELECTOR_SIZE] = {0xde, 0xad, 0xbe, 0xef};
-// Example of selector 2
 static const uint8_t BOILERPLATE_DUMMY_SELECTOR_2[SELECTOR_SIZE] = {0x13, 0x37, 0x42, 0x42};
 
 // Array of all the different boilerplate selectors. Make sure this follows the same order as the
 // enum defined in `boilerplate_plugin.h`
+// EDIT THIS: Use the names of the array declared above.
 const uint8_t *const BOILERPLATE_SELECTORS[NUM_BOILERPLATE_SELECTORS] = {
     BOILERPLATE_DUMMY_SELECTOR_1,
     BOILERPLATE_DUMMY_SELECTOR_2,
@@ -74,7 +75,7 @@ void call_app_ethereum() {
     os_lib_call((unsigned int *) &libcall_params);
 }
 
-// Weird low-level black magic.
+// Weird low-level black magic. No need to edit this.
 __attribute__((section(".boot"))) int main(int arg0) {
     // Low-level black magic, don't touch.
     // exit critical section

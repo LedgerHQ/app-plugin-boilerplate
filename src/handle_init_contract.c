@@ -23,8 +23,6 @@ void handle_init_contract(void *parameters) {
 
     // Initialize the context (to 0).
     memset(context, 0, sizeof(*context));
-    // Mark context as valid.
-    context->valid = 1;
 
     // Look for the index of the selectorIndex passed in by `msg`.
     uint8_t i;
@@ -37,11 +35,12 @@ void handle_init_contract(void *parameters) {
 
     // If `i == NUM_BOILERPLATE_SELECTOR` it means we haven't found the selector. Return an error.
     if (i == NUM_BOILERPLATE_SELECTORS) {
-        context->valid = 0;
         msg->result = ETH_PLUGIN_RESULT_UNAVAILABLE;
     }
 
     // Set `next_param` to be the first field we expect to parse.
+    // EDIT THIS: Adapt the `cases`, and set the `next_param` to be the first parameter you expect
+    // to parse.
     switch (context->selectorIndex) {
         case BOILERPLATE_DUMMY_1:
             context->next_param = TOKEN_SENT;

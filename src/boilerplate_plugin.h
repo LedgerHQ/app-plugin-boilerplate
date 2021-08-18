@@ -5,9 +5,11 @@
 #include <string.h>
 
 // Number of selectors defined in this plugin. Should match the enum `boilerPlateSelector_t`.
+// EDIT THIS: Put in the number of selectors your plugin is going to support.
 #define NUM_BOILERPLATE_SELECTORS 2
 
 // Name of the plugin.
+// EDIT THIS: Replace with your plugin name.
 #define PLUGIN_NAME "Boilerplate"
 
 // TODO: add doc.
@@ -21,7 +23,7 @@ typedef enum {
     BOILERPLATE_DUMMY_2,
 } boilerplateSelector_t;
 
-// Enumeration used to parse the smart-contract data.
+// Enumeration used to parse the smart contract data.
 typedef enum {
     TOKEN_SENT,
     TOKEN_RECEIVED,
@@ -36,7 +38,6 @@ typedef enum {
     SEND_SCREEN,
     RECEIVE_SCREEN,
     BENEFICIARY_SCREEN,
-    WARN_SCREEN,
     ERROR,  // This variant indicates that an error occured. No display should occur.
 } screens_t;
 
@@ -60,7 +61,6 @@ typedef struct boilerplate_parameters_t {
 
     uint8_t next_param;
     uint8_t tokens_found;
-    uint8_t valid;
     uint8_t decimals_sent;
     uint8_t decimals_received;
     uint8_t selectorIndex;
