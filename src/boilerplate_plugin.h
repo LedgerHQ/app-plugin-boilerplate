@@ -32,6 +32,7 @@ typedef enum {
     BENEFICIARY,
     PATH_OFFSET,
     PATH_LENGTH,
+    UNEXPECTED_PARAMETER,
 } parameter;
 
 // Enumeration of different screens that the plugin might display.
@@ -39,7 +40,7 @@ typedef enum {
     SEND_SCREEN,
     RECEIVE_SCREEN,
     BENEFICIARY_SCREEN,
-    ERROR,  // This variant indicates that an error occured. No display should occur.
+    SCREEN_ERROR,  // This variant indicates that an error occured. No display should occur.
 } screens_t;
 
 // EDIT THIS: Rename `BOILERPLATE` to be the same as the one initialized in `main.c`.
@@ -53,9 +54,9 @@ typedef struct context_t {
     uint8_t amount_received[INT256_LENGTH];
     char beneficiary[ADDRESS_LENGTH];
     uint8_t token_received[ADDRESS_LENGTH];
-    char ticker_received[MAX_TICKER_LEN];
-    uint8_t tokens_found;
-    uint8_t decimals_received;
+    char ticker[MAX_TICKER_LEN];
+    uint8_t decimals;
+    uint8_t token_found;
 
     // For parsing data.
     uint8_t next_param;  // Set to be the next param we expect to parse.

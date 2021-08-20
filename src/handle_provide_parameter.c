@@ -48,7 +48,7 @@ static void handle_swap_exact_eth_for_tokens(ethPluginProvideParameter_t *msg, c
             break;
         case TOKEN_RECEIVED:  // path[1] -> contract address of token received
             copy_address(context->token_received, sizeof(context->token_received), msg->parameter);
-            context->next_param = -1;  // SCOTT fix
+            context->next_param = UNEXPECTED_PARAMETER;
             break;
         // Keep this
         default:

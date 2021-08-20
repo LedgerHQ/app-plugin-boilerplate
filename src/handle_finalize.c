@@ -8,7 +8,9 @@ void handle_finalize(void *parameters) {
 
     // EDIT THIS: Set the total number of screen you will need.
     msg->numScreens = 2;
-    msg->tokenLookup1 = context->contract_address_sent;  // TODO: CHECK THIS
+    // EDIT THIS: set `tokenLookup1` (and maybe `tokenLookup2`) to point to
+    // token addresses you will info for (such as decimals, ticker...).
+    msg->tokenLookup1 = context->token_received;
 
     msg->result = ETH_PLUGIN_RESULT_OK;
 }
