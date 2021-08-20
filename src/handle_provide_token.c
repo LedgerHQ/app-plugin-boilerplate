@@ -2,7 +2,7 @@
 
 void handle_provide_token(void *parameters) {
     ethPluginProvideToken_t *msg = (ethPluginProvideToken_t *) parameters;
-    boilerplate_parameters_t *context = (boilerplate_parameters_t *) msg->pluginContext;
+    context_t *context = (context_t *) msg->pluginContext;
 
     if (msg->token1) {
         context->decimals_sent = msg->token1->decimals;

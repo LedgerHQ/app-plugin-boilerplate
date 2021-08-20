@@ -5,9 +5,9 @@
 
 // Set UI for the "Send" screen.
 // EDIT THIS: Adapt / remove this function to your needs.
-static void set_send_ui(ethQueryContractUI_t *msg, boilerplate_parameters_t *context) {
+static void set_send_ui(ethQueryContractUI_t *msg, context_t *context) {
     switch (context->selectorIndex) {
-        case BOILERPLATE_DUMMY_1:
+        case SWAP_EXACT_ETH_FOR_TOKENS:
             strlcpy(msg->title, "Send", msg->titleLength);
             break;
         case BOILERPLATE_DUMMY_2:
@@ -31,9 +31,9 @@ static void set_send_ui(ethQueryContractUI_t *msg, boilerplate_parameters_t *con
 
 // Set UI for "Receive" screen.
 // EDIT THIS: Adapt / remove this function to your needs.
-static void set_receive_ui(ethQueryContractUI_t *msg, boilerplate_parameters_t *context) {
+static void set_receive_ui(ethQueryContractUI_t *msg, context_t *context) {
     switch (context->selectorIndex) {
-        case BOILERPLATE_DUMMY_1:
+        case SWAP_EXACT_ETH_FOR_TOKENS:
             strlcpy(msg->title, "Receive Min", msg->titleLength);
             break;
         case BOILERPLATE_DUMMY_2:
@@ -55,7 +55,7 @@ static void set_receive_ui(ethQueryContractUI_t *msg, boilerplate_parameters_t *
 
 // Set UI for "Beneficiary" screen.
 // EDIT THIS: Adapt / remove this function to your needs.
-static void set_beneficiary_ui(ethQueryContractUI_t *msg, boilerplate_parameters_t *context) {
+static void set_beneficiary_ui(ethQueryContractUI_t *msg, context_t *context) {
     strlcpy(msg->title, "Beneficiary", msg->titleLength);
 
     // Prefix the address with `0x`.
@@ -76,7 +76,7 @@ static void set_beneficiary_ui(ethQueryContractUI_t *msg, boilerplate_parameters
 
 void handle_query_contract_ui(void *parameters) {
     ethQueryContractUI_t *msg = (ethQueryContractUI_t *) parameters;
-    boilerplate_parameters_t *context = (boilerplate_parameters_t *) msg->pluginContext;
+    context_t *context = (context_t *) msg->pluginContext;
 
     // msg->title is the upper line displayed on the device.
     // msg->msg is the lower line displayed on the device.
@@ -99,6 +99,7 @@ void handle_query_contract_ui(void *parameters) {
         case BENEFICIARY_SCREEN:
             set_beneficiary_ui(msg, context);
             break;
+        // Keep this
         default:
             PRINTF("Received an invalid screenIndex\n");
             msg->result = ETH_PLUGIN_RESULT_ERROR;
