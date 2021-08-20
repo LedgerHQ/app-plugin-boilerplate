@@ -42,7 +42,7 @@ static void handle_swap_exact_eth_for_tokens(ethPluginProvideParameter_t *msg, c
             context->go_to_offset = true;
             break;
         case PATH_LENGTH:
-            context->offset = msg->parameterOffset - 4 + PARAMETER_LENGTH * 2;
+            context->offset = msg->parameterOffset - SELECTOR_SIZE + PARAMETER_LENGTH * 2;
             context->go_to_offset = true;
             context->next_param = TOKEN_RECEIVED;
             break;
