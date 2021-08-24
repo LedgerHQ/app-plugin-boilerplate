@@ -22,12 +22,13 @@ void handle_provide_token(void *parameters) {
 
         // Default to ETH's decimals (for wei).
         context->decimals = 18;
-        // Default to no ticket at all.
-        strlcpy(context->ticker, "", sizeof(context->ticker));
-        // We will print a warning statement saying
-        // "WARNING UNKNOWN TOKEN" before printing out the value.
-        // We need an additional screen to account for that!
-        msg->additionalScreens = 1;
+        // If data wasn't found, use "???" as the ticker.
+        strlcpy(context->ticker, "???", sizeof(context->ticker));
+
+        // If we wanted to add a screen, say a warning screen for example, we could instruct the
+        // ethereum app to add an additional screen by setting `msg->additionalScreens` here, just
+        // like so:
+        // msg->additionalScreens = 1;
     }
     msg->result = ETH_PLUGIN_RESULT_OK;
 }

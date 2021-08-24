@@ -35,14 +35,6 @@ typedef enum {
     UNEXPECTED_PARAMETER,
 } parameter;
 
-// Enumeration of different screens that the plugin might display.
-typedef enum {
-    SEND_SCREEN,
-    RECEIVE_SCREEN,
-    BENEFICIARY_SCREEN,
-    SCREEN_ERROR,  // This variant indicates that an error occured. No display should occur.
-} screens_t;
-
 // EDIT THIS: Rename `BOILERPLATE` to be the same as the one initialized in `main.c`.
 extern const uint8_t *const BOILERPLATE_SELECTORS[NUM_SELECTORS];
 
@@ -52,7 +44,7 @@ extern const uint8_t *const BOILERPLATE_SELECTORS[NUM_SELECTORS];
 typedef struct context_t {
     // For display.
     uint8_t amount_received[INT256_LENGTH];
-    char beneficiary[ADDRESS_LENGTH];
+    uint8_t beneficiary[ADDRESS_LENGTH];
     uint8_t token_received[ADDRESS_LENGTH];
     char ticker[MAX_TICKER_LEN];
     uint8_t decimals;
