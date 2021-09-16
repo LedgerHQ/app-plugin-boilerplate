@@ -21,7 +21,7 @@ endif
 
 include $(BOLOS_SDK)/Makefile.defines
 
-APP_LOAD_PARAMS += --appFlags 0x800
+APP_LOAD_PARAMS += --appFlags 0x800 --path "44'/60'" --path "45'"
 
 # Add a random path because if the application has no path then it can derive on any path.
 # In the future, apps with no path specified won't be able to derive on any path. We will the remove this param.
