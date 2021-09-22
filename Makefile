@@ -84,7 +84,6 @@ DEBUG:= 0
 ifneq ($(DEBUG),0)
         DEFINES += PRINTF=semihosted_printf
         CFLAGS    += -include src/dbg/debug.h
-        endif
 else
         DEFINES   += PRINTF\(...\)=
 endif
