@@ -43,8 +43,9 @@ static void set_beneficiary_ui(ethQueryContractUI_t *msg, context_t *context) {
     msg->msg[0] = '0';
     msg->msg[1] = 'x';
 
-    // Initialize an empty chainConfig because it's needed by `getEthAddressStringFromBinary`.
-    chain_config_t chainConfig = {0};
+    // We need a random chainID for legacy reasons with `getEthAddressStringFromBinary`.
+    // Setting it to `0` will make it work with every chainID :)
+    uint64_t chainid = 0;
 
     // Get the string representation of the address stored in `context->beneficiary`. Put it in
     // `msg->msg`.
@@ -52,7 +53,7 @@ static void set_beneficiary_ui(ethQueryContractUI_t *msg, context_t *context) {
         context->beneficiary,
         (uint8_t *) msg->msg + 2,  // +2 here because we've already prefixed with '0x'.
         msg->pluginSharedRW->sha3,
-        &chainConfig);
+        chainid);
 }
 
 void handle_query_contract_ui(void *parameters) {

@@ -2,7 +2,7 @@
 
 // Copies the whole parameter (32 bytes long) from `src` to `dst`.
 // Useful for numbers, data...
-static copy_parameter(char *dst, size_t dst_len, char *src) {
+static void copy_parameter(uint8_t *dst, size_t dst_len, uint8_t *src) {
     // Take the minimum between dst_len and parameter_length to make sure we don't overwrite memory.
     size_t len = MIN(dst_len, PARAMETER_LENGTH);
     memcpy(dst, src, len);
@@ -10,7 +10,7 @@ static copy_parameter(char *dst, size_t dst_len, char *src) {
 
 // Copies a 20 byte address (located in a 32 bytes parameter) `from `src` to `dst`.
 // Useful for token addresses, user addresses...
-static copy_address(char *dst, size_t dst_len, char *src) {
+static void copy_address(uint8_t *dst, size_t dst_len, uint8_t *src) {
     // An address is 20 bytes long: so we need to make sure we skip the first 12 bytes!
     size_t offset = PARAMETER_LENGTH - ADDRESS_LENGTH;
     size_t len = MIN(dst_len, ADDRESS_LENGTH);
