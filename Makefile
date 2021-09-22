@@ -34,9 +34,11 @@ APPVERSION_N     = 0
 APPVERSION_P     = 0
 APPVERSION       = "$(APPVERSION_M).$(APPVERSION_N).$(APPVERSION_P)"
 
+# EDIT THIS: Put your plugin name
 APPNAME = "Boilerplate"
 
 #prepare hsm generation
+# EDIT THIS: Change the name of the gif, and generate you own GIFs!
 ifeq ($(TARGET_NAME), TARGET_NANOX)
 ICONNAME=icons/nanox_app_boilerplate.gif
 else
@@ -144,4 +146,5 @@ include $(BOLOS_SDK)/Makefile.rules
 dep/%.d: %.c Makefile
 
 listvariants:
+        # EDIT THIS: replace `boilerplate` by the lowercase name of your plugin
 	@echo VARIANTS NONE boilerplate 
