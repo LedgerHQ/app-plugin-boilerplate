@@ -21,7 +21,7 @@ endif
 
 include $(BOLOS_SDK)/Makefile.defines
 
-APP_LOAD_PARAMS += --appFlags 0x800
+APP_LOAD_PARAMS += --appFlags 0x800 --path "44'/60'" --path "45'" --curve secp256k1
 
 # Add a random path because if the application has no path then it can derive on any path.
 # In the future, apps with no path specified won't be able to derive on any path. We will the remove this param.
@@ -34,9 +34,11 @@ APPVERSION_N     = 0
 APPVERSION_P     = 0
 APPVERSION       = "$(APPVERSION_M).$(APPVERSION_N).$(APPVERSION_P)"
 
+# EDIT THIS: Put your plugin name
 APPNAME = "Boilerplate"
 
 #prepare hsm generation
+# EDIT THIS: Change the name of the gif, and generate you own GIFs!
 ifeq ($(TARGET_NAME), TARGET_NANOX)
 ICONNAME=icons/nanox_app_boilerplate.gif
 else
@@ -80,22 +82,8 @@ endif
 # Enabling debug PRINTF
 DEBUG:= 0
 ifneq ($(DEBUG),0)
-        DEFINES += HAVE_STACK_OVERFLOW_CHECK
-        SDK_SOURCE_PATH  += lib_stusb lib_stusb_impl lib_u2f
-        DEFINES   += HAVE_IO_USB HAVE_L4_USBLIB IO_USB_MAX_ENDPOINTS=4 IO_HID_EP_LENGTH=64 HAVE_USB_APDU
-
-        ifeq ($(DEBUG),10)
-                $(warning Using semihosted PRINTF. Only run with speculos!)
-                CFLAGS    += -include src/debug_utils/debug.h
-                DEFINES   += HAVE_PRINTF PRINTF=semihosted_printf
-        else
-                ifeq ($(TARGET_NAME),TARGET_NANOX)
-                        DEFINES   += HAVE_PRINTF PRINTF=mcu_usb_printf
-                else
-                        DEFINES   += HAVE_PRINTF PRINTF=screen_printf
-                endif
-
-        endif
+        DEFINES += PRINTF=semihosted_printf
+        CFLAGS    += -include src/dbg/debug.h
 else
         DEFINES   += PRINTF\(...\)=
 endif
@@ -157,4 +145,5 @@ include $(BOLOS_SDK)/Makefile.rules
 dep/%.d: %.c Makefile
 
 listvariants:
+        # EDIT THIS: replace `boilerplate` by the lowercase name of your plugin
 	@echo VARIANTS NONE boilerplate 

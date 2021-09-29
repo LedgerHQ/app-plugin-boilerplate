@@ -1,38 +1,34 @@
 #include "boilerplate_plugin.h"
 
+// EDIT THIS: Adapt this function to your needs! Remember, the information for tokens are held in
+// `msg->token1` and `msg->token2`. If those pointers are `NULL`, this means the ethereum app didn't
+// find any info regarding the requested tokens!
 void handle_provide_token(void *parameters) {
     ethPluginProvideToken_t *msg = (ethPluginProvideToken_t *) parameters;
-    boilerplate_parameters_t *context = (boilerplate_parameters_t *) msg->pluginContext;
-    PRINTF("plugin provide token: 0x%p, 0x%p\n", msg->token1, msg->token2);
+    context_t *context = (context_t *) msg->pluginContext;
 
     if (msg->token1) {
-        context->decimals_sent = msg->token1->decimals;
-        strncpy(context->ticker_sent, (char *) msg->token1->ticker, sizeof(context->ticker_sent));
+        // The Ethereum App found the information for the requested token!
+        // Store its decimals.
+        context->decimals = msg->token1->decimals;
+        // Store its ticker.
+        strlcpy(context->ticker, (char *) msg->token1->ticker, sizeof(context->ticker));
 
         // Keep track that we found the token.
-        context->tokens_found |= TOKEN_SENT_FOUND;
+        context->token_found = true;
     } else {
-        context->decimals_sent = DEFAULT_DECIMAL;
-        strncpy(context->ticker_sent, DEFAULT_TICKER, sizeof(context->ticker_sent));
+        // The Ethereum App did not manage to find the info for the requested token.
+        context->token_found = false;
 
-        // We will need an additional screen to display a warning message.
-        msg->additionalScreens++;
+        // Default to ETH's decimals (for wei).
+        context->decimals = 18;
+        // If data wasn't found, use "???" as the ticker.
+        strlcpy(context->ticker, "???", sizeof(context->ticker));
+
+        // If we wanted to add a screen, say a warning screen for example, we could instruct the
+        // ethereum app to add an additional screen by setting `msg->additionalScreens` here, just
+        // like so:
+        // msg->additionalScreens = 1;
     }
-    if (msg->token2) {
-        context->decimals_received = msg->token2->decimals;
-        strncpy(context->ticker_received,
-                (char *) msg->token2->ticker,
-                sizeof(context->ticker_received));
-
-        // Keep track that we found the token.
-        context->tokens_found |= TOKEN_RECEIVED_FOUND;
-    } else {
-        context->decimals_received = DEFAULT_DECIMAL;
-        strncpy(context->ticker_received, DEFAULT_TICKER, sizeof(context->ticker_received));
-
-        // We will need an additional screen to display a warning message.
-        msg->additionalScreens++;
-    }
-
     msg->result = ETH_PLUGIN_RESULT_OK;
 }

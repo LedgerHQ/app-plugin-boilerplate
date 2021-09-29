@@ -1,122 +1,58 @@
 #include "boilerplate_plugin.h"
 
-// Store the amount sent in the form of a string, without any ticker or
-// decimals. These will be added when displaying.
-static void handle_amount_sent(ethPluginProvideParameter_t *msg,
-                               boilerplate_parameters_t *context) {
-    memset(context->amount_sent, 0, sizeof(context->amount_sent));
-
-    // Convert to string.
-    amountToString(msg->parameter,
-                   PARAMETER_LENGTH,
-                   0,
-                   "",
-                   (char *) context->amount_sent,
-                   sizeof(context->amount_sent));
-    PRINTF("AMOUNT SENT: %s\n", context->amount_sent);
+// Copies the whole parameter (32 bytes long) from `src` to `dst`.
+// Useful for numbers, data...
+static void copy_parameter(uint8_t *dst, size_t dst_len, uint8_t *src) {
+    // Take the minimum between dst_len and parameter_length to make sure we don't overwrite memory.
+    size_t len = MIN(dst_len, PARAMETER_LENGTH);
+    memcpy(dst, src, len);
 }
 
-// Store the amount received in the form of a string, without any ticker or
-// decimals. These will be added when displaying.
-static void handle_amount_received(ethPluginProvideParameter_t *msg,
-                                   boilerplate_parameters_t *context) {
-    memset(context->amount_received, 0, sizeof(context->amount_received));
-
-    // Convert to string.
-    amountToString(msg->parameter,
-                   PARAMETER_LENGTH,
-                   0,   // No decimals
-                   "",  // No ticker
-                   (char *) context->amount_received,
-                   sizeof(context->amount_received));
-    PRINTF("AMOUNT RECEIVED: %s\n", context->amount_received);
+// Copies a 20 byte address (located in a 32 bytes parameter) `from `src` to `dst`.
+// Useful for token addresses, user addresses...
+static void copy_address(uint8_t *dst, size_t dst_len, uint8_t *src) {
+    // An address is 20 bytes long: so we need to make sure we skip the first 12 bytes!
+    size_t offset = PARAMETER_LENGTH - ADDRESS_LENGTH;
+    size_t len = MIN(dst_len, ADDRESS_LENGTH);
+    memcpy(dst, &src[offset], len);
 }
 
-static void handle_beneficiary(ethPluginProvideParameter_t *msg,
-                               boilerplate_parameters_t *context) {
-    memset(context->beneficiary, 0, sizeof(context->beneficiary));
-    memcpy(context->beneficiary,
-           &msg->parameter[PARAMETER_LENGTH - ADDRESS_LENGTH],
-           sizeof(context->beneficiary));
-    PRINTF("BENEFICIARY: %.*H\n", ADDRESS_LENGTH, context->beneficiary);
-}
-
-static void handle_token_sent(ethPluginProvideParameter_t *msg, boilerplate_parameters_t *context) {
-    memset(context->contract_address_sent, 0, sizeof(context->contract_address_sent));
-    memcpy(context->contract_address_sent,
-           &msg->parameter[PARAMETER_LENGTH - ADDRESS_LENGTH],
-           sizeof(context->contract_address_sent));
-    PRINTF("TOKEN SENT: %.*H\n", ADDRESS_LENGTH, context->contract_address_sent);
-}
-
-static void handle_token_received(ethPluginProvideParameter_t *msg,
-                                  boilerplate_parameters_t *context) {
-    memset(context->contract_address_received, 0, sizeof(context->contract_address_received));
-    memcpy(context->contract_address_received,
-           &msg->parameter[PARAMETER_LENGTH - ADDRESS_LENGTH],
-           sizeof(context->contract_address_received));
-    PRINTF("TOKEN RECIEVED: %.*H\n", ADDRESS_LENGTH, context->contract_address_received);
-}
-
-static void handle_dummy_one(ethPluginProvideParameter_t *msg, boilerplate_parameters_t *context) {
-    // Describe ABI
+// EDIT THIS: Remove this function and write your own handlers!
+static void handle_swap_exact_eth_for_tokens(ethPluginProvideParameter_t *msg, context_t *context) {
+    if (context->go_to_offset) {
+        if (msg->parameterOffset != context->offset + SELECTOR_SIZE) {
+            return;
+        }
+        context->go_to_offset = false;
+    }
     switch (context->next_param) {
-        case TOKEN_SENT:  // fromToken
-            handle_token_sent(msg, context);
+        case MIN_AMOUNT_RECEIVED:  // amountOutMin
+            copy_parameter(context->amount_received,
+                           sizeof(context->amount_received),
+                           msg->parameter);
+            context->next_param = PATH_OFFSET;
+            break;
+        case PATH_OFFSET:  // path
+            context->offset = U2BE(msg->parameter, PARAMETER_LENGTH - 2);
+            context->next_param = BENEFICIARY;
+            break;
+        case BENEFICIARY:  // to
+            copy_address(context->beneficiary, sizeof(context->beneficiary), msg->parameter);
+            context->next_param = PATH_LENGTH;
+            context->go_to_offset = true;
+            break;
+        case PATH_LENGTH:
+            context->offset = msg->parameterOffset - SELECTOR_SIZE + PARAMETER_LENGTH * 2;
+            context->go_to_offset = true;
             context->next_param = TOKEN_RECEIVED;
             break;
-        case TOKEN_RECEIVED:  // toToken
-            handle_token_received(msg, context);
-            context->next_param = AMOUNT_SENT;
+        case TOKEN_RECEIVED:  // path[1] -> contract address of token received
+            copy_address(context->token_received, sizeof(context->token_received), msg->parameter);
+            context->next_param = UNEXPECTED_PARAMETER;
             break;
-        case AMOUNT_SENT:  // fromAmount
-            handle_amount_sent(msg, context);
-            context->next_param = AMOUNT_RECEIVED;
-            break;
-        case AMOUNT_RECEIVED:  // toAmount
-            handle_amount_received(msg, context);
-            context->next_param = BENEFICIARY;
-            break;
-        case BENEFICIARY:  // beneficiary
-            handle_beneficiary(msg, context);
-            context->next_param = NONE;
-            break;
-        case NONE:
-            break;
+        // Keep this
         default:
-            PRINTF("Param not supported\n");
-            msg->result = ETH_PLUGIN_RESULT_ERROR;
-            break;
-    }
-}
-
-static void handle_dummy_two(ethPluginProvideParameter_t *msg, boilerplate_parameters_t *context) {
-    // Describe ABI
-    switch (context->next_param) {
-        case TOKEN_RECEIVED:  // fromToken
-            handle_token_received(msg, context);
-            context->next_param = TOKEN_SENT;
-            break;
-        case TOKEN_SENT:  // toToken
-            handle_token_sent(msg, context);
-            context->next_param = AMOUNT_RECEIVED;
-            break;
-        case AMOUNT_RECEIVED:  // fromAmount
-            handle_amount_received(msg, context);
-            context->next_param = AMOUNT_SENT;
-            break;
-        case AMOUNT_SENT:  // toAmount
-            handle_amount_sent(msg, context);
-            context->next_param = BENEFICIARY;
-            break;
-        case BENEFICIARY:  // beneficiary
-            handle_beneficiary(msg, context);
-            context->next_param = NONE;
-            break;
-        case NONE:
-            break;
-        default:
-            PRINTF("Param not supported\n");
+            PRINTF("Param not supported: %d\n", context->next_param);
             msg->result = ETH_PLUGIN_RESULT_ERROR;
             break;
     }
@@ -124,23 +60,26 @@ static void handle_dummy_two(ethPluginProvideParameter_t *msg, boilerplate_param
 
 void handle_provide_parameter(void *parameters) {
     ethPluginProvideParameter_t *msg = (ethPluginProvideParameter_t *) parameters;
-    boilerplate_parameters_t *context = (boilerplate_parameters_t *) msg->pluginContext;
-    PRINTF("plugin provide parameter %d %.*H\n",
+    context_t *context = (context_t *) msg->pluginContext;
+    // We use `%.*H`: it's a utility function to print bytes. You first give
+    // the number of bytes you wish to print (in this case, `PARAMETER_LENGTH`) and then
+    // the address (here `msg->parameter`).
+    PRINTF("plugin provide parameter: offset %d\nBytes: %.*H\n",
            msg->parameterOffset,
            PARAMETER_LENGTH,
            msg->parameter);
 
     msg->result = ETH_PLUGIN_RESULT_OK;
 
+    // EDIT THIS: adapt the cases and the names of the functions.
     switch (context->selectorIndex) {
-        case BOILERPLATE_DUMMY_1:
-            handle_dummy_one(msg, context);
+        case SWAP_EXACT_ETH_FOR_TOKENS:
+            handle_swap_exact_eth_for_tokens(msg, context);
             break;
         case BOILERPLATE_DUMMY_2:
-            handle_dummy_two(msg, context);
             break;
         default:
-            PRINTF("Selector Index %d not supported\n", context->selectorIndex);
+            PRINTF("Selector Index not supported: %d\n", context->selectorIndex);
             msg->result = ETH_PLUGIN_RESULT_ERROR;
             break;
     }

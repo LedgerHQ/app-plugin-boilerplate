@@ -2,16 +2,20 @@
 
 void handle_finalize(void *parameters) {
     ethPluginFinalize_t *msg = (ethPluginFinalize_t *) parameters;
-    boilerplate_parameters_t *context = (boilerplate_parameters_t *) msg->pluginContext;
-    PRINTF("handle finalize\n");
-    if (context->valid) {
-        msg->uiType = ETH_UI_TYPE_GENERIC;
-        msg->numScreens = 2;
+    context_t *context = (context_t *) msg->pluginContext;
 
-        msg->tokenLookup1 = context->contract_address_sent;  // TODO: CHECK THIS
-        msg->result = ETH_PLUGIN_RESULT_OK;
-    } else {
-        PRINTF("Invalid context\n");
-        msg->result = ETH_PLUGIN_RESULT_FALLBACK;
+    msg->uiType = ETH_UI_TYPE_GENERIC;
+
+    // EDIT THIS: Set the total number of screen you will need.
+    msg->numScreens = 2;
+    // If the beneficiary is NOT the sender, we will need an additional screen to display it.
+    if (memcmp(msg->address, context->beneficiary, ADDRESS_LENGTH) != 0) {
+        msg->numScreens += 1;
     }
+
+    // EDIT THIS: set `tokenLookup1` (and maybe `tokenLookup2`) to point to
+    // token addresses you will info for (such as decimals, ticker...).
+    msg->tokenLookup1 = context->token_received;
+
+    msg->result = ETH_PLUGIN_RESULT_OK;
 }
