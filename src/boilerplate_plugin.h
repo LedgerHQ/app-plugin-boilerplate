@@ -12,10 +12,6 @@
 // EDIT THIS: Replace with your plugin name.
 #define PLUGIN_NAME "Boilerplate"
 
-// TODO: add doc.
-#define TOKEN_SENT_FOUND     1
-#define TOKEN_RECEIVED_FOUND (1 << 1)
-
 // Enumeration of the different selectors possible.
 // Should follow the exact same order as the array declared in main.c
 // EDIT THIS: Change the naming (`selector_t`), and add your selector names.
