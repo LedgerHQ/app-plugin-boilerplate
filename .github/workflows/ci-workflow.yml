@@ -83,7 +83,7 @@ jobs:
           cd tests && yarn install
       - name: Create tmp folder for artifacts
         run: |
-          mkdir tests/elfs
+          mkdir -p tests/elfs
       - name: Download app binaries
         uses: actions/download-artifact@v2
         with:
