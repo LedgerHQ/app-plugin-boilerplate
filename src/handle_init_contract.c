@@ -6,7 +6,7 @@ void handle_init_contract(void *parameters) {
     ethPluginInitContract_t *msg = (ethPluginInitContract_t *) parameters;
 
     // Make sure we are running a compatible version.
-    if (msg->interfaceVersion != ETH_PLUGIN_INTERFACE_VERSION_1) {
+    if (msg->interfaceVersion != ETH_PLUGIN_INTERFACE_VERSION_LATEST) {
         // If not the case, return the `UNAVAILABLE` status.
         msg->result = ETH_PLUGIN_RESULT_UNAVAILABLE;
         return;

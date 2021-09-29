@@ -5,20 +5,15 @@
 
 // Set UI for the "Send" screen.
 // EDIT THIS: Adapt / remove this function to your needs.
-static void set_send_ui(ethQueryContractUI_t *msg, context_t *context) {
+static void set_send_ui(ethQueryContractUI_t *msg) {
     strlcpy(msg->title, "Send", msg->titleLength);
 
     uint8_t *eth_amount = msg->pluginSharedRO->txContent->value.value;
     uint8_t eth_amount_size = msg->pluginSharedRO->txContent->value.length;
 
-    // Converts the uint256 number located in `context->amount_sent` to its string representation,
-    // it copies this to `msg->msg`.
-    amountToString(eth_amount,
-                   eth_amount_size,
-                   context->decimals,
-                   context->ticker,
-                   msg->msg,
-                   msg->msgLength);
+    // Converts the uint256 number located in `eth_amount` to its string representation and
+    // copies this to `msg->msg`.
+    amountToString(eth_amount, eth_amount_size, WEI_TO_ETHER, "ETH ", msg->msg, msg->msgLength);
 }
 
 // Set UI for "Receive" screen.
@@ -51,7 +46,7 @@ static void set_beneficiary_ui(ethQueryContractUI_t *msg, context_t *context) {
     // `msg->msg`.
     getEthAddressStringFromBinary(
         context->beneficiary,
-        (uint8_t *) msg->msg + 2,  // +2 here because we've already prefixed with '0x'.
+        msg->msg + 2,  // +2 here because we've already prefixed with '0x'.
         msg->pluginSharedRW->sha3,
         chainid);
 }
@@ -72,7 +67,7 @@ void handle_query_contract_ui(void *parameters) {
     // EDIT THIS: Adapt the cases for the screens you'd like to display.
     switch (msg->screenIndex) {
         case 0:
-            set_send_ui(msg, context);
+            set_send_ui(msg);
             break;
         case 1:
             set_receive_ui(msg, context);
