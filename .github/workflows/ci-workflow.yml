@@ -3,18 +3,18 @@ name: Compilation & tests
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
     branches:
-    - main
+      - main
 
 jobs:
-  job_build_debug:
-    name: Build debug
+  job_build_debug_nano_s:
+    name: Build debug Nano S
     runs-on: ubuntu-latest
 
     container:
-      image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:2.0.0-1
+      image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 
     steps:
       - name: Clone
@@ -22,12 +22,76 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Build Boilerplate plugin
+      - name: Build plugin for Nano S
         run: |
-          make 
+          make clean
+          make BOLOS_SDK=$NANOS_SDK
+          mv bin/app.elf boilerplate_nanos.elf
 
-      - name: Upload Boilerplate binary
+      - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
-          name: boilerplate-app-debug
-          path: bin
+          name: boilerplate-app-plugin-debug
+          path: ./boilerplate_nanos.elf
+
+  job_build_debug_nano_x:
+    name: Build debug Nano X
+    runs-on: ubuntu-latest
+
+    container:
+      image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+
+    steps:
+      - name: Clone
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Build plugin for Nano X
+        run: |
+          make clean
+          make BOLOS_SDK=$NANOX_SDK
+          mv bin/app.elf boilerplate_nanox.elf
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: boilerplate-app-plugin-debug
+          path: ./boilerplate_nanox.elf
+
+  jobs-e2e-tests:
+    needs: [job_build_debug_nano_s, job_build_debug_nano_x]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test
+        run: |
+          id
+          echo $HOME
+          echo $DISPLAY
+      - name: Checkout
+        uses: actions/checkout@v2
+      - run: sudo apt-get update -y && sudo apt-get install -y libusb-1.0.0 libudev-dev
+      - name: Install node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14.4.0"
+      - name: Install yarn
+        run: |
+          npm install -g yarn
+      - name: Build/Install build js deps
+        run: |
+          cd tests && yarn install
+      - name: Create tmp folder for artifacts
+        run: |
+          mkdir tests/elfs
+      - name: Download app binaries
+        uses: actions/download-artifact@v2
+        with:
+          path: tests/elfs
+      - name: Gather elfs
+        run: |
+          cd tests/elfs
+          cp `find . -name "*.elf"` .
+      - name: Run zemu tests
+        run: |
+          cd tests && yarn test
