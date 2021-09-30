@@ -1,7 +1,7 @@
-// EDIT THIS: replace with the name of your plugin (lowercase)
 // You will need to create a folder with this name, and put in the abis of your contracts in `abis/`.
 // You will also need to create a `b2c.json` file that will hold the methodIDs and location of
 // the erc20 tokens that should get displayed.
+// EDIT THIS: replace with the name of your plugin (lowercase)
 const pluginFolder = "boilerplate";
 
 function serialize_data(pluginName, contractAddress, selector) {

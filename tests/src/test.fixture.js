@@ -21,9 +21,8 @@ const Resolve = require('path').resolve;
 const NANOS_ETH_PATH = Resolve('elfs/ethereum_nanos.elf');
 const NANOX_ETH_PATH = Resolve('elfs/ethereum_nanox.elf');
 
-// Edit this: replace `Boilerplate` by your plugin name
-const NANOS_PLUGIN_PATH = Resolve('elfs/boilerplate_nanos.elf');
-const NANOX_PLUGIN_PATH = Resolve('elfs/boilerplate_nanox.elf');
+const NANOS_PLUGIN_PATH = Resolve('elfs/plugin_nanos.elf');
+const NANOX_PLUGIN_PATH = Resolve('elfs/plugin_nanox.elf');
 
 // Edit this: replace `Boilerplate` by your plugin name
 const NANOS_PLUGIN = { "Boilerplate": NANOS_PLUGIN_PATH };
