@@ -21,11 +21,10 @@ endif
 
 include $(BOLOS_SDK)/Makefile.defines
 
-APP_LOAD_PARAMS += --appFlags 0x800 --path "44'/60'" --path "45'" --curve secp256k1
+# EDIT THIS: Put your plugin name
+APPNAME = "Boilerplate"
 
-# Add a random path because if the application has no path then it can derive on any path.
-# In the future, apps with no path specified won't be able to derive on any path. We will the remove this param.
-APP_LOAD_PARAMS += --path "42/42/13/37"
+APP_LOAD_PARAMS += --appFlags 0x800 --path "44'/60'" --path "45'" --curve secp256k1
 
 APP_LOAD_PARAMS += $(COMMON_LOAD_PARAMS)
 
@@ -34,10 +33,6 @@ APPVERSION_N     = 0
 APPVERSION_P     = 0
 APPVERSION       = "$(APPVERSION_M).$(APPVERSION_N).$(APPVERSION_P)"
 
-# EDIT THIS: Put your plugin name
-APPNAME = "Boilerplate"
-
-#prepare hsm generation
 # EDIT THIS: Change the name of the gif, and generate you own GIFs!
 ifeq ($(TARGET_NAME), TARGET_NANOX)
 ICONNAME=icons/nanox_app_boilerplate.gif
