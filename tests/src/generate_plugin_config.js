@@ -62,6 +62,10 @@ function generate_plugin_config() {
 			const serializedData = serialize_data(pluginName, contractAddress, selector);
 			const signature = PLACE_HOLDER_SIGNATURE;
 
+			const erc20OfInterest = values["erc20OfInterest"];
+			assert(erc20OfInterest.length <= 2, `Maximum of 2 erc20OfInterest allowed. Got ${erc20OfInterest.length}`);
+
+
 			// Put them in `methods_info`
 			methods_info[selector] = {"erc20OfInterest": values["erc20OfInterest"], "plugin": pluginName, "serialized_data": serializedData, "signature": signature};
 		}
