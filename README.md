@@ -1,14 +1,15 @@
 # app-plugin-boilerplate
 
-## NEED TO HAVE LINK TO DOC
+This repo is a meant to be a forkable example of a plugin.
 
-Boilerplate repo to get your plugin started!
+Plugins are lightweight applications that go hand-in-hand with the Ethereum Application on a Nano S / X device.
 
-This is WIP, here's a small list of what still needs to be done:
-TODO:
+They allow users to safely interact with smart contracts by parsing the transaction data and displaying its content in a human readable way. This is done on a "per contract" basis, meaning a plugin is required for every DApp.
 
-- [ ] Add test folder
-- [ ] Add links to documentation
-- [ ] Add links to examples
-- [ ] Add CI
-- [ ] Rebrand icons
+The code has been commented, and special "EDIT THIS" comments indicate where developers are expected to adapt the code to their own needs.
+
+It is STRONGLY recommended to follow the [plugin guide](https://hackmd.io/300Ukv5gSbCbVcp3cZuwRQ) in order to better understand the flow and the context for plugins.
+
+## Formatting
+
+The C source code is expected to be formatted with `clang-format` 11.0.0 or higher.
