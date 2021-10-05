@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # FILL THESE WITH YOUR OWN SDKs PATHS and APP-ETHEREUM's ROOT
-NANOS_SDK=$TWO
-NANOX_SDK=$X
-APP_ETHEREUM=/home/spiriou/Code/app-ethereum
+NANOS_SDK=$NANOS_SDK
+NANOX_SDK=$NANOX_SDK
+APP_ETHEREUM=/plugin_dev/app-ethereum
 
 # create elfs folder if it doesn't exist
 mkdir -p elfs
