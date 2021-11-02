@@ -40,7 +40,7 @@ function generate_plugin_config() {
 	}
 	
 	// Load the b2c.json file
-	const b2c = require(`../boilerplate/b2c.json`);
+	const b2c = require(`../${pluginFolder}/b2c.json`);
 	
 	let res = {};
 	
