@@ -21,10 +21,19 @@ static void set_send_ui(ethQueryContractUI_t *msg) {
 static void set_receive_ui(ethQueryContractUI_t *msg, context_t *context) {
     strlcpy(msg->title, "Receive Min.", msg->titleLength);
 
+    uint8_t decimals = context->decimals;
+    char *ticker = context->ticker;
+
+    // If the token look up failed, use the default network ticker along with the default decimals.
+    if (!context->token_found) {
+        decimals = WEI_TO_ETHER;
+        ticker = msg->network_ticker;
+    }
+
     amountToString(context->amount_received,
                    sizeof(context->amount_received),
-                   context->decimals,
-                   context->ticker,
+                   decimals,
+                   ticker,
                    msg->msg,
                    msg->msgLength);
 }
