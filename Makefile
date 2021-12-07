@@ -116,6 +116,9 @@ include $(BOLOS_SDK)/Makefile.glyphs
 ### variables processed by the common makefile.rules of the SDK to grab source files and include dirs
 APP_SOURCE_PATH  += src ethereum-plugin-sdk
 SDK_SOURCE_PATH  += lib_ux
+ifneq (,$(findstring HAVE_BLE,$(DEFINES)))
+SDK_SOURCE_PATH  += lib_blewbxx lib_blewbxx_impl
+endif
 
 # remove UX warnings from SDK even though the plugin doesn't use it
 DEFINES		     += HAVE_UX_FLOW
