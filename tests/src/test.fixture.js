@@ -98,7 +98,7 @@ function zemu(device, func) {
             await sim.start(sim_options);
             const transport = await sim.getTransport();
             const eth = new Eth(transport);
-            eth.setPluginsLoadConfig({
+            eth.setLoadConfig({
                 baseURL: null,
                 extraPlugins: boilerplateJSON,
             });
