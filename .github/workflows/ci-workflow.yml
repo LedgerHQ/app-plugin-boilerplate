@@ -10,6 +10,7 @@ on:
       - main
       - master
 
+
 jobs:
   job_build_nano_s:
     name: Build Nano S
