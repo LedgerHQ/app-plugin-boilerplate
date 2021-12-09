@@ -49,7 +49,7 @@ jobs:
 
   job_build_debug:
     name: Build debug plguins
-    needs: [job_build_debug_nano_s, job_build_debug_nano_x]
+    needs: [job_build_nano_s, job_build_nano_x]
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
