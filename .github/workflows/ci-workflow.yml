@@ -58,7 +58,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: recursive
-      - name: Build plugin for Nano X
+      - name: Build plugins for testing
         run: |
           cd tests
           sh build_local_test_elfs.sh
