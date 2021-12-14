@@ -48,7 +48,7 @@ jobs:
           make BOLOS_SDK=$NANOX_SDK
 
   job_build_debug:
-    name: Build debug plguins
+    name: Build debug plugins
     needs: [job_build_nano_s, job_build_nano_x]
     runs-on: ubuntu-latest
     container:
