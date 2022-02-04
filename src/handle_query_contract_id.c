@@ -3,7 +3,7 @@
 // Sets the first screen to display.
 void handle_query_contract_id(void *parameters) {
     ethQueryContractID_t *msg = (ethQueryContractID_t *) parameters;
-    context_t *context = (context_t *) msg->pluginContext;
+    const context_t *context = (const context_t *) msg->pluginContext;
     // msg->name will be the upper sentence displayed on the screen.
     // msg->version will be the lower sentence displayed on the screen.
 
@@ -11,16 +11,11 @@ void handle_query_contract_id(void *parameters) {
     strlcpy(msg->name, PLUGIN_NAME, msg->nameLength);
 
     // EDIT THIS: Adapt the cases by modifying the strings you pass to `strlcpy`.
-    switch (context->selectorIndex) {
-        case SWAP_EXACT_ETH_FOR_TOKENS:
-            strlcpy(msg->version, "Swap", msg->versionLength);
-            break;
-        // Keep this
-        default:
-            PRINTF("Selector index: %d not supported\n", context->selectorIndex);
-            msg->result = ETH_PLUGIN_RESULT_ERROR;
-            return;
+    if (context->selectorIndex == SWAP_EXACT_ETH_FOR_TOKENS) {
+        strlcpy(msg->version, "Swap", msg->versionLength);
+        msg->result = ETH_PLUGIN_RESULT_OK;
+    } else {
+        PRINTF("Selector index: %d not supported\n", context->selectorIndex);
+        msg->result = ETH_PLUGIN_RESULT_ERROR;
     }
-
-    msg->result = ETH_PLUGIN_RESULT_OK;
 }
