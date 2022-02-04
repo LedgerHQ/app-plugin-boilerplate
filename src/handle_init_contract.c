@@ -49,6 +49,7 @@ void handle_init_contract(void *parameters) {
             break;
         case BOILERPLATE_DUMMY_2:
             context->next_param = TOKEN_RECEIVED;
+            break;
         // Keep this
         default:
             PRINTF("Missing selectorIndex: %d\n", context->selectorIndex);

@@ -94,7 +94,7 @@ __attribute__((section(".boot"))) int main(int arg0) {
                 return 0;
             } else {
                 // Not called from dashboard: called from the ethereum app!
-                unsigned int *args = (unsigned int *) arg0;
+                const unsigned int *args = (const unsigned int *) arg0;
 
                 // If `ETH_PLUGIN_CHECK_PRESENCE` is set, this means the caller is just trying to
                 // know whether this app exists or not. We can skip `dispatch_plugin_calls`.
