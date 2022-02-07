@@ -32,7 +32,7 @@ typedef enum {
 } parameter;
 
 // EDIT THIS: Rename `BOILERPLATE` to be the same as the one initialized in `main.c`.
-extern const uint8_t *const BOILERPLATE_SELECTORS[NUM_SELECTORS];
+extern const uint32_t BOILERPLATE_SELECTORS[NUM_SELECTORS];
 
 // Shared global memory with Ethereum app. Must be at most 5 * 32 bytes.
 // EDIT THIS: This struct is used by your plugin to save the parameters you parse. You

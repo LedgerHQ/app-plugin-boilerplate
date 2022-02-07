@@ -26,9 +26,10 @@ void handle_init_contract(void *parameters) {
     memset(context, 0, sizeof(*context));
 
     // Look for the index of the selectorIndex passed in by `msg`.
-    uint8_t i;
+    uint32_t selector = U4BE(msg->selector, 0);
+    int i;
     for (i = 0; i < NUM_SELECTORS; i++) {
-        if (memcmp((uint8_t *) PIC(BOILERPLATE_SELECTORS[i]), msg->selector, SELECTOR_SIZE) == 0) {
+        if (selector == BOILERPLATE_SELECTORS[i]) {
             context->selectorIndex = i;
             break;
         }

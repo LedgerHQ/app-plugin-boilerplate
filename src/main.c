@@ -26,13 +26,13 @@
 
 // List of selectors supported by this plugin.
 // EDIT THIS: Adapt the variable names and change the `0x` values to match your selectors.
-static const uint8_t SWAP_EXACT_ETH_FOR_TOKENS_SELECTOR[SELECTOR_SIZE] = {0x7f, 0xf3, 0x6a, 0xb5};
-static const uint8_t BOILERPLATE_DUMMY_SELECTOR_2[SELECTOR_SIZE] = {0x13, 0x37, 0x42, 0x42};
+static const uint32_t SWAP_EXACT_ETH_FOR_TOKENS_SELECTOR = 0x7ff36ab5;
+static const uint32_t BOILERPLATE_DUMMY_SELECTOR_2 = 0x13374242;
 
 // Array of all the different boilerplate selectors. Make sure this follows the same order as the
 // enum defined in `boilerplate_plugin.h`
 // EDIT THIS: Use the names of the array declared above.
-const uint8_t *const BOILERPLATE_SELECTORS[NUM_SELECTORS] = {
+const uint32_t BOILERPLATE_SELECTORS[NUM_SELECTORS] = {
     SWAP_EXACT_ETH_FOR_TOKENS_SELECTOR,
     BOILERPLATE_DUMMY_SELECTOR_2,
 };
