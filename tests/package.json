@@ -15,7 +15,7 @@
     "@ledgerhq/hw-app-eth": "^6.18.0",
     "@ledgerhq/hw-transport-http": "^6.15.0",
     "@ledgerhq/logs": "^5.50.0",
-    "@zondax/zemu": "0.16.5",
+    "@zondax/zemu": "0.21.1",
     "bip32-path": "^0.4.2",
     "core-js": "^3.7.0",
     "ethereum-tx-decoder": "^3.0.0",
