@@ -1,5 +1,15 @@
 #include "boilerplate_plugin.h"
 
+static int find_selector(uint32_t selector, const uint32_t *selectors, size_t n, selector_t *out) {
+    for (selector_t i = 0; i < n; i++) {
+        if (selector == selectors[i]) {
+            *out = i;
+            return 0;
+        }
+    }
+    return -1;
+}
+
 // Called once to init.
 void handle_init_contract(void *parameters) {
     // Cast the msg to the type of structure we expect (here, ethPluginInitContract_t).
@@ -25,17 +35,8 @@ void handle_init_contract(void *parameters) {
     // Initialize the context (to 0).
     memset(context, 0, sizeof(*context));
 
-    // Look for the index of the selectorIndex passed in by `msg`.
-    uint8_t i;
-    for (i = 0; i < NUM_SELECTORS; i++) {
-        if (memcmp((uint8_t *) PIC(BOILERPLATE_SELECTORS[i]), msg->selector, SELECTOR_SIZE) == 0) {
-            context->selectorIndex = i;
-            break;
-        }
-    }
-
-    // If `i == NUM_SELECTORS` it means we haven't found the selector. Return an error.
-    if (i == NUM_SELECTORS) {
+    uint32_t selector = U4BE(msg->selector, 0);
+    if (find_selector(selector, BOILERPLATE_SELECTORS, NUM_SELECTORS, &context->selectorIndex)) {
         msg->result = ETH_PLUGIN_RESULT_UNAVAILABLE;
         return;
     }
