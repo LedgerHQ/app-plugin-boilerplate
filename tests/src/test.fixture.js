@@ -1,4 +1,4 @@
-import Zemu from '@zondax/zemu';
+import Zemu, { DEFAULT_START_OPTIONS, DeviceModel } from '@zondax/zemu';
 import Eth from '@ledgerhq/hw-app-eth';
 import { generate_plugin_config } from './generate_plugin_config';
 import { parseEther, parseUnits, RLP} from "ethers/lib/utils";
@@ -9,12 +9,12 @@ async function waitForAppScreen(sim) {
     await sim.waitUntilScreenIsNot(sim.getMainMenuSnapshot(), transactionUploadDelay);
 }
 
-const sim_options_generic = {
+const sim_options_nano = {
+    ...DEFAULT_START_OPTIONS,
     logging: true,
     X11: true,
     startDelay: 5000,
-    startText: 'is ready',
-    custom: '',
+    startText: 'is ready'
 };
 
 const Resolve = require('path').resolve;
@@ -25,9 +25,11 @@ const NANOX_ETH_PATH = Resolve('elfs/ethereum_nanox.elf');
 const NANOS_PLUGIN_PATH = Resolve('elfs/plugin_nanos.elf');
 const NANOX_PLUGIN_PATH = Resolve('elfs/plugin_nanox.elf');
 
-// Edit this: replace `Boilerplate` by your plugin name
-const NANOS_PLUGIN = { "Boilerplate": NANOS_PLUGIN_PATH };
-const NANOX_PLUGIN = { "Boilerplate": NANOX_PLUGIN_PATH };
+const nano_models: DeviceModel[] = [
+    { name: 'nanos', letter: 'S', path: NANOS_PLUGIN_PATH, eth_path: NANOS_ETH_PATH },
+    { name: 'nanox', letter: 'X', path: NANOX_PLUGIN_PATH, eth_path: NANOX_ETH_PATH }
+];
+
 
 const boilerplateJSON = generate_plugin_config();
 
@@ -79,24 +81,15 @@ function txFromEtherscan(rawTx) {
 function zemu(device, func) {
     return async () => {
         jest.setTimeout(TIMEOUT);
-        let eth_path;
-        let plugin;
-        let sim_options = sim_options_generic;
+        let elf_path;
+        let lib_elf;
+        elf_path = device.eth_path;
+        // Edit this: replace `Boilerplate` by your plugin name
+        lib_elf = { 'Boilerplate': device.path };
 
-        if (device === "nanos") {
-            eth_path = NANOS_ETH_PATH;
-            plugin = NANOS_PLUGIN;
-            sim_options.model = "nanos";
-        } else {
-            eth_path = NANOX_ETH_PATH;
-            plugin = NANOX_PLUGIN;
-            sim_options.model = "nanox";
-        }
-
-        const sim = new Zemu(eth_path, plugin);
-
+        const sim = new Zemu(elf_path, lib_elf);
         try {
-            await sim.start(sim_options);
+            await sim.start({...sim_options_nano, model: device.name});
             const transport = await sim.getTransport();
             const eth = new Eth(transport);
             eth.setLoadConfig({
@@ -114,6 +107,7 @@ module.exports = {
     zemu,
     waitForAppScreen,
     genericTx,
+    nano_models,
     SPECULOS_ADDRESS,
     RANDOM_ADDRESS,
     txFromEtherscan,
