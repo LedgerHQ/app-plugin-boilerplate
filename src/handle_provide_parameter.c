@@ -1,22 +1,5 @@
 #include "boilerplate_plugin.h"
 
-// Copies the whole parameter (32 bytes long) from `src` to `dst`.
-// Useful for numbers, data...
-static void copy_parameter(uint8_t *dst, size_t dst_len, const uint8_t *src) {
-    // Take the minimum between dst_len and parameter_length to make sure we don't overwrite memory.
-    size_t len = MIN(dst_len, PARAMETER_LENGTH);
-    memcpy(dst, src, len);
-}
-
-// Copies a 20 byte address (located in a 32 bytes parameter) `from `src` to `dst`.
-// Useful for token addresses, user addresses...
-static void copy_address(uint8_t *dst, size_t dst_len, const uint8_t *src) {
-    // An address is 20 bytes long: so we need to make sure we skip the first 12 bytes!
-    size_t offset = PARAMETER_LENGTH - ADDRESS_LENGTH;
-    size_t len = MIN(dst_len, ADDRESS_LENGTH);
-    memcpy(dst, &src[offset], len);
-}
-
 // EDIT THIS: Remove this function and write your own handlers!
 static void handle_swap_exact_eth_for_tokens(ethPluginProvideParameter_t *msg, context_t *context) {
     if (context->go_to_offset) {
@@ -28,8 +11,8 @@ static void handle_swap_exact_eth_for_tokens(ethPluginProvideParameter_t *msg, c
     switch (context->next_param) {
         case MIN_AMOUNT_RECEIVED:  // amountOutMin
             copy_parameter(context->amount_received,
-                           sizeof(context->amount_received),
-                           msg->parameter);
+                           msg->parameter,
+                           sizeof(context->amount_received));
             context->next_param = PATH_OFFSET;
             break;
         case PATH_OFFSET:  // path
@@ -37,7 +20,7 @@ static void handle_swap_exact_eth_for_tokens(ethPluginProvideParameter_t *msg, c
             context->next_param = BENEFICIARY;
             break;
         case BENEFICIARY:  // to
-            copy_address(context->beneficiary, sizeof(context->beneficiary), msg->parameter);
+            copy_address(context->beneficiary, msg->parameter, sizeof(context->beneficiary));
             context->next_param = PATH_LENGTH;
             context->go_to_offset = true;
             break;
@@ -47,7 +30,7 @@ static void handle_swap_exact_eth_for_tokens(ethPluginProvideParameter_t *msg, c
             context->next_param = TOKEN_RECEIVED;
             break;
         case TOKEN_RECEIVED:  // path[1] -> contract address of token received
-            copy_address(context->token_received, sizeof(context->token_received), msg->parameter);
+            copy_address(context->token_received, msg->parameter, sizeof(context->token_received));
             context->next_param = UNEXPECTED_PARAMETER;
             break;
         // Keep this

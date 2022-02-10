@@ -49,7 +49,7 @@ void dispatch_plugin_calls(int message, void *parameters) {
         case ETH_PLUGIN_FINALIZE:
             handle_finalize(parameters);
             break;
-        case ETH_PLUGIN_PROVIDE_TOKEN:
+        case ETH_PLUGIN_PROVIDE_INFO:
             handle_provide_token(parameters);
             break;
         case ETH_PLUGIN_QUERY_CONTRACT_ID:
