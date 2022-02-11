@@ -5,6 +5,7 @@
   "main": "test.js",
   "scripts": {
     "build": "babel src/ -d lib/",
+    "lint": "eslint src",
     "prepublish": "yarn run build",
     "test": "jest src --verbose --runInBand --detectOpenHandles"
   },
@@ -34,7 +35,11 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-stage-0": "^7.0.0",
     "@babel/register": "^7.7.0",
+    "eslint": "^8.8.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "flow-bin": "^0.112.0",
-    "jest": "^26.6.3"
+    "jest": "^26.6.3",
+    "prettier": "^2.5.1"
   }
 }
