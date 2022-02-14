@@ -4,16 +4,14 @@ on:
   push:
     branches:
       - main
-      - master
   pull_request:
     branches:
       - main
-      - master
 
 
 jobs:
-  job_build_nano_s:
-    name: Build Nano S
+  job_build_plugin_nano_s:
+    name: Build plugin for Nano S
     runs-on: ubuntu-latest
 
     container:
@@ -29,8 +27,8 @@ jobs:
           make clean
           make BOLOS_SDK=$NANOS_SDK
 
-  job_build_nano_x:
-    name: Build Nano X
+  job_build_plugin_nano_x:
+    name: Build plugin for Nano X
     runs-on: ubuntu-latest
 
     container:
@@ -47,21 +45,107 @@ jobs:
           make clean
           make BOLOS_SDK=$NANOX_SDK
 
-  job_build_debug:
-    name: Build debug plugins
-    needs: [job_build_nano_s, job_build_nano_x]
+  job_build_plugin_debug_nano_s:
+    name: Build plugin for Nano S testing
     runs-on: ubuntu-latest
+
     container:
       image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+
     steps:
       - name: Clone
         uses: actions/checkout@v2
         with:
           submodules: recursive
-      - name: Build plugins for testing
+      - name: Build plugin for Nano S
         run: |
-          cd tests
-          sh build_local_test_elfs.sh
+          make clean
+          make -j DEBUG=1 BOLOS_SDK=$NANOS_SDK
+      - name: Move to test directory
+        run: |
+          mkdir -p ./tests/elfs/
+          mv bin/app.elf ./tests/elfs/plugin_nanos.elf
+      - name: Cache plugin
+        uses: actions/cache@v1
+        with:
+          path: ./tests/elfs
+          key: ${{ runner.os }}-${{ github.run_id }}-plugins
+
+  job_build_plugin_debug_nano_x:
+    name: Build plugin for Nano X testing
+    runs-on: ubuntu-latest
+
+    container:
+      image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+
+    steps:
+      - name: Clone
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Build plugin for Nano X
+        run: |
+          make clean
+          make -j DEBUG=1 BOLOS_SDK=$NANOX_SDK
+      - name: Move to test directory
+        run: |
+          mkdir -p ./tests/elfs/
+          mv bin/app.elf ./tests/elfs/plugin_nanox.elf
+      - name: Cache plugin
+        uses: actions/cache@v1
+        with:
+          path: ./tests/elfs
+          key: ${{ runner.os }}-${{ github.run_id }}-plugins
+
+  job_build_ethereum_nano_s:
+    name: Build plugin for Nano S testing
+    runs-on: ubuntu-latest
+
+    container:
+      image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+
+    steps:
+      - name: Checkout tools repo
+        uses: actions/checkout@v2
+        with:
+          repository: LedgerHQ/app-ethereum
+          ref: master
+      - name: Build ethereum for Nano S
+        run: |
+          make clean
+          make -j DEBUG=1 BYPASS_SIGNATURES=1 BOLOS_SDK=$NANOS_SDK CHAIN=ethereum
+      - name: Move to test directory
+        run: |
+          mkdir -p ./tests/elfs/
+          mv bin/app.elf ./tests/elfs/ethereum_nanos.elf
+      - name: Cache plugin
+        uses: actions/cache@v1
+        with:
+          path: ./tests/elfs
+          key: ${{ runner.os }}-${{ github.run_id }}-plugins
+
+  job_build_ethereum_nano_x:
+    name: Build plugin for Nano X testing
+    runs-on: ubuntu-latest
+
+    container:
+      image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+
+    steps:
+      - name: Checkout tools repo
+        uses: actions/checkout@v2
+        with:
+          repository: LedgerHQ/app-ethereum
+          ref: master
+      - name: Build ethereum for Nano X
+        run: |
+          make clean
+          make -j DEBUG=1 BYPASS_SIGNATURES=1 BOLOS_SDK=$NANOX_SDK CHAIN=ethereum
+      - name: Move to test directory
+        run: |
+          mkdir -p ./tests/elfs/
+          mv bin/app.elf ./tests/elfs/ethereum_nanox.elf
       - name: Cache plugin
         uses: actions/cache@v1
         with:
@@ -70,7 +154,7 @@ jobs:
 
   jobs-e2e-tests:
     name: E2E Tests
-    needs: [job_build_debug]
+    needs: [job_build_plugin_debug_nano_s, job_build_plugin_debug_nano_x, job_build_ethereum_nano_s, job_build_ethereum_nano_x]
     runs-on: ubuntu-latest
     steps:
       - name: Test
@@ -88,6 +172,9 @@ jobs:
         with:
           path: ./tests/elfs
           key: ${{ runner.os }}-${{ github.run_id }}-plugins
+      - name: Check'em
+        run: |
+          ls -lh tests/elfs/
       - run: sudo apt-get update -y && sudo apt-get install -y libusb-1.0.0 libudev-dev
       - name: Install node
         uses: actions/setup-node@v2
