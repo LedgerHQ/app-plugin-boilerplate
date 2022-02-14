@@ -21,3 +21,4 @@ __pycache__/
 # JS
 tests/node_modules
 tests/lib
+tests/elfs
