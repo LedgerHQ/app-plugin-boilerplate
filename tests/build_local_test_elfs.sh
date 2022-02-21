@@ -11,10 +11,10 @@ build_plugin() {
     # arguments: <SDK letter>
     echo "** Building app-plugin for Nano $1..."
     local target="tests/elfs/plugin_nano${1,,}.elf"
-    if [ $1 == "S" ];
+    if [ "$1" == "S" ];
     then
         local sdk=$NANOS_SDK
-    elif [ $1 == "X" ];
+    elif [ "$1" == "X" ];
     then
         local sdk=$NANOX_SDK
     else
@@ -22,9 +22,9 @@ build_plugin() {
         exit 1
     fi
     cd ..
-    make clean BOLOS_SDK=$sdk
-    make -j DEBUG=1 BOLOS_SDK=$sdk
-    cp bin/app.elf $target
+    make clean BOLOS_SDK="$sdk"
+    make -j DEBUG=1 BOLOS_SDK="$sdk"
+    cp bin/app.elf "$target"
     cd -
 }
 
@@ -32,20 +32,20 @@ build_ethereum() {
     # arguments: <SDK letter>
     echo "** Building app-ethereum for Nano $1..."
     local target="tests/elfs/ethereum_nano${1,,}.elf"
-    if [ $1 == "S" ];
+    if [ "$1" == "S" ];
     then
         local sdk=$NANOS_SDK
-    elif [ $1 == "X" ];
+    elif [ "$1" == "X" ];
     then
-        local sdk=$NANOX_SDK
+        local sdk="$NANOX_SDK"
     else
         echo "Unknown SDK '$1'"
         exit 1
     fi
-    cd $APP_ETHEREUM
-    make clean BOLOS_SDK=$sdk
-    make -j DEBUG=1 BYPASS_SIGNATURES=1 BOLOS_SDK=$sdk CHAIN=ethereum
-    cp bin/app.elf $target
+    cd "$APP_ETHEREUM"
+    make clean BOLOS_SDK="$sdk"
+    make -j DEBUG=1 BYPASS_SIGNATURES=1 BOLOS_SDK="$sdk" CHAIN=ethereum
+    cp bin/app.elf "$target"
     cd -
 }
 
@@ -56,9 +56,9 @@ main() {
 
     if [ $# -ne 0 ];
     then
-        test -d $1 ||
+        test -d "$1" ||
             (echo "Provided argument '$1' is expected to be the app-ethereum repository path, but is not a directory" && exit 1);
-        APP_ETHEREUM=$1
+        APP_ETHEREUM="$1"
     fi
 
     echo "* Building elfs for Nano S..."
@@ -73,4 +73,4 @@ main() {
 }
 
 
-main $@
+main "$@"
