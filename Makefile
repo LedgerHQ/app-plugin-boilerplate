@@ -24,6 +24,10 @@ include $(BOLOS_SDK)/Makefile.defines
 # EDIT THIS: Put your plugin name
 APPNAME = "Boilerplate"
 
+ifeq ($(ETHEREUM_PLUGIN_SDK),)
+ETHEREUM_PLUGIN_SDK=ethereum-plugin-sdk
+endif
+
 APP_LOAD_PARAMS += --appFlags 0x800 --path "44'/60'" --curve secp256k1
 
 APP_LOAD_PARAMS += $(COMMON_LOAD_PARAMS)
@@ -117,7 +121,7 @@ LDLIBS   += -lm -lgcc -lc
 include $(BOLOS_SDK)/Makefile.glyphs
 
 ### variables processed by the common makefile.rules of the SDK to grab source files and include dirs
-APP_SOURCE_PATH  += src ethereum-plugin-sdk
+APP_SOURCE_PATH  += src $(ETHEREUM_PLUGIN_SDK)
 SDK_SOURCE_PATH  += lib_stusb lib_stusb_impl
 SDK_SOURCE_PATH  += lib_ux
 ifneq (,$(findstring HAVE_BLE,$(DEFINES)))
