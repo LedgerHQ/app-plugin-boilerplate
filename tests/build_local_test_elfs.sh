@@ -31,7 +31,8 @@ build_plugin() {
 build_ethereum() {
     # arguments: <SDK letter>
     echo "** Building app-ethereum for Nano $1..."
-    local target="tests/elfs/ethereum_nano${1,,}.elf"
+    local current_dir=`pwd`
+    local target="$current_dir/elfs/ethereum_nano${1,,}.elf"
     if [ "$1" == "S" ];
     then
         local sdk=$NANOS_SDK
