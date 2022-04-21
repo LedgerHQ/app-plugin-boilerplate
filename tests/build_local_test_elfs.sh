@@ -3,14 +3,14 @@
 # FILL THESE WITH YOUR OWN SDKs PATHS and APP-ETHEREUM's ROOT
 NANOS_SDK=$NANOS_SDK
 NANOX_SDK=$NANOX_SDK
-APP_ETHEREUM=$APP_ETHEREUM
+APP_ETHEREUM=${APP_ETHEREUM:-"/plugin_dev/app-ethereum"}
 
 set -e
 
 build_plugin() {
     # arguments: <SDK letter>
     echo "** Building app-plugin for Nano $1..."
-    local target="tests/elfs/plugin_nano${1,,}.elf"
+    local target="$(realpath './elfs/')/plugin_nano${1,,}.elf"
     if [ "$1" == "S" ];
     then
         local sdk=$NANOS_SDK
@@ -31,7 +31,7 @@ build_plugin() {
 build_ethereum() {
     # arguments: <SDK letter>
     echo "** Building app-ethereum for Nano $1..."
-    local target="tests/elfs/ethereum_nano${1,,}.elf"
+    local target="$(realpath './elfs/')/ethereum_nano${1,,}.elf"
     if [ "$1" == "S" ];
     then
         local sdk=$NANOS_SDK
