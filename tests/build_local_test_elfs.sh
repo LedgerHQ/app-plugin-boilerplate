@@ -2,6 +2,7 @@
 
 # FILL THESE WITH YOUR OWN SDKs PATHS and APP-ETHEREUM's ROOT
 NANOS_SDK=$NANOS_SDK
+NANOSP_SDK=$NANOSP_SDK
 NANOX_SDK=$NANOX_SDK
 APP_ETHEREUM=${APP_ETHEREUM:-"/plugin_dev/app-ethereum"}
 
@@ -14,6 +15,9 @@ build_plugin() {
     if [ "$1" == "S" ];
     then
         local sdk=$NANOS_SDK
+    elif [ "$1" == "SP" ];
+    then
+        local sdk=$NANOSP_SDK
     elif [ "$1" == "X" ];
     then
         local sdk=$NANOX_SDK
@@ -35,6 +39,9 @@ build_ethereum() {
     if [ "$1" == "S" ];
     then
         local sdk=$NANOS_SDK
+    elif [ "$1" == "SP" ];
+    then
+        local sdk=$NANOSP_SDK
     elif [ "$1" == "X" ];
     then
         local sdk="$NANOX_SDK"
@@ -64,6 +71,10 @@ main() {
     echo "* Building elfs for Nano S..."
     build_plugin "S"
     build_ethereum "S"
+
+    echo "* Building elfs for Nano S Plus..."
+    build_plugin "SP"
+    build_ethereum "SP"
 
     echo "* Building elfs for Nano X..."
     build_plugin "X"
