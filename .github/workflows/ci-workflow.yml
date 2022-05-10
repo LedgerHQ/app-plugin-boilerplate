@@ -23,7 +23,7 @@ jobs:
         with:
           repository: LedgerHQ/ethereum-plugin-sdk
           path: ethereum-plugin-sdk
-          ref: ${{ github.base_ref || github.ref_name }}
+          ref: develop
       - name: Build plugin for Nano S
         run: |
           make clean
@@ -42,7 +42,7 @@ jobs:
         with:
           repository: LedgerHQ/ethereum-plugin-sdk
           path: ethereum-plugin-sdk
-          ref: ${{ github.base_ref || github.ref_name }}
+          ref: develop
       - name: Build plugin for Nano S Plus
         run: |
           make clean
@@ -61,7 +61,7 @@ jobs:
         with:
           repository: LedgerHQ/ethereum-plugin-sdk
           path: ethereum-plugin-sdk
-          ref: ${{ github.base_ref || github.ref_name }}
+          ref: develop
       - name: Build plugin for Nano X
         run: |
           make clean
@@ -80,7 +80,7 @@ jobs:
         with:
           repository: LedgerHQ/ethereum-plugin-sdk
           path: ethereum-plugin-sdk
-          ref: ${{ github.base_ref || github.ref_name }}
+          ref: develop
       - name: Build plugin
         run: |
           make clean
@@ -109,7 +109,7 @@ jobs:
         with:
           repository: LedgerHQ/ethereum-plugin-sdk
           path: ethereum-plugin-sdk
-          ref: ${{ github.base_ref || github.ref_name }}
+          ref: develop
       - name: Build plugin
         run: |
           make clean
@@ -137,7 +137,7 @@ jobs:
         with:
           repository: LedgerHQ/ethereum-plugin-sdk
           path: ethereum-plugin-sdk
-          ref: ${{ github.base_ref || github.ref_name }}
+          ref: develop
       - name: Build plugin
         run: |
           make clean
