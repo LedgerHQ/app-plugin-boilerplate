@@ -1,4 +1,4 @@
-name: Compilation & tests
+name: Compilation
 
 on:
   workflow_dispatch:
@@ -11,7 +11,7 @@ on:
 
 jobs:
   nano_plugin_build:
-    name: Build plugin for NanoS, X and S+
+    name: Build plugin for Nano
     strategy:
       matrix:
         include:
@@ -39,7 +39,7 @@ jobs:
           make BOLOS_SDK=${{ matrix.SDK }}
 
   nano_plugin_debug_build:
-    name: Build plugin for NanoS, X and S+ testing
+    name: Build testing plugin for Nano
     strategy:
       matrix:
         include:
@@ -78,7 +78,7 @@ jobs:
           path: tests/elfs/plugin_${{ matrix.artifact }}.elf
 
   nano_ethereum_debug_build:
-    name: Build Ethereum application for Nano S, X and S+ testing
+    name: Build Ethereum testing application for Nano
     strategy:
       matrix:
         include:
