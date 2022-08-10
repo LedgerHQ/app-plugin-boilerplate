@@ -8,7 +8,8 @@ import { parseEther, parseUnits} from "ethers/lib/utils";
 const contractAddr = "0x7a250d5630b4cf539739df2c5dacb4c659f2488d";
 // EDIT THIS: Replace `boilerplate` with your plugin name
 const pluginName = "boilerplate";
-const abi_path = `../${pluginName}/abis/` + contractAddr + '.json';
+const testNetwork = "ethereum";
+const abi_path = `../networks/${testNetwork}/${pluginName}/abis/` + contractAddr + '.json';
 const abi = require(abi_path);
 
 // Test from replayed transaction: https://etherscan.io/tx/0x0160b3aec12fd08e6be0040616c7c38248efb4413168a3372fc4d2db0e5961bb
