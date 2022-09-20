@@ -22,3 +22,6 @@ __pycache__/
 tests/node_modules
 tests/lib
 tests/elfs
+
+# Ledger Ethereum APP cloned from github
+ethereum-plugin-sdk
