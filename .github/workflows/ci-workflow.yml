@@ -26,8 +26,12 @@ jobs:
     steps:
       - name: Clone
         uses: actions/checkout@v3
+      - name: Clone SDK
+        uses: actions/checkout@v3
         with:
-          submodules: recursive
+          repository: LedgerHQ/ethereum-plugin-sdk
+          path: ethereum-plugin-sdk
+          ref: ${{ github.base_ref || github.ref_name }}
       - name: Build plugin
         run: |
           make clean
@@ -119,8 +123,12 @@ jobs:
       image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
     steps:
       - uses: actions/checkout@v3
+      - name: Clone SDK
+        uses: actions/checkout@v3
         with:
-          submodules: recursive
+          repository: LedgerHQ/ethereum-plugin-sdk
+          path: ethereum-plugin-sdk
+          ref: ${{ github.base_ref || github.ref_name }}
       - name: Build with Clang Static Analyzer
         run: |
           make clean
