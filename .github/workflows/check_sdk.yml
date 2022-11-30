@@ -1,0 +1,40 @@
+name: Check SDK submodule version
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+
+jobs:
+  job_check_SDK:
+    name: Check Ethereum plugin SDK submodule is up-to-date
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone plugin
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Clone SDK
+        uses: actions/checkout@v3
+        with:
+          repository: LedgerHQ/ethereum-plugin-sdk
+          path: plugin-sdk
+          ref: ${{ github.base_ref || github.ref_name }}
+      - name: Comparing the SDK hash values
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          REPO_SDK_HASH=$(git submodule status | grep sdk | cut -d ' ' -f2)
+          echo "SDK submodule hash: ${REPO_SDK_HASH} (checked out from '${{ github.base_ref || github.ref_name }}')"
+          CURRENT_SDK_HASH=$(cd ./plugin-sdk/ && git rev-parse HEAD)
+          echo "SDK submodule hash: ${CURRENT_SDK_HASH}"
+          if [ ${REPO_SDK_HASH} = ${CURRENT_SDK_HASH} ]
+          then
+              echo "SDK versions match!"
+              exit 0
+          else
+              echo "SDK versions mismatch!"
+              exit 1
+          fi
