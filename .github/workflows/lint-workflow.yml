@@ -5,9 +5,11 @@ on:
   push:
     branches:
     - master
+    - develop
   pull_request:
     branches:
     - master
+    - develop
 
 jobs:
   job_lint:
@@ -16,7 +18,7 @@ jobs:
 
     steps:
       - name: Clone
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Lint
         uses: DoozyX/clang-format-lint-action@v0.11
