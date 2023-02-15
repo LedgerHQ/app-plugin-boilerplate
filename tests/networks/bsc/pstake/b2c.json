@@ -1,0 +1,33 @@
+{
+    "chainId": 1,
+    "contracts": [
+        {
+            "address": "0xc228cefdf841defdbd5b3a18dfd414cc0dbfa0d8",
+            "contractName": "StakePool",
+            "selectors": {
+                "0xd0e30db0": {
+                    "erc20OfInterest": [],
+                    "method": "deposit",
+                    "plugin": "pSTAKE"
+		        },
+                "0xd1058e59": {
+                    "erc20OfInterest": [],
+                    "method": "claimAll",
+                    "plugin": "pSTAKE"
+                }
+	        }
+	    },
+        {
+            "address": "0xc2e9d07f66a89c44062459a47a0d2dc038e4fb16",
+            "contractName": "StakedBNBToken",
+            "selectors": {
+                "0x9bd9bbc6": {
+                    "erc20OfInterest": [],
+                    "method": "send",
+                    "plugin": "pSTAKE"
+                }
+            }
+        }
+    ],
+    "name": "pSTAKE"
+}

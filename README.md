@@ -1,32 +1,12 @@
-# app-plugin-boilerplate
+# Ledger pSTAKE Plugin
 
-This repo is a meant to be a forkable example of a plugin.
+This is a plugin for the Ethereum application which helps parsing and displaying relevant information when signing a transaction on pSTAKE's stkBNB platform.
 
-Plugins are lightweight applications that go hand-in-hand with the Ethereum
-Application on a Nano S / X device.
+## Smart Contracts
 
-They allow users to safely interact with smart contracts by parsing the
-transaction data and displaying its content in a human readable way. This is
-done on a "per contract" basis, meaning a plugin is required for every DApp.
+Smart contracts covered by this plugin are:
 
-The code has been commented, and special "EDIT THIS" comments indicate where
-developers are expected to adapt the code to their own needs.
-
-It is STRONGLY recommended to follow the
-[plugin guide](https://developers.ledger.com/docs/dapp/nano-plugin/overview/)
-in order to better understand the flow and the context for plugins.
-
-## Ethereum SDK
-
-Ethereum plugins need the [Ethereum SDK](https://github.com/LedgerHQ/ethereum-plugin-sdk).
-You can use the `ETHEREUM_PLUGIN_SDK` variable to point to the directory where you cloned
-this repository. By default, the `Makefile` expects it to be at the root directory of this
-plugin repository, by the `ethereum-plugin-sdk` name.
-
-This repository is deliberately **not** a submodule. You can see that the CI workflows
-clone and checkout either the latest `master` or on `develop` references. This ensures
-the code is compiled and tested on the latest version of the SDK.
-
-## Formatting
-
-The C source code is expected to be formatted with `clang-format` 11.0.0 or higher.
+| Network | Smart Contract Name | Address                                      | Selectors                                                                                                     |
+|---------|---------------------|----------------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| BSC     | Stake Pool          | `0xc228cefdf841defdbd5b3a18dfd414cc0dbfa0d8` | **deposit (0xd0e30db0)**: Shows deposited BNB amount,<br/> **claimAll (0xd1058e59)**: Shows a static info msg |
+| BSC     | stkBNB Token        | `0xc2e9d07f66a89c44062459a47a0d2dc038e4fb16` | **send (0x9bd9bbc6)**: Shows stkBNB amount on unstake                                                         |
