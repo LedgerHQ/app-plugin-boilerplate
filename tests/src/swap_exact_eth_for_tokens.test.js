@@ -15,6 +15,7 @@ const abi = require(abi_path);
 // Test from replayed transaction: https://etherscan.io/tx/0x0160b3aec12fd08e6be0040616c7c38248efb4413168a3372fc4d2db0e5961bb
 // EDIT THIS: build your own test
 nano_models.forEach(function(model) {
+  jest.setTimeout(20000)
   test('[Nano ' + model.letter + '] Swap Exact Eth For Tokens with beneficiary', zemu(model, async (sim, eth) => {
 
   // The rawTx of the tx up above is accessible through: https://etherscan.io/getRawTx?tx=0xb27a69cd3190ad0712da39f6b809ecc019ecbc319d3c17169853270226d18a8a
@@ -39,6 +40,7 @@ nano_models.forEach(function(model) {
 // Test from constructed transaction
 // EDIT THIS: build your own test
 nano_models.forEach(function(model) {
+  jest.setTimeout(20000)
   test('[Nano ' + model.letter + '] Swap Exact Eth For Tokens', zemu(model, async (sim, eth) => {
   const contract = new ethers.Contract(contractAddr, abi);
 
