@@ -10,7 +10,7 @@
 
 // Name of the plugin.
 // EDIT THIS: Replace with your plugin name.
-#define PLUGIN_NAME "Boilerplate"
+#define PLUGIN_NAME "PluginBoilerplate"
 
 // Enumeration of the different selectors possible.
 // Should follow the exact same order as the array declared in main.c
