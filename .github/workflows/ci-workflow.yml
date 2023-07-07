@@ -161,4 +161,4 @@ jobs:
 
       - name: Run Zemu tests
         run: |
-          cd tests && docker pull zondax/builder-zemu && yarn test
+          cd tests && yarn test
