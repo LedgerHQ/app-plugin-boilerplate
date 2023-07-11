@@ -25,7 +25,7 @@ include $(BOLOS_SDK)/Makefile.defines
 #        Mandatory configuration       #
 ########################################
 # Application name
-APPNAME = "Plugin Boilerplate"
+APPNAME = "PluginBoilerplate"
 
 # Application version
 APPVERSION_M = 1

@@ -87,8 +87,8 @@ function zemu(device, func) {
         let elf_path;
         let lib_elf;
         elf_path = device.eth_path;
-        // Edit this: replace `Boilerplate` by your plugin name
-        lib_elf = { 'Boilerplate': device.path };
+        // Edit this: replace `PluginBoilerplate` by your plugin name
+        lib_elf = { 'PluginBoilerplate': device.path };
 
         const sim = new Zemu(elf_path, lib_elf);
         try {
