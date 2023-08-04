@@ -23,7 +23,7 @@
     "eslint-plugin-import": "^2.28.0",
     "ethers": "^5.6.3",
     "jest-serial-runner": "^1.2.1",
-    "patch-package": "^7.0.2",
+    "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
     "regenerator-runtime": "^0.13.9"
   },
