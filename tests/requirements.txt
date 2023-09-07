@@ -1,8 +1,6 @@
 pytest
-ragger[speculos]
-ragger[ledgerwallet]>=1.2.0
-Jinja2==3.1.2
-Flask==2.1.2
+ragger[speculos,ledgerwallet]>=1.11.4
 ecdsa
 simple-rlp
-# TODO add here the ethereum client
+# to change when ethereum client will be pushed on master
+tests/client/

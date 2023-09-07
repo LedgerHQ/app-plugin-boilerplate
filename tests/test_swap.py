@@ -1,5 +1,8 @@
-from application_client.client import EthAppClient, StatusWord, ROOT_SCREENSHOT_PATH
+from pathlib import Path
+from ledger_app_clients.ethereum.client import EthAppClient, StatusWord
 from ragger.navigator import NavInsID
+
+ROOT_SCREENSHOT_PATH = Path(__file__).parent
 
 # EDIT THIS: Replace `boilerplate` with your plugin name
 PLUGIN_NAME = "PluginBoilerplate"
@@ -32,13 +35,14 @@ def test_swap_exact_eth_for_token(backend, firmware, navigator, test_name):
     client = EthAppClient(backend)
 
     # first setup the external plugin
-    with client.external_plugin_setup(PLUGIN_NAME, contract_address, method_selector, PLACE_HOLDER_SIGNATURE):
+    with client.set_external_plugin(PLUGIN_NAME, contract_address, method_selector, PLACE_HOLDER_SIGNATURE):
         pass
 
     assert client.response().status == StatusWord.OK
 
     # send the transaction
-    with client.external_plugin_setup_sign(tx_payload):
+    # !!!! to be replaced by a dedicated plugin sign function !!!
+    with client._sign("m/44'/60'/1'/0/0", tx_payload):
         # Validate the on-screen request by performing the navigation appropriate for this device
         if firmware.device.startswith("nano"):
             navigator.navigate_until_text_and_compare(NavInsID.RIGHT_CLICK,
