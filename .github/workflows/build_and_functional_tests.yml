@@ -33,7 +33,7 @@ jobs:
     uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_build.yml@v1
     with:
       app_repository: LedgerHQ/app-ethereum
-      app_branch_name: master
+      app_branch_name: develop
       flags: "DEBUG=1 BYPASS_SIGNATURES=1"
       upload_app_binaries_artifact: ethereum_binaries
       run_for_devices: '["nanos", "nanox", "nanosp", "stax"]'

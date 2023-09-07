@@ -1,15 +1,20 @@
 # documentation about APDU format is available here:
 # https://github.com/LedgerHQ/app-ethereum/blob/develop/doc/ethapp.adoc
 
-from enum import IntEnum
-from typing import Iterator
 import struct
+from enum import IntEnum
+from typing import Optional
 from ragger.bip import pack_derivation_path
+from typing import List
+
 from .eip712 import EIP712FieldType
 
 
 class InsType(IntEnum):
+    GET_PUBLIC_ADDR = 0x02
     SIGN = 0x04
+    PROVIDE_NFT_INFORMATION = 0x14
+    SET_PLUGIN = 0x16
     EIP712_SEND_STRUCT_DEF = 0x1a
     EIP712_SEND_STRUCT_IMPL = 0x1c
     EIP712_SEND_FILTERING = 0x1e
@@ -18,11 +23,13 @@ class InsType(IntEnum):
     PROVIDE_DOMAIN_NAME = 0x22
     EXTERNAL_PLUGIN_SETUP = 0x12
 
+
 class P1Type(IntEnum):
     COMPLETE_SEND = 0x00
     PARTIAL_SEND = 0x01
     SIGN_FIRST_CHUNK = 0x00
     SIGN_SUBSQT_CHUNK = 0x80
+
 
 class P2Type(IntEnum):
     STRUCT_NAME = 0x00
@@ -34,6 +41,7 @@ class P2Type(IntEnum):
     FILTERING_CONTRACT_NAME = 0x0f
     FILTERING_FIELD_NAME = 0xff
 
+
 class CommandBuilder:
     _CLA: int = 0xE0
 
@@ -41,7 +49,7 @@ class CommandBuilder:
                    ins: InsType,
                    p1: int,
                    p2: int,
-                   cdata: bytearray = bytes()) -> bytes:
+                   cdata: bytes = bytes()) -> bytes:
 
         header = bytearray()
         header.append(self._CLA)
@@ -67,7 +75,7 @@ class CommandBuilder:
                                             field_type: EIP712FieldType,
                                             type_name: str,
                                             type_size: int,
-                                            array_levels: [],
+                                            array_levels: List,
                                             key_name: str) -> bytes:
         data = bytearray()
         typedesc = 0
@@ -107,7 +115,7 @@ class CommandBuilder:
                                P2Type.ARRAY,
                                data)
 
-    def eip712_send_struct_impl_struct_field(self, data: bytearray) -> Iterator[bytes]:
+    def eip712_send_struct_impl_struct_field(self, data: bytearray) -> List[bytes]:
         chunks = list()
         # Add a 16-bit integer with the data's byte length (network byte order)
         data_w_length = bytearray()
@@ -174,7 +182,7 @@ class CommandBuilder:
                                P2Type.FILTERING_FIELD_NAME,
                                self._eip712_filtering_send_name(name, sig))
 
-    def external_plugin_setup(self, plugin_name: str, contract_address: bytes, method_selelector: bytes, sig: bytes) -> bytes:
+    def set_external_plugin(self, plugin_name: str, contract_address: bytes, method_selelector: bytes, sig: bytes) -> bytes:
         data = bytearray()
         data.append(len(plugin_name))
         data += self._string_to_bytes(plugin_name)
@@ -206,7 +214,7 @@ class CommandBuilder:
 
     def provide_domain_name(self, tlv_payload: bytes) -> list[bytes]:
         chunks = list()
-        payload  = struct.pack(">H", len(tlv_payload))
+        payload = struct.pack(">H", len(tlv_payload))
         payload += tlv_payload
         p1 = 1
         while len(payload) > 0:
@@ -217,3 +225,62 @@ class CommandBuilder:
             payload = payload[0xff:]
             p1 = 0
         return chunks
+
+    def get_public_addr(self,
+                        display: bool,
+                        chaincode: bool,
+                        bip32_path: str,
+                        chain_id: Optional[int]) -> bytes:
+        payload = pack_derivation_path(bip32_path)
+        if chain_id is not None:
+            payload += struct.pack(">Q", chain_id)
+        return self._serialize(InsType.GET_PUBLIC_ADDR,
+                               int(display),
+                               int(chaincode),
+                               payload)
+
+    def set_plugin(self,
+                   type_: int,
+                   version: int,
+                   plugin_name: str,
+                   contract_addr: bytes,
+                   selector: bytes,
+                   chain_id: int,
+                   key_id: int,
+                   algo_id: int,
+                   sig: bytes) -> bytes:
+        payload = bytearray()
+        payload.append(type_)
+        payload.append(version)
+        payload.append(len(plugin_name))
+        payload += plugin_name.encode()
+        payload += contract_addr
+        payload += selector
+        payload += struct.pack(">Q", chain_id)
+        payload.append(key_id)
+        payload.append(algo_id)
+        payload.append(len(sig))
+        payload += sig
+        return self._serialize(InsType.SET_PLUGIN, 0x00, 0x00, payload)
+
+    def provide_nft_information(self,
+                                type_: int,
+                                version: int,
+                                collection_name: str,
+                                addr: bytes,
+                                chain_id: int,
+                                key_id: int,
+                                algo_id: int,
+                                sig: bytes):
+        payload = bytearray()
+        payload.append(type_)
+        payload.append(version)
+        payload.append(len(collection_name))
+        payload += collection_name.encode()
+        payload += addr
+        payload += struct.pack(">Q", chain_id)
+        payload.append(key_id)
+        payload.append(algo_id)
+        payload.append(len(sig))
+        payload += sig
+        return self._serialize(InsType.PROVIDE_NFT_INFORMATION, 0x00, 0x00, payload)
