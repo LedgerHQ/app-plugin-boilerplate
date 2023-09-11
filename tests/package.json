@@ -13,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.14.5",
-    "@ledgerhq/hw-app-eth": "6.34.3",
+    "@ledgerhq/hw-app-eth": "6.34.5",
     "@ledgerhq/hw-transport-http": "^6.28.3",
     "@ledgerhq/logs": "^6.2.0",
     "@zondax/zemu": "^0.44.0",
