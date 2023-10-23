@@ -1,24 +1,54 @@
+/*******************************************************************************
+ *   Plugin Boilerplate
+ *   (c) 2023 Ledger
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ ********************************************************************************/
+
 #pragma once
 
+#include <string.h>
 #include "eth_internals.h"
 #include "eth_plugin_interface.h"
-#include <string.h>
-
-// Number of selectors defined in this plugin. Should match the enum `selector_t`.
-// EDIT THIS: Put in the number of selectors your plugin is going to support.
-#define NUM_SELECTORS 2
 
 // Name of the plugin.
 // EDIT THIS: Replace with your plugin name.
 #define PLUGIN_NAME "PluginBoilerplate"
 
-// Enumeration of the different selectors possible.
-// Should follow the exact same order as the array declared in main.c
-// EDIT THIS: Change the naming (`selector_t`), and add your selector names.
-typedef enum {
-    SWAP_EXACT_ETH_FOR_TOKENS = 0,
-    BOILERPLATE_DUMMY_2,
+// All possible selectors of your plugin.
+// EDIT THIS: Enter your selectors here, in the format X(NAME, value)
+// A Xmacro below will create for you:
+//     - an enum named selector_t with every NAME
+//     - a map named SELECTORS associating each NAME with it's value
+#define SELECTORS_LIST(X)                    \
+    X(SWAP_EXACT_ETH_FOR_TOKENS, 0x7ff36ab5) \
+    X(BOILERPLATE_DUMMY_2, 0x13374242)
+
+// Xmacro helpers to define the enum and map
+// Do not modify !
+#define TO_ENUM(selector_name, selector_id)  selector_name,
+#define TO_VALUE(selector_name, selector_id) selector_id,
+
+// This enum will be automatically expanded to hold all selector names.
+// The value SELECTOR_COUNT can be used to get the number of defined selectors
+// Do not modify !
+typedef enum selector_e {
+    SELECTORS_LIST(TO_ENUM) SELECTOR_COUNT,
 } selector_t;
+
+// This array will be automatically expanded to map all selector_t names with the correct value.
+// Do not modify !
+extern const uint32_t SELECTORS[SELECTOR_COUNT];
 
 // Enumeration used to parse the smart contract data.
 // EDIT THIS: Adapt the parameter names here.
@@ -30,9 +60,6 @@ typedef enum {
     PATH_LENGTH,
     UNEXPECTED_PARAMETER,
 } parameter;
-
-// EDIT THIS: Rename `BOILERPLATE` to be the same as the one initialized in `main.c`.
-extern const uint32_t BOILERPLATE_SELECTORS[NUM_SELECTORS];
 
 // Shared global memory with Ethereum app. Must be at most 5 * 32 bytes.
 // EDIT THIS: This struct is used by your plugin to save the parameters you parse. You

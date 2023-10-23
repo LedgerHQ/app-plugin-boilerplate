@@ -24,7 +24,7 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
     memset(context, 0, sizeof(*context));
 
     size_t index;
-    if (!find_selector(U4BE(msg->selector, 0), BOILERPLATE_SELECTORS, NUM_SELECTORS, &index)) {
+    if (!find_selector(U4BE(msg->selector, 0), SELECTORS, SELECTOR_COUNT, &index)) {
         PRINTF("Error: selector not found!\n");
         msg->result = ETH_PLUGIN_RESULT_UNAVAILABLE;
         return;
