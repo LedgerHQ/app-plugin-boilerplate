@@ -15,8 +15,6 @@
  *  limitations under the License.
  ********************************************************************************/
 
-#include <stdint.h>
-#include "boilerplate_plugin.h"
-#include "xmacro_helpers.h"
-
-const uint32_t SELECTORS[SELECTOR_COUNT] = {SELECTORS_LIST(TO_VALUE)};
+// XMacro helpers to create the selector enum and map
+#define TO_ENUM(name, val)  name,
+#define TO_VALUE(name, val) val,
