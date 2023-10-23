@@ -21,10 +21,6 @@
 #include "eth_internals.h"
 #include "eth_plugin_interface.h"
 
-// Name of the plugin.
-// EDIT THIS: Replace with your plugin name.
-#define PLUGIN_NAME "PluginBoilerplate"
-
 // All possible selectors of your plugin.
 // EDIT THIS: Enter your selectors here, in the format X(NAME, value)
 // A Xmacro below will create for you:

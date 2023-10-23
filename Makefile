@@ -25,6 +25,7 @@ include $(BOLOS_SDK)/Makefile.defines
 #        Mandatory configuration       #
 ########################################
 # Application name
+# Will be displayed on screen by the Ethereum app
 APPNAME = "PluginBoilerplate"
 
 # Application version
