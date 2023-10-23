@@ -16,7 +16,7 @@
  ********************************************************************************/
 
 #include <stdint.h>
-#include "boilerplate_plugin.h"
+#include "plugin.h"
 #include "xmacro_helpers.h"
 
 const uint32_t SELECTORS[SELECTOR_COUNT] = {SELECTORS_LIST(TO_VALUE)};
