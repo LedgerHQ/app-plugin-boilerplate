@@ -7,16 +7,12 @@ from ragger.conftest import configuration
 # You can configure optional parameters by overriding the value of ragger.configuration.OPTIONAL_CONFIGURATION
 # Please refer to ragger/conftest/configuration.py for their descriptions and accepted values
 
-# configuration.OPTIONAL.APP_NAME = "Ethereum"
-# configuration.OPTIONAL.APP_DIR="tests/bin/"
+configuration.OPTIONAL.APP_DIR = "tests/ethereum_build/"
 
-configuration.OPTIONAL.SIDELOADED_APPS = {
-    "PluginBoilerplate": "PluginBoilerplate",
-}
-
-configuration.OPTIONAL.SIDELOADED_APPS_DIR = "tests/lib_binaries"
+configuration.OPTIONAL.LOAD_MAIN_APP_AS_LIBRARY = True
 
 configuration.OPTIONAL.BACKEND_SCOPE = "class"
+
 
 #########################
 ### CONFIGURATION END ###
