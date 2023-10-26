@@ -1,4 +1,4 @@
-#include "boilerplate_plugin.h"
+#include "plugin.h"
 
 // EDIT THIS: Adapt this function to your needs! Remember, the information for tokens are held in
 // `msg->token1` and `msg->token2`. If those pointers are `NULL`, this means the ethereum app didn't

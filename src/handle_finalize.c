@@ -1,4 +1,4 @@
-#include "boilerplate_plugin.h"
+#include "plugin.h"
 
 void handle_finalize(void *parameters) {
     ethPluginFinalize_t *msg = (ethPluginFinalize_t *) parameters;
