@@ -51,7 +51,7 @@ Alternatively, you can run the test by command lines in your terminal.
 First, run this command once to install the tests requirements:
 
 ```shell
-pip install -r tests/requirements.txt --extra-index-url
+pip install -r tests/requirements.txt
 ```
 
 Then you can run the tests. For example, run the following command to run all tests on all devices:
