@@ -22,7 +22,6 @@ jobs:
     name: Build plugin using the reusable workflow
     uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_build.yml@v1
     with:
-      app_repository: LedgerHQ/app-plugin-boilerplate
       flags: "DEBUG=1"
       upload_app_binaries_artifact: libraries_binaries
       upload_as_lib_artifact: PluginBoilerplate
