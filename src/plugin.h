@@ -21,10 +21,6 @@
 #include "eth_internals.h"
 #include "eth_plugin_interface.h"
 
-// Name of the plugin.
-// EDIT THIS: Replace with your plugin name.
-#define PLUGIN_NAME "PluginBoilerplate"
-
 // All possible selectors of your plugin.
 // EDIT THIS: Enter your selectors here, in the format X(NAME, value)
 // A Xmacro below will create for you:
@@ -64,7 +60,7 @@ typedef enum {
 // Shared global memory with Ethereum app. Must be at most 5 * 32 bytes.
 // EDIT THIS: This struct is used by your plugin to save the parameters you parse. You
 // will need to adapt this struct to your plugin.
-typedef struct context_t {
+typedef struct context_s {
     // For display.
     uint8_t amount_received[INT256_LENGTH];
     uint8_t beneficiary[ADDRESS_LENGTH];
@@ -85,4 +81,7 @@ typedef struct context_t {
 
 // Piece of code that will check that the above structure is not bigger than 5 * 32. Do not remove
 // this check.
-_Static_assert(sizeof(context_t) <= 5 * 32, "Structure of parameters too big.");
+#define PLUGIN_CONTEXT_SIZE (5 * INT256_LENGTH)
+#define ASSERT_SIZEOF_PLUGIN_CONTEXT(s) \
+    _Static_assert(sizeof(s) <= PLUGIN_CONTEXT_SIZE, "Plugin context structure is too big.")
+ASSERT_SIZEOF_PLUGIN_CONTEXT(context_t);

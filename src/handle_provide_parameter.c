@@ -1,4 +1,4 @@
-#include "boilerplate_plugin.h"
+#include "plugin.h"
 
 // EDIT THIS: Remove this function and write your own handlers!
 static void handle_swap_exact_eth_for_tokens(ethPluginProvideParameter_t *msg, context_t *context) {

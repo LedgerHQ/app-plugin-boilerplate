@@ -1,4 +1,4 @@
-#include "boilerplate_plugin.h"
+#include "plugin.h"
 #include "utils.h"
 
 // Called once to init.

@@ -16,7 +16,7 @@
  ********************************************************************************/
 
 #include <stdint.h>
-#include "boilerplate_plugin.h"
+#include "plugin.h"
 
 // This array will be automatically expanded to map all selector_t names with the correct value.
 // Do not modify !
