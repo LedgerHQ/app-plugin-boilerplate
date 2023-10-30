@@ -1,0 +1,6 @@
+--extra-index-url https://test.pypi.org/simple/
+ledger_app_clients.ethereum
+pytest
+ragger[speculos,ledgerwallet]>=1.11.5
+ecdsa
+simple-rlp
