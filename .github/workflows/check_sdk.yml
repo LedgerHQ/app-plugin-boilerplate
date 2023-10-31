@@ -1,3 +1,4 @@
+---
 name: Check SDK submodule version
 
 on:
@@ -18,24 +19,38 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: recursive
+
+      - name: Determine SDK reference
+        id: determine_sdk_ref
+        run: |
+          if [[ "${{ github.event_name }}" == 'pull_request' ]]; then
+            ref_to_use="${{ github.base_ref }}"
+          else
+            ref_to_use="${{ github.ref_name }}"
+          fi
+          if [[ "$ref_to_use" =~ ^(main|master)$ ]]; then
+            echo "sdk_ref=master" >> $GITHUB_OUTPUT
+          else
+            echo "sdk_ref=develop" >> $GITHUB_OUTPUT
+          fi
+
       - name: Clone SDK
         uses: actions/checkout@v3
         with:
           repository: LedgerHQ/ethereum-plugin-sdk
           path: plugin-sdk
-          ref: ${{ github.base_ref || github.ref_name }}
+          ref: ${{ steps.determine_sdk_ref.outputs.sdk_ref }}
+
       - name: Comparing the SDK hash values
         run: |
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          REPO_SDK_HASH=$(git submodule status | grep sdk | cut -d ' ' -f2)
-          echo "SDK submodule hash: ${REPO_SDK_HASH} (checked out from '${{ github.base_ref || github.ref_name }}')"
-          CURRENT_SDK_HASH=$(cd ./plugin-sdk/ && git rev-parse HEAD)
-          echo "SDK submodule hash: ${CURRENT_SDK_HASH}"
-          if [ ${REPO_SDK_HASH} = ${CURRENT_SDK_HASH} ]
-          then
-              echo "SDK versions match!"
-              exit 0
+          repo_sdk_hash="$(git submodule status | grep sdk | cut -d ' ' -f2)"
+          current_sdk_hash="$(cd ./plugin-sdk/ && git rev-parse HEAD)"
+          if [[ "$repo_sdk_hash" == "$current_sdk_hash" ]]; then
+            echo "SDK versions match!"
+            exit 0
           else
-              echo "SDK versions mismatch!"
-              exit 1
+            echo "SDK versions mismatch!"
+            echo "Local SDK submodule hash: $repo_sdk_hash (checked out from '${{ github.ref }}')"
+            echo "Reference SDK submodule hash: $current_sdk_hash (checked out from '${{ steps.determine_sdk_ref.outputs.sdk_ref }}'"
+            exit 1
           fi
