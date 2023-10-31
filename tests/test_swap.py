@@ -1,11 +1,14 @@
 from pathlib import Path
+
 from ledger_app_clients.ethereum.client import EthAppClient, StatusWord
 from ragger.navigator import NavInsID
 
+from .utils import get_appname_from_makefile
+
+
 ROOT_SCREENSHOT_PATH = Path(__file__).parent
 
-# EDIT THIS: Replace `boilerplate` with your plugin name
-PLUGIN_NAME = "PluginBoilerplate"
+PLUGIN_NAME = get_appname_from_makefile()
 
 PLACE_HOLDER_SIGNATURE = bytes.fromhex('3045022100f6e1a922c745e244fa3ed9a865491672808ef93f492ee0410861d748c5de201f0220160d6522499f3a84fa3e744b3b81e49e129e997b28495e58671a1169b16fa777')
 
