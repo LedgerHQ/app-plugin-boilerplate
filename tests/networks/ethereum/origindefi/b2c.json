@@ -1,0 +1,182 @@
+{
+    "chainId": 1,
+    "contracts": [
+        {
+            "address": "0x9858e47bcbbe6fbac040519b02d7cd4b2c470c66",
+            "contractName": "OETHZapper",
+            "selectors": {
+                "0xd0e30db0": {
+                    "erc20OfInterest": [],
+                    "method": "deposit",
+                    "plugin": "origindefi"
+		        },
+                "0xd443e97d": {
+                    "erc20OfInterest": [],
+                    "method": "depositSFRXETH",
+                    "plugin": "origindefi"
+		        }
+	        }
+	    },
+        {
+            "address": "0x39254033945aa2e4809cc2977e7087bee48bd7ab",
+            "contractName": "OETHVaultProxy",
+            "selectors": {
+                "0x156e29f6": {
+                    "erc20OfInterest": [
+                        "_asset"
+                    ],
+                    "method": "mint",
+                    "plugin": "origindefi"
+		        },
+                "0x7cbc2373": {
+                    "erc20OfInterest": [],
+                    "method": "redeem",
+                    "plugin": "origindefi"
+		        }
+	        }
+	    },
+        {
+            "address": "0x94b17476a93b3262d87b9a326965d1e91f9c13e7",
+            "contractName": "ETH/OETH Curve pool",
+            "selectors": {
+                "0x3df02124": {
+                    "erc20OfInterest": [],
+                    "method": "exchange",
+                    "plugin": "origindefi"
+		        }
+	        }
+	    },
+        {
+            "address": "0x99a58482bd75cbab83b27ec03ca68ff489b5788f",
+            "contractName": "Curve router",
+            "selectors": {
+                "0x353ca424": {
+                    "erc20OfInterest": [
+                        "_route.0",
+                        "_route.4"
+                    ],
+                    "method": "exchange_multiple",
+                    "plugin": "origindefi"
+		        }
+	        }
+	    },
+        {
+            "address": "0xdcee70654261af21c44c093c300ed3bb97b78192",
+            "contractName": "WOETH",
+            "selectors": {
+                "0x6e553f65": {
+                    "erc20OfInterest": [],
+                    "method": "deposit",
+                    "plugin": "origindefi"
+		        },
+                "0xba087652": {
+                    "erc20OfInterest": [],
+                    "method": "redeem",
+                    "plugin": "origindefi"
+		        }
+	        }
+	    },
+        {
+            "address": "0xe75d77b1865ae93c7eaa3040b038d7aa7bc02f70",
+            "contractName": "OriginDollarVault",
+            "selectors": {
+                "0x156e29f6": {
+                    "erc20OfInterest": [
+                        "_asset"
+                    ],
+                    "method": "mint",
+                    "plugin": "origindefi"
+		        },
+                "0x7cbc2373": {
+                    "erc20OfInterest": [],
+                    "method": "redeem",
+                    "plugin": "origindefi"
+		        }
+	        }
+	    },
+        {
+            "address": "0xcecad69d7d4ed6d52efcfa028af8732f27e08f70",
+            "contractName": "OriginDollarFlipper",
+            "selectors": {
+                "0x35aa0b96": {
+                    "erc20OfInterest": [],
+                    "method": "buyOusdWithUsdt",
+                    "plugin": "origindefi"
+		        },
+                "0xcb939053": {
+                    "erc20OfInterest": [],
+                    "method": "sellOusdForUsdt",
+                    "plugin": "origindefi"
+		        },
+                "0x5981c746": {
+                    "erc20OfInterest": [],
+                    "method": "buyOusdWithDai",
+                    "plugin": "origindefi"
+		        },
+                "0x8a095a0f": {
+                    "erc20OfInterest": [],
+                    "method": "sellOusdForDai",
+                    "plugin": "origindefi"
+		        },
+                "0xbfc11ffd": {
+                    "erc20OfInterest": [],
+                    "method": "buyOusdWithUsdc",
+                    "plugin": "origindefi"
+		        },
+                "0xc6b68169": {
+                    "erc20OfInterest": [],
+                    "method": "sellOusdForUsdc",
+                    "plugin": "origindefi"
+		        }
+	        }
+	    },
+        {
+            "address": "0xe592427a0aece92de3edee1f18e0157c05861564",
+            "contractName": "UniswapV3 Router",
+            "selectors": {
+                "0xc04b8d59": {
+                    "erc20OfInterest": [],
+                    "method": "exactInput",
+                    "plugin": "origindefi"
+		        },
+                "0x414bf389": {
+                    "erc20OfInterest": [
+                        "params.tokenIn",
+                        "params.tokenOut"
+
+                    ],
+                    "method": "exactInputSingle",
+                    "plugin": "origindefi"
+		        }
+	        }
+	    },
+        {
+            "address": "0x87650d7bbfc3a9f10587d7778206671719d9910d",
+            "contractName": "OUSD/3CRV Curve pool",
+            "selectors": {
+                "0xa6417ed6": {
+                    "erc20OfInterest": [],
+                    "method": "exchange_underlying",
+                    "plugin": "origindefi"
+		        }
+	        }
+	    },
+        {
+            "address": "0xd2af830e8cbdfed6cc11bab697bb25496ed6fa62",
+            "contractName": "WOUSD",
+            "selectors": {
+                "0x6e553f65": {
+                    "erc20OfInterest": [],
+                    "method": "deposit",
+                    "plugin": "origindefi"
+		        },
+                "0xba087652": {
+                    "erc20OfInterest": [],
+                    "method": "redeem",
+                    "plugin": "origindefi"
+		        }
+	        }
+	    }
+    ],
+    "name": "origindefi"
+}
