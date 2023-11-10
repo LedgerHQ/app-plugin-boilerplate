@@ -1,228 +1,84 @@
+/*******************************************************************************
+ *   Plugin Boilerplate
+ *   (c) 2023 Ledger
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ ********************************************************************************/
+
 #pragma once
 
+#include <string.h>
 #include "eth_internals.h"
 #include "eth_plugin_interface.h"
-#include <string.h>
 
-// Number of selectors defined in this plugin. Should match the enum
-// `selector_t`. EDIT THIS: Put in the number of selectors your plugin is going
-// to support.
-#define NUM_SELECTORS 17
-#define PARAMETER_LENGTH 32
+// All possible selectors of your plugin.
+// EDIT THIS: Enter your selectors here, in the format X(NAME, value)
+// A Xmacro below will create for you:
+//     - an enum named selector_t with every NAME
+//     - a map named SELECTORS associating each NAME with it's value
+#define SELECTORS_LIST(X)                    \
+    X(SWAP_EXACT_ETH_FOR_TOKENS, 0x7ff36ab5) \
+    X(BOILERPLATE_DUMMY_2, 0x13374242)
 
-// Name of the plugin.
-// EDIT THIS: Replace with your plugin name.
-#define PLUGIN_NAME "Origin DeFi"
+// Xmacro helpers to define the enum and map
+// Do not modify !
+#define TO_ENUM(selector_name, selector_id)  selector_name,
+#define TO_VALUE(selector_name, selector_id) selector_id,
 
-#define TOKEN_SENT_FOUND 1
-#define TOKEN_RECEIVED_FOUND 1 << 1
-
-// Number of decimals used when the token wasn't found in the CAL.
-#define DEFAULT_DECIMAL WEI_TO_ETHER
-
-// Ticker used when the token wasn't found in the CAL.
-#define DEFAULT_TICKER ""
-
-#define OETH_TICKER "OETH"
-#define OETH_DECIMALS WEI_TO_ETHER
-
-#define OUSD_TICKER "OUSD"
-#define OUSD_DECIMALS WEI_TO_ETHER
-
-#define DAI_TICKER "DAI"
-#define DAI_DECIMALS WEI_TO_ETHER
-
-#define USDC_TICKER "USDC"
-#define USDC_DECIMALS 6
-
-#define USDT_TICKER "USDT"
-#define USDT_DECIMALS 6
-
-#define WOETH_TICKER "WOETH"
-#define WOUSD_TICKER "WOUSD"
-
-#define SFRXETH_TICKER "sfrxETH"
-
-// Enumeration of the different selectors possible.
-// Should follow the exact same order as the array declared in main.c
-// EDIT THIS: Change the naming (`selector_t`), and add your selector names.
-typedef enum {
-  ZAPPER_DEPOSIT_ETH,
-  ZAPPER_DEPOSIT_SFRXETH,
-  VAULT_MINT,
-  VAULT_REDEEM,
-  CURVE_POOL_EXCHANGE,
-  CURVE_POOL_EXCHANGE_UNDERLYING,
-  CURVE_ROUTER_EXCHANGE_MULTIPLE,
-  UNISWAP_ROUTER_EXACT_INPUT,
-  UNISWAP_ROUTER_EXACT_INPUT_SINGLE,
-  FLIPPER_BUY_OUSD_WITH_USDT,
-  FLIPPER_SELL_OUSD_FOR_USDT,
-  FLIPPER_BUY_OUSD_WITH_DAI,
-  FLIPPER_SELL_OUSD_FOR_DAI,
-  FLIPPER_BUY_OUSD_WITH_USDC,
-  FLIPPER_SELL_OUSD_FOR_USDC,
-  WRAP,
-  UNWRAP
+// This enum will be automatically expanded to hold all selector names.
+// The value SELECTOR_COUNT can be used to get the number of defined selectors
+// Do not modify !
+typedef enum selector_e {
+    SELECTORS_LIST(TO_ENUM) SELECTOR_COUNT,
 } selector_t;
 
-typedef enum {
-  SEND_SCREEN,
-  RECEIVE_SCREEN,
-  WARN_SCREEN,
-  BENEFICIARY_SCREEN,
-  ERROR,
-} screens_t;
-
-extern const uint8_t NULL_ETH_ADDRESS[ADDRESS_LENGTH];
-extern const uint8_t STETH_ADDRESS[ADDRESS_LENGTH];
-extern const uint8_t OETH_ADDRESS[ADDRESS_LENGTH];
-extern const uint8_t OUSD_ADDRESS[ADDRESS_LENGTH];
-extern const uint8_t DAI_ADDRESS[ADDRESS_LENGTH];
-extern const uint8_t USDC_ADDRESS[ADDRESS_LENGTH];
-extern const uint8_t USDT_ADDRESS[ADDRESS_LENGTH];
-
-extern const uint8_t OETH_VAULT_ADDRESS[ADDRESS_LENGTH];
-extern const uint8_t CURVE_OETH_POOL_ADDRESS[ADDRESS_LENGTH];
-extern const uint8_t CURVE_OUSD_POOL_ADDRESS[ADDRESS_LENGTH];
-extern const uint8_t WOETH_ADDRESS[ADDRESS_LENGTH];
-
-#define ADDRESS_IS_NETWORK_TOKEN(_addr)                                        \
-  (!memcmp(_addr, NULL_ETH_ADDRESS, ADDRESS_LENGTH))
-#define ADDRESS_IS_OETH(_addr) (!memcmp(_addr, OETH_ADDRESS, ADDRESS_LENGTH))
-#define ADDRESS_IS_OUSD(_addr) (!memcmp(_addr, OUSD_ADDRESS, ADDRESS_LENGTH))
-#define ADDRESS_IS_DAI(_addr) (!memcmp(_addr, DAI_ADDRESS, ADDRESS_LENGTH))
-#define ADDRESS_IS_USDC(_addr) (!memcmp(_addr, USDC_ADDRESS, ADDRESS_LENGTH))
-#define ADDRESS_IS_USDT(_addr) (!memcmp(_addr, USDT_ADDRESS, ADDRESS_LENGTH))
-//#define ADDRESS_IS_FRXETH(_addr) (!memcmp(_addr, FRXETH_ADDRESS,
-// ADDRESS_LENGTH))
+// This array will be automatically expanded to map all selector_t names with the correct value.
+// Do not modify !
+extern const uint32_t SELECTORS[SELECTOR_COUNT];
 
 // Enumeration used to parse the smart contract data.
 // EDIT THIS: Adapt the parameter names here.
 typedef enum {
-  TOKEN_SENT,
-  TOKEN_RECEIVED,
-  TOKEN_RECEIVED_REST,
-  AMOUNT_SENT,
-  MIN_AMOUNT_RECEIVED,
-  BENEFICIARY,
-  PATH_LENGTH,
-  UNEXPECTED_PARAMETER,
-  NONE,
+    MIN_AMOUNT_RECEIVED = 0,
+    TOKEN_RECEIVED,
+    BENEFICIARY,
+    PATH_OFFSET,
+    PATH_LENGTH,
+    UNEXPECTED_PARAMETER,
 } parameter;
 
-// EDIT THIS: Rename `BOILERPLATE` to be the same as the one initialized in
-// `main.c`.
-extern const uint32_t ORIGIN_DEFI_SELECTORS[NUM_SELECTORS];
-
 // Shared global memory with Ethereum app. Must be at most 5 * 32 bytes.
-// EDIT THIS: This struct is used by your plugin to save the parameters you
-// parse. You will need to adapt this struct to your plugin.
-typedef struct origin_defi_parameters_t {
-  // For display.
+// EDIT THIS: This struct is used by your plugin to save the parameters you parse. You
+// will need to adapt this struct to your plugin.
+typedef struct context_s {
+    // For display.
+    uint8_t amount_received[INT256_LENGTH];
+    uint8_t beneficiary[ADDRESS_LENGTH];
+    uint8_t token_received[ADDRESS_LENGTH];
+    char ticker[MAX_TICKER_LEN];
+    uint8_t decimals;
+    uint8_t token_found;
 
-  uint8_t amount_sent[INT256_LENGTH];
-  uint8_t min_amount_received[INT256_LENGTH];
-  uint8_t contract_address_sent[ADDRESS_LENGTH];
-  uint8_t contract_address_received[ADDRESS_LENGTH];
-  uint8_t beneficiary[ADDRESS_LENGTH];
-  char ticker_sent[MAX_TICKER_LEN];
-  char ticker_received[MAX_TICKER_LEN];
+    // For parsing data.
+    uint8_t next_param;  // Set to be the next param we expect to parse.
+    uint16_t offset;     // Offset at which the array or struct starts.
+    bool go_to_offset;   // If set, will force the parsing to iterate through parameters until
+                         // `offset` is reached.
 
-  uint8_t tokens_found;
-  uint8_t decimals_sent;
-  uint8_t decimals_received;
-  uint8_t skip;
+    // For both parsing and display.
+    selector_t selectorIndex;
+} context_t;
 
-  bool valid;
-  uint8_t amount_length;
-
-  // For parsing data.
-  uint8_t next_param; // Set to be the next param we expect to parse.
-  uint8_t counter;
-  // uint16_t checkpoint;
-  uint16_t offset;
-  // bool go_to_offset;   // If set, will force the parsing to iterate through
-  // parameters until
-  // `offset` is reached.
-
-  // For both parsing and display.
-  selector_t selectorIndex;
-} origin_defi_parameters_t;
-
-// Piece of code that will check that the above structure is not bigger than 5
-// * 32. Do not remove this check.
-_Static_assert(sizeof(origin_defi_parameters_t) <= 5 * 32,
-               "Structure of parameters too big.");
-
-void handle_provide_parameter(void *parameters);
-void handle_query_contract_ui(void *parameters);
-void handle_init_contract(void *parameters);
-void handle_finalize(void *parameters);
-void handle_provide_token(void *parameters);
-void handle_query_contract_id(void *parameters);
-
-static inline check_token_sent(origin_defi_parameters_t *context) {
-  if (ADDRESS_IS_OETH(context->contract_address_sent)) {
-    context->decimals_sent = OETH_DECIMALS;
-    context->tokens_found |= TOKEN_SENT_FOUND;
-  } else if (ADDRESS_IS_OUSD(context->contract_address_sent)) {
-    context->decimals_sent = OUSD_DECIMALS;
-    context->tokens_found |= TOKEN_SENT_FOUND;
-  } else if (ADDRESS_IS_DAI(context->contract_address_sent)) {
-    context->decimals_sent = DAI_DECIMALS;
-    context->tokens_found |= TOKEN_SENT_FOUND;
-  } else if (ADDRESS_IS_USDC(context->contract_address_sent)) {
-    context->decimals_sent = USDC_DECIMALS;
-    context->tokens_found |= TOKEN_SENT_FOUND;
-  } else if (ADDRESS_IS_USDT(context->contract_address_sent)) {
-    context->decimals_sent = USDT_DECIMALS;
-    context->tokens_found |= TOKEN_SENT_FOUND;
-  } else {
-    return false;
-  }
-  return true;
-}
-
-static inline check_token_received(origin_defi_parameters_t *context) {
-  if (ADDRESS_IS_OETH(context->contract_address_received)) {
-    context->decimals_received = OETH_DECIMALS;
-    context->tokens_found |= TOKEN_RECEIVED_FOUND;
-  } else if (ADDRESS_IS_OUSD(context->contract_address_received)) {
-    context->decimals_received = OUSD_DECIMALS;
-    context->tokens_found |= TOKEN_RECEIVED_FOUND;
-  } else if (ADDRESS_IS_DAI(context->contract_address_received)) {
-    context->decimals_received = DAI_DECIMALS;
-    context->tokens_found |= TOKEN_RECEIVED_FOUND;
-  } else if (ADDRESS_IS_USDC(context->contract_address_received)) {
-    context->decimals_received = USDC_DECIMALS;
-    context->tokens_found |= TOKEN_RECEIVED_FOUND;
-  } else if (ADDRESS_IS_USDT(context->contract_address_received)) {
-    context->decimals_received = USDT_DECIMALS;
-    context->tokens_found |= TOKEN_RECEIVED_FOUND;
-  } else {
-    return false;
-  }
-  return true;
-}
-
-static inline void sent_network_token(origin_defi_parameters_t *context) {
-  context->decimals_sent = WEI_TO_ETHER;
-  context->tokens_found |= TOKEN_SENT_FOUND;
-}
-
-static inline void received_network_token(origin_defi_parameters_t *context) {
-  context->decimals_received = WEI_TO_ETHER;
-  context->tokens_found |= TOKEN_RECEIVED_FOUND;
-}
-
-static inline void printf_hex_array(const char *title __attribute__((unused)),
-                                    size_t len __attribute__((unused)),
-                                    const uint8_t *data
-                                    __attribute__((unused))) {
-  PRINTF(title);
-  for (size_t i = 0; i < len; ++i) {
-    PRINTF("%02x", data[i]);
-  };
-  PRINTF("\n");
-}
+// Check if the context structure will fit in the RAM section ETH will prepare for us
+// Do not remove!
+ASSERT_SIZEOF_PLUGIN_CONTEXT(context_t);
