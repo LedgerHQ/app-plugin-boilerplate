@@ -79,9 +79,6 @@ typedef struct context_s {
     selector_t selectorIndex;
 } context_t;
 
-// Piece of code that will check that the above structure is not bigger than 5 * 32. Do not remove
-// this check.
-#define PLUGIN_CONTEXT_SIZE (5 * INT256_LENGTH)
-#define ASSERT_SIZEOF_PLUGIN_CONTEXT(s) \
-    _Static_assert(sizeof(s) <= PLUGIN_CONTEXT_SIZE, "Plugin context structure is too big.")
+// Check if the context structure will fit in the RAM section ETH will prepare for us
+// Do not remove!
 ASSERT_SIZEOF_PLUGIN_CONTEXT(context_t);
