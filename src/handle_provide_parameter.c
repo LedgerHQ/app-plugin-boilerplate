@@ -1,7 +1,7 @@
-#include "origin_defi_plugin.h"
+#include "origin_plugin.h"
 
 static void handle_token_sent(ethPluginProvideParameter_t *msg,
-                              origin_defi_parameters_t *context) {
+                              origin_parameters_t *context) {
   memset(context->contract_address_sent, 0,
          sizeof(context->contract_address_sent));
 
@@ -52,7 +52,7 @@ static void handle_token_sent(ethPluginProvideParameter_t *msg,
 }
 
 static void handle_token_received(ethPluginProvideParameter_t *msg,
-                                  origin_defi_parameters_t *context) {
+                                  origin_parameters_t *context) {
   memset(context->contract_address_received, 0,
          sizeof(context->contract_address_received));
 
@@ -109,17 +109,17 @@ static void handle_token_received(ethPluginProvideParameter_t *msg,
 }
 
 static void handle_amount_sent(ethPluginProvideParameter_t *msg,
-                               origin_defi_parameters_t *context) {
+                               origin_parameters_t *context) {
   memcpy(context->amount_sent, msg->parameter, INT256_LENGTH);
 }
 
 static void handle_min_amount_received(ethPluginProvideParameter_t *msg,
-                                       origin_defi_parameters_t *context) {
+                                       origin_parameters_t *context) {
   memcpy(context->min_amount_received, msg->parameter, PARAMETER_LENGTH);
 }
 
 static void handle_beneficiary(ethPluginProvideParameter_t *msg,
-                               origin_defi_parameters_t *context) {
+                               origin_parameters_t *context) {
   memset(context->beneficiary, 0, sizeof(context->beneficiary));
   memcpy(context->beneficiary,
          &msg->parameter[PARAMETER_LENGTH - ADDRESS_LENGTH],
@@ -129,7 +129,7 @@ static void handle_beneficiary(ethPluginProvideParameter_t *msg,
 
 // deposit()
 static void handle_zapper_deposit_eth(ethPluginProvideParameter_t *msg,
-                                      origin_defi_parameters_t *context) {
+                                      origin_parameters_t *context) {
   switch (context->next_param) {
   case NONE:
     break;
@@ -142,7 +142,7 @@ static void handle_zapper_deposit_eth(ethPluginProvideParameter_t *msg,
 
 // depositSFRXETH(uint256 amount,uint256 minOETH)
 static void handle_zapper_deposit_sfrxeth(ethPluginProvideParameter_t *msg,
-                                          origin_defi_parameters_t *context) {
+                                          origin_parameters_t *context) {
   switch (context->next_param) {
   case AMOUNT_SENT:
     handle_amount_sent(msg, context);
@@ -163,7 +163,7 @@ static void handle_zapper_deposit_sfrxeth(ethPluginProvideParameter_t *msg,
 
 // mint(address _asset,uint256 _amount,uint256 _minimumOusdAmount)
 static void handle_vault_mint(ethPluginProvideParameter_t *msg,
-                              origin_defi_parameters_t *context) {
+                              origin_parameters_t *context) {
   switch (context->next_param) {
   case TOKEN_SENT:
     handle_token_sent(msg, context);
@@ -188,7 +188,7 @@ static void handle_vault_mint(ethPluginProvideParameter_t *msg,
 
 // redeem(uint256 _amount,uint256 _minimumUnitAmount)
 static void handle_vault_redeem(ethPluginProvideParameter_t *msg,
-                                origin_defi_parameters_t *context) {
+                                origin_parameters_t *context) {
   switch (context->next_param) {
   case AMOUNT_SENT:
     handle_amount_sent(msg, context);
@@ -209,7 +209,7 @@ static void handle_vault_redeem(ethPluginProvideParameter_t *msg,
 
 // exchange(int128 i,int128 j,uint256 _dx,uint256 _min_dy)
 static void handle_curve_pool_exchange(ethPluginProvideParameter_t *msg,
-                                       origin_defi_parameters_t *context) {
+                                       origin_parameters_t *context) {
   switch (context->next_param) {
   case TOKEN_SENT:
     handle_token_sent(msg, context);
@@ -239,7 +239,7 @@ static void handle_curve_pool_exchange(ethPluginProvideParameter_t *msg,
 // exchange_multiple(address[9] _route,uint256[3][4] _swap_params,uint256
 // _amount,uint256 _expected)
 static void handle_curve_router_exchange(ethPluginProvideParameter_t *msg,
-                                         origin_defi_parameters_t *context) {
+                                         origin_parameters_t *context) {
   switch (context->next_param) {
   case TOKEN_SENT:
     handle_token_sent(msg, context);
@@ -277,7 +277,7 @@ static void handle_curve_router_exchange(ethPluginProvideParameter_t *msg,
 
 // exactInput(tuple params)
 static void handle_uniswap_exchange(ethPluginProvideParameter_t *msg,
-                                    origin_defi_parameters_t *context) {
+                                    origin_parameters_t *context) {
   switch (context->next_param) {
   case BENEFICIARY:
     handle_beneficiary(msg, context);
@@ -336,7 +336,7 @@ static void handle_uniswap_exchange(ethPluginProvideParameter_t *msg,
 
 // exactInputSingle(tuple params)
 static void handle_uniswap_exchange_single(ethPluginProvideParameter_t *msg,
-                                           origin_defi_parameters_t *context) {
+                                           origin_parameters_t *context) {
   switch (context->next_param) {
   case TOKEN_SENT:
     handle_token_sent(msg, context);
@@ -376,7 +376,7 @@ static void handle_uniswap_exchange_single(ethPluginProvideParameter_t *msg,
 // buyOusdWithUsdc(uint256 amount)
 // sellOusdForUsdc(uint256 amount)
 static void handle_flipper_exchange(ethPluginProvideParameter_t *msg,
-                                    origin_defi_parameters_t *context) {
+                                    origin_parameters_t *context) {
   switch (context->next_param) {
   case AMOUNT_SENT:
     handle_amount_sent(msg, context);
@@ -394,7 +394,7 @@ static void handle_flipper_exchange(ethPluginProvideParameter_t *msg,
 // deposit(uint256 assets,address receiver)
 // redeem(uint256 shares,address receiver,address owner)
 static void handle_wrap(ethPluginProvideParameter_t *msg,
-                        origin_defi_parameters_t *context) {
+                        origin_parameters_t *context) {
   switch (context->next_param) {
   case AMOUNT_SENT:
     handle_amount_sent(msg, context);
@@ -415,8 +415,8 @@ static void handle_wrap(ethPluginProvideParameter_t *msg,
 
 void handle_provide_parameter(void *parameters) {
   ethPluginProvideParameter_t *msg = (ethPluginProvideParameter_t *)parameters;
-  origin_defi_parameters_t *context =
-      (origin_defi_parameters_t *)msg->pluginContext;
+  origin_parameters_t *context =
+      (origin_parameters_t *)msg->pluginContext;
   printf_hex_array("oeth plugin provide parameter: ", PARAMETER_LENGTH,
                    msg->parameter);
 

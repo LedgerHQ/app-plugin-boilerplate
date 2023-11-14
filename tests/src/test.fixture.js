@@ -34,7 +34,7 @@ const nano_models: DeviceModel[] = [
 ];
 
 
-const originDefiJSON = generate_plugin_config();
+const originJSON = generate_plugin_config();
 
 const SPECULOS_ADDRESS = '0xFE984369CE3919AA7BB4F431082D027B4F8ED70C';
 const RANDOM_ADDRESS = '0xaaaabbbbccccddddeeeeffffgggghhhhiiiijjjj';
@@ -88,7 +88,7 @@ function zemu(device, func) {
         let lib_elf;
         elf_path = device.eth_path;
         // Edit this: replace `Boilerplate` by your plugin name
-        lib_elf = { 'origindefi': device.path };
+        lib_elf = { 'origin': device.path };
 
         const sim = new Zemu(elf_path, lib_elf);
         try {
@@ -97,7 +97,7 @@ function zemu(device, func) {
             const eth = new Eth(transport);
             eth.setLoadConfig({
                 baseURL: null,
-                extraPlugins: originDefiJSON,
+                extraPlugins: originJSON,
             });
             await func(sim, eth);
         } finally {

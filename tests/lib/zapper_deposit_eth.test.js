@@ -8,7 +8,7 @@ var _utils = require("ethers/lib/utils");
 // EDIT THIS: Replace with your contract address
 const contractAddr = "0x9858e47bcbbe6fbac040519b02d7cd4b2c470c66";
 // EDIT THIS: Replace `boilerplate` with your plugin name
-const pluginName = "origindefi";
+const pluginName = "origin";
 const testNetwork = "ethereum";
 const abi_path = `../networks/${testNetwork}/${pluginName}/abis/` + contractAddr + '.json';
 const abi = require(abi_path);

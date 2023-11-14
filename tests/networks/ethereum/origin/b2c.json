@@ -8,12 +8,12 @@
                 "0xd0e30db0": {
                     "erc20OfInterest": [],
                     "method": "deposit",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        },
                 "0xd443e97d": {
                     "erc20OfInterest": [],
                     "method": "depositSFRXETH",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        }
 	        }
 	    },
@@ -26,12 +26,12 @@
                         "_asset"
                     ],
                     "method": "mint",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        },
                 "0x7cbc2373": {
                     "erc20OfInterest": [],
                     "method": "redeem",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        }
 	        }
 	    },
@@ -42,7 +42,7 @@
                 "0x3df02124": {
                     "erc20OfInterest": [],
                     "method": "exchange",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        }
 	        }
 	    },
@@ -56,7 +56,7 @@
                         "_route.4"
                     ],
                     "method": "exchange_multiple",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        }
 	        }
 	    },
@@ -67,12 +67,12 @@
                 "0x6e553f65": {
                     "erc20OfInterest": [],
                     "method": "deposit",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        },
                 "0xba087652": {
                     "erc20OfInterest": [],
                     "method": "redeem",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        }
 	        }
 	    },
@@ -85,12 +85,12 @@
                         "_asset"
                     ],
                     "method": "mint",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        },
                 "0x7cbc2373": {
                     "erc20OfInterest": [],
                     "method": "redeem",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        }
 	        }
 	    },
@@ -101,32 +101,32 @@
                 "0x35aa0b96": {
                     "erc20OfInterest": [],
                     "method": "buyOusdWithUsdt",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        },
                 "0xcb939053": {
                     "erc20OfInterest": [],
                     "method": "sellOusdForUsdt",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        },
                 "0x5981c746": {
                     "erc20OfInterest": [],
                     "method": "buyOusdWithDai",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        },
                 "0x8a095a0f": {
                     "erc20OfInterest": [],
                     "method": "sellOusdForDai",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        },
                 "0xbfc11ffd": {
                     "erc20OfInterest": [],
                     "method": "buyOusdWithUsdc",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        },
                 "0xc6b68169": {
                     "erc20OfInterest": [],
                     "method": "sellOusdForUsdc",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        }
 	        }
 	    },
@@ -137,7 +137,7 @@
                 "0xc04b8d59": {
                     "erc20OfInterest": [],
                     "method": "exactInput",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        },
                 "0x414bf389": {
                     "erc20OfInterest": [
@@ -146,7 +146,7 @@
 
                     ],
                     "method": "exactInputSingle",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        }
 	        }
 	    },
@@ -157,7 +157,7 @@
                 "0xa6417ed6": {
                     "erc20OfInterest": [],
                     "method": "exchange_underlying",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        }
 	        }
 	    },
@@ -168,15 +168,15 @@
                 "0x6e553f65": {
                     "erc20OfInterest": [],
                     "method": "deposit",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        },
                 "0xba087652": {
                     "erc20OfInterest": [],
                     "method": "redeem",
-                    "plugin": "origindefi"
+                    "plugin": "origin"
 		        }
 	        }
 	    }
     ],
-    "name": "origindefi"
+    "name": "origin"
 }

@@ -41,7 +41,7 @@ const nano_models = [{
   path: NANOX_PLUGIN_PATH,
   eth_path: NANOX_ETH_PATH
 }];
-const originDefiJSON = (0, _generate_plugin_config.generate_plugin_config)();
+const originJSON = (0, _generate_plugin_config.generate_plugin_config)();
 const SPECULOS_ADDRESS = '0xFE984369CE3919AA7BB4F431082D027B4F8ED70C';
 const RANDOM_ADDRESS = '0xaaaabbbbccccddddeeeeffffgggghhhhiiiijjjj';
 let genericTx = {
@@ -89,7 +89,7 @@ function zemu(device, func) {
     elf_path = device.eth_path;
     // Edit this: replace `Boilerplate` by your plugin name
     lib_elf = {
-      'origindefi': device.path
+      'origin': device.path
     };
     const sim = new _zemu.default(elf_path, lib_elf);
     try {
@@ -101,7 +101,7 @@ function zemu(device, func) {
       const eth = new _hwAppEth.default(transport);
       eth.setLoadConfig({
         baseURL: null,
-        extraPlugins: originDefiJSON
+        extraPlugins: originJSON
       });
       await func(sim, eth);
     } finally {

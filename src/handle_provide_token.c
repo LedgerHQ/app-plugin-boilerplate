@@ -1,4 +1,4 @@
-#include "origin_defi_plugin.h"
+#include "origin_plugin.h"
 
 // EDIT THIS: Adapt this function to your needs! Remember, the information for
 // tokens are held in `msg->token1` and `msg->token2`. If those pointers are
@@ -6,8 +6,8 @@
 // requested tokens!
 void handle_provide_token(void *parameters) {
   ethPluginProvideInfo_t *msg = (ethPluginProvideInfo_t *)parameters;
-  origin_defi_parameters_t *context =
-      (origin_defi_parameters_t *)msg->pluginContext;
+  origin_parameters_t *context =
+      (origin_parameters_t *)msg->pluginContext;
   PRINTF("OETH plugin provide token: 0x%p, 0x%p\n", msg->item1, msg->item2);
   if (!check_token_sent(context)) {
     if (ADDRESS_IS_NETWORK_TOKEN(context->contract_address_sent)) {

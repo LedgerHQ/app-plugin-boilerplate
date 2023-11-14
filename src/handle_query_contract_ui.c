@@ -1,7 +1,7 @@
-#include "origin_defi_plugin.h"
+#include "origin_plugin.h"
 
 static void set_send_ui(ethQueryContractUI_t *msg,
-                        origin_defi_parameters_t *context) {
+                        origin_parameters_t *context) {
 
   // set network ticker (ETH, BNB, etc) if needed
   if (ADDRESS_IS_NETWORK_TOKEN(context->contract_address_sent)) {
@@ -105,7 +105,7 @@ static void set_send_ui(ethQueryContractUI_t *msg,
 
 // Set UI for "Receive" screen.
 static void set_receive_ui(ethQueryContractUI_t *msg,
-                           origin_defi_parameters_t *context) {
+                           origin_parameters_t *context) {
 
   // set network ticker (ETH, BNB, etc) if needed
   if (ADDRESS_IS_NETWORK_TOKEN(context->contract_address_received)) {
@@ -216,14 +216,14 @@ static void set_receive_ui(ethQueryContractUI_t *msg,
 
 // Set UI for "Warning" screen.
 static void set_warning_ui(ethQueryContractUI_t *msg,
-                           const origin_defi_parameters_t *context
+                           const origin_parameters_t *context
                            __attribute__((unused))) {
   strlcpy(msg->title, "WARNING", msg->titleLength);
   strlcpy(msg->msg, "Unknown token", msg->msgLength);
 }
 
 static void set_beneficiary_ui(ethQueryContractUI_t *msg,
-                               origin_defi_parameters_t *context) {
+                               origin_parameters_t *context) {
   strlcpy(msg->title, "Beneficiary", msg->titleLength);
 
   msg->msg[0] = '0';
@@ -236,7 +236,7 @@ static void set_beneficiary_ui(ethQueryContractUI_t *msg,
 // Helper function that returns the enum corresponding to the screen that should
 // be displayed.
 static screens_t get_screen(const ethQueryContractUI_t *msg,
-                            const origin_defi_parameters_t *context) {
+                            const origin_parameters_t *context) {
   uint8_t index = msg->screenIndex;
 
   bool token_sent_found = context->tokens_found & TOKEN_SENT_FOUND;
@@ -305,8 +305,8 @@ static screens_t get_screen(const ethQueryContractUI_t *msg,
 
 void handle_query_contract_ui(void *parameters) {
   ethQueryContractUI_t *msg = (ethQueryContractUI_t *)parameters;
-  origin_defi_parameters_t *context =
-      (origin_defi_parameters_t *)msg->pluginContext;
+  origin_parameters_t *context =
+      (origin_parameters_t *)msg->pluginContext;
   memset(msg->title, 0, msg->titleLength);
   memset(msg->msg, 0, msg->msgLength);
   msg->result = ETH_PLUGIN_RESULT_OK;
