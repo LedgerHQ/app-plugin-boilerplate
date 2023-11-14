@@ -1,3 +1,6 @@
+[![Ensure compliance with Ledger guidelines](https://github.com/LedgerHQ/app-plugin-boilerplate/actions/workflows/guidelines_enforcer.yml/badge.svg?branch=develop)](https://github.com/LedgerHQ/app-plugin-boilerplate/actions/workflows/guidelines_enforcer.yml)
+[![Compilation & tests](https://github.com/LedgerHQ/app-plugin-boilerplate/actions/workflows/build_and_functional_tests.yml/badge.svg?branch=develop)](https://github.com/LedgerHQ/app-plugin-boilerplate/actions/workflows/build_and_functional_tests.yml)
+
 # Origin DeFi Ledger Plugin
 
 This is a plugin for the Ethereum application which helps parsing and displaying relevant information when signing an OUSD or OETH transaction on their respective dapps.
@@ -14,7 +17,7 @@ done on a "per contract" basis, meaning a plugin is required for every DApp.
 Clone the plugin to a new folder.
 
 ```shell
-git clone https://github.com/rolandpo/app-plugin-origindefi.git
+git clone https://github.com/OriginProtocol/origin-app-plugin.git
 ```
 
 Then in the same folder clone two more repositories, which is the plugin-tools and app-ethereum.
