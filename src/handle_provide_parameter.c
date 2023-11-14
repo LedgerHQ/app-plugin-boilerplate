@@ -42,7 +42,11 @@ static void handle_swap_exact_eth_for_tokens(ethPluginProvideParameter_t *msg, c
 }
 
 void handle_provide_parameter(ethPluginProvideParameter_t *msg) {
-    context_t *context = (context_t *) msg->pluginContext;
+    context_t *context = NULL;
+
+    if ((!msg) || (!msg->pluginContext) || (!msg->parameter)) return;
+
+    context = (context_t *) msg->pluginContext;
     // We use `%.*H`: it's a utility function to print bytes. You first give
     // the number of bytes you wish to print (in this case, `PARAMETER_LENGTH`) and then
     // the address (here `msg->parameter`).

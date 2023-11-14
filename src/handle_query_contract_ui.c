@@ -6,8 +6,9 @@
 // Set UI for the "Send" screen.
 // EDIT THIS: Adapt / remove this function to your needs.
 static bool set_send_ui(ethQueryContractUI_t *msg) {
-    strlcpy(msg->title, "Send", msg->titleLength);
+    if ((!msg) || (!msg->pluginSharedRO) || (!msg->pluginSharedRO->txContent)) return false;
 
+    strlcpy(msg->title, "Send", msg->titleLength);
     const uint8_t *eth_amount = msg->pluginSharedRO->txContent->value.value;
     uint8_t eth_amount_size = msg->pluginSharedRO->txContent->value.length;
 
@@ -24,8 +25,9 @@ static bool set_send_ui(ethQueryContractUI_t *msg) {
 // Set UI for "Receive" screen.
 // EDIT THIS: Adapt / remove this function to your needs.
 static bool set_receive_ui(ethQueryContractUI_t *msg, const context_t *context) {
-    strlcpy(msg->title, "Receive Min.", msg->titleLength);
+    if ((!msg) || (!context)) return false;
 
+    strlcpy(msg->title, "Receive Min.", msg->titleLength);
     uint8_t decimals = context->decimals;
     const char *ticker = context->ticker;
 
@@ -46,8 +48,9 @@ static bool set_receive_ui(ethQueryContractUI_t *msg, const context_t *context) 
 // Set UI for "Beneficiary" screen.
 // EDIT THIS: Adapt / remove this function to your needs.
 static bool set_beneficiary_ui(ethQueryContractUI_t *msg, context_t *context) {
-    strlcpy(msg->title, "Beneficiary", msg->titleLength);
+    if ((!msg) || (!msg->msg) || (!msg->pluginSharedRW) || (!context)) return false;
 
+    strlcpy(msg->title, "Beneficiary", msg->titleLength);
     // Prefix the address with `0x`.
     msg->msg[0] = '0';
     msg->msg[1] = 'x';
@@ -66,9 +69,12 @@ static bool set_beneficiary_ui(ethQueryContractUI_t *msg, context_t *context) {
 }
 
 void handle_query_contract_ui(ethQueryContractUI_t *msg) {
-    context_t *context = (context_t *) msg->pluginContext;
+    context_t *context = NULL;
     bool ret = false;
 
+    if (!msg) return;
+
+    context = (context_t *) msg->pluginContext;
     // msg->title is the upper line displayed on the device.
     // msg->msg is the lower line displayed on the device.
 

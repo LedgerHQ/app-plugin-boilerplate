@@ -4,8 +4,11 @@
 // `msg->token1` and `msg->token2`. If those pointers are `NULL`, this means the ethereum app didn't
 // find any info regarding the requested tokens!
 void handle_provide_token(ethPluginProvideInfo_t *msg) {
-    context_t *context = (context_t *) msg->pluginContext;
+    context_t *context = NULL;
 
+    if ((!msg) || (!msg->pluginContext)) return;
+
+    context = (context_t *) msg->pluginContext;
     if (msg->item1) {
         // The Ethereum App found the information for the requested token!
         // Store its decimals.
