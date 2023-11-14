@@ -32,8 +32,7 @@ void handle_init_contract(void *parameters) {
     return;
   }
 
-  origin_parameters_t *context =
-      (origin_parameters_t *)msg->pluginContext;
+  origin_parameters_t *context = (origin_parameters_t *)msg->pluginContext;
 
   // Initialize the context (to 0).
   memset(context, 0, sizeof(*context));
@@ -49,57 +48,57 @@ void handle_init_contract(void *parameters) {
   // EDIT THIS: Adapt the `cases`, and set the `next_param` to be the first
   // parameter you expect to parse.
   switch (context->selectorIndex) {
-  case ZAPPER_DEPOSIT_ETH:
-    context->next_param = NONE;
-    break;
-  case ZAPPER_DEPOSIT_SFRXETH:
-    context->next_param = AMOUNT_SENT;
-    break;
-  case VAULT_MINT:
-    context->next_param = TOKEN_SENT;
-    break;
-  case VAULT_REDEEM:
-    context->next_param = AMOUNT_SENT;
-    break;
-  case CURVE_POOL_EXCHANGE:
-  case CURVE_POOL_EXCHANGE_UNDERLYING:
-    if (memcmp(CURVE_OETH_POOL_ADDRESS,
-               msg->pluginSharedRO->txContent->destination,
-               ADDRESS_LENGTH) == 0 ||
-        memcmp(CURVE_OUSD_POOL_ADDRESS,
-               msg->pluginSharedRO->txContent->destination,
-               ADDRESS_LENGTH) == 0) {
+    case ZAPPER_DEPOSIT_ETH:
+      context->next_param = NONE;
+      break;
+    case ZAPPER_DEPOSIT_SFRXETH:
+      context->next_param = AMOUNT_SENT;
+      break;
+    case VAULT_MINT:
       context->next_param = TOKEN_SENT;
       break;
-    }
-    PRINTF("Missing selectorIndex: %d\n", context->selectorIndex);
-    msg->result = ETH_PLUGIN_RESULT_ERROR;
-    return;
-  case CURVE_ROUTER_EXCHANGE_MULTIPLE:
-    context->next_param = TOKEN_SENT;
-    break;
-  case UNISWAP_ROUTER_EXACT_INPUT:
-    context->skip += 2;
-    context->next_param = BENEFICIARY;
-    break;
-  case UNISWAP_ROUTER_EXACT_INPUT_SINGLE:
-    context->next_param = TOKEN_SENT;
-    break;
-  case FLIPPER_BUY_OUSD_WITH_USDT:
-  case FLIPPER_SELL_OUSD_FOR_USDT:
-  case FLIPPER_BUY_OUSD_WITH_DAI:
-  case FLIPPER_SELL_OUSD_FOR_DAI:
-  case FLIPPER_BUY_OUSD_WITH_USDC:
-  case FLIPPER_SELL_OUSD_FOR_USDC:
-  case WRAP:
-  case UNWRAP:
-    context->next_param = AMOUNT_SENT;
-    break;
-  // Keep this
-  default:
-    PRINTF("Missing selectorIndex: %d\n", context->selectorIndex);
-    msg->result = ETH_PLUGIN_RESULT_ERROR;
-    return;
+    case VAULT_REDEEM:
+      context->next_param = AMOUNT_SENT;
+      break;
+    case CURVE_POOL_EXCHANGE:
+    case CURVE_POOL_EXCHANGE_UNDERLYING:
+      if (memcmp(CURVE_OETH_POOL_ADDRESS,
+                 msg->pluginSharedRO->txContent->destination,
+                 ADDRESS_LENGTH) == 0 ||
+          memcmp(CURVE_OUSD_POOL_ADDRESS,
+                 msg->pluginSharedRO->txContent->destination,
+                 ADDRESS_LENGTH) == 0) {
+        context->next_param = TOKEN_SENT;
+        break;
+      }
+      PRINTF("Missing selectorIndex: %d\n", context->selectorIndex);
+      msg->result = ETH_PLUGIN_RESULT_ERROR;
+      return;
+    case CURVE_ROUTER_EXCHANGE_MULTIPLE:
+      context->next_param = TOKEN_SENT;
+      break;
+    case UNISWAP_ROUTER_EXACT_INPUT:
+      context->skip += 2;
+      context->next_param = BENEFICIARY;
+      break;
+    case UNISWAP_ROUTER_EXACT_INPUT_SINGLE:
+      context->next_param = TOKEN_SENT;
+      break;
+    case FLIPPER_BUY_OUSD_WITH_USDT:
+    case FLIPPER_SELL_OUSD_FOR_USDT:
+    case FLIPPER_BUY_OUSD_WITH_DAI:
+    case FLIPPER_SELL_OUSD_FOR_DAI:
+    case FLIPPER_BUY_OUSD_WITH_USDC:
+    case FLIPPER_SELL_OUSD_FOR_USDC:
+    case WRAP:
+    case UNWRAP:
+      context->next_param = AMOUNT_SENT;
+      break;
+    // Keep this
+    default:
+      PRINTF("Missing selectorIndex: %d\n", context->selectorIndex);
+      msg->result = ETH_PLUGIN_RESULT_ERROR;
+      return;
   }
 
   // Return valid status.

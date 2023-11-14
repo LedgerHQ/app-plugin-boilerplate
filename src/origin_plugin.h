@@ -1,8 +1,9 @@
 #pragma once
 
+#include <string.h>
+
 #include "eth_internals.h"
 #include "eth_plugin_interface.h"
-#include <string.h>
 
 // Number of selectors defined in this plugin. Should match the enum
 // `selector_t`. EDIT THIS: Put in the number of selectors your plugin is going
@@ -87,15 +88,15 @@ extern const uint8_t CURVE_OETH_POOL_ADDRESS[ADDRESS_LENGTH];
 extern const uint8_t CURVE_OUSD_POOL_ADDRESS[ADDRESS_LENGTH];
 extern const uint8_t WOETH_ADDRESS[ADDRESS_LENGTH];
 
-#define ADDRESS_IS_NETWORK_TOKEN(_addr)                                        \
+#define ADDRESS_IS_NETWORK_TOKEN(_addr) \
   (!memcmp(_addr, NULL_ETH_ADDRESS, ADDRESS_LENGTH))
 #define ADDRESS_IS_OETH(_addr) (!memcmp(_addr, OETH_ADDRESS, ADDRESS_LENGTH))
 #define ADDRESS_IS_OUSD(_addr) (!memcmp(_addr, OUSD_ADDRESS, ADDRESS_LENGTH))
 #define ADDRESS_IS_DAI(_addr) (!memcmp(_addr, DAI_ADDRESS, ADDRESS_LENGTH))
 #define ADDRESS_IS_USDC(_addr) (!memcmp(_addr, USDC_ADDRESS, ADDRESS_LENGTH))
 #define ADDRESS_IS_USDT(_addr) (!memcmp(_addr, USDT_ADDRESS, ADDRESS_LENGTH))
-//#define ADDRESS_IS_FRXETH(_addr) (!memcmp(_addr, FRXETH_ADDRESS,
-// ADDRESS_LENGTH))
+// #define ADDRESS_IS_FRXETH(_addr) (!memcmp(_addr, FRXETH_ADDRESS,
+//  ADDRESS_LENGTH))
 
 // Enumeration used to parse the smart contract data.
 // EDIT THIS: Adapt the parameter names here.
@@ -138,7 +139,7 @@ typedef struct origin_parameters_t {
   uint8_t amount_length;
 
   // For parsing data.
-  uint8_t next_param; // Set to be the next param we expect to parse.
+  uint8_t next_param;  // Set to be the next param we expect to parse.
   uint8_t counter;
   // uint16_t checkpoint;
   uint16_t offset;

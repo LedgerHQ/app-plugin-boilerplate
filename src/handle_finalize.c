@@ -2,8 +2,7 @@
 
 void handle_finalize(void *parameters) {
   ethPluginFinalize_t *msg = (ethPluginFinalize_t *)parameters;
-  origin_parameters_t *context =
-      (origin_parameters_t *)msg->pluginContext;
+  origin_parameters_t *context = (origin_parameters_t *)msg->pluginContext;
   msg->numScreens = 2;
   if ((context->selectorIndex == UNISWAP_ROUTER_EXACT_INPUT ||
        context->selectorIndex == UNISWAP_ROUTER_EXACT_INPUT_SINGLE) &&

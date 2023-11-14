@@ -20,51 +20,50 @@
 #include <string.h>
 
 #include "cx.h"
-#include "os.h"
-
 #include "origin_plugin.h"
+#include "os.h"
 
 // List of selectors supported by this plugin.
 // EDIT THIS: Adapt the variable names and change the `0x` values to match your
 // selectors.
 // static const uint32_t SWAP_EXACT_ETH_FOR_TOKENS_SELECTOR = 0x7ff36ab5;
 // static const uint32_t BOILERPLATE_DUMMY_SELECTOR_2 = 0x13374242;
-static const uint32_t ZAPPER_DEPOSIT_ETH_SELECTOR = 0xd0e30db0; // deposit(),
+static const uint32_t ZAPPER_DEPOSIT_ETH_SELECTOR = 0xd0e30db0;  // deposit(),
 static const uint32_t ZAPPER_DEPOSIT_SFRXETH_SELECTOR =
-    0xd443e97d; // depositSFRXETH(uint256 amount,uint256 minOETH)
+    0xd443e97d;  // depositSFRXETH(uint256 amount,uint256 minOETH)
 static const uint32_t VAULT_MINT_SELECTOR =
-    0x156e29f6; // mint(address _asset,uint256 _amount,uint256
-                // _minimumOusdAmount)
+    0x156e29f6;  // mint(address _asset,uint256 _amount,uint256
+                 // _minimumOusdAmount)
 static const uint32_t VAULT_REDEEM_SELECTOR =
-    0x7cbc2373; // redeem(uint256 _amount,uint256 _minimumUnitAmount)
+    0x7cbc2373;  // redeem(uint256 _amount,uint256 _minimumUnitAmount)
 static const uint32_t CURVE_POOL_EXCHANGE_SELECTOR =
-    0x3df02124; // exchange(int128 i,int128 j,uint256 _dx,uint256 _min_dy)
+    0x3df02124;  // exchange(int128 i,int128 j,uint256 _dx,uint256 _min_dy)
 static const uint32_t CURVE_POOL_EXCHANGE_UNDERLYING_SELECTOR =
-    0xa6417ed6; // exchange_underlying(int128 i, int128 j, uint256 dx, uint256
-                // min_dy)
+    0xa6417ed6;  // exchange_underlying(int128 i, int128 j, uint256 dx, uint256
+                 // min_dy)
 static const uint32_t CURVE_ROUTER_EXCHANGE_MULTIPLE_SELECTOR =
-    0x353ca424; // exchange_multiple(address[9] _route,uint256[3][4]
-                // _swap_params,uint256 _amount,uint256 _expected)
+    0x353ca424;  // exchange_multiple(address[9] _route,uint256[3][4]
+                 // _swap_params,uint256 _amount,uint256 _expected)
 static const uint32_t UNISWAP_ROUTER_EXACT_INPUT_SELECTOR =
-    0xc04b8d59; // exactInput(tuple params)
+    0xc04b8d59;  // exactInput(tuple params)
 static const uint32_t UNISWAP_ROUTER_EXACT_INPUT_SINGLE_SELECTOR =
-    0x414bf389; // exactInputSingle(tuple params)
+    0x414bf389;  // exactInputSingle(tuple params)
 static const uint32_t FLIPPER_BUY_OUSD_WITH_USDT_SELECTOR =
-    0x35aa0b96; // buyOusdWithUsdt(uint256 amount)
+    0x35aa0b96;  // buyOusdWithUsdt(uint256 amount)
 static const uint32_t FLIPPER_SELL_OUSD_FOR_USDT_SELECTOR =
-    0xcb939053; // sellOusdForUsdt(uint256 amount)
+    0xcb939053;  // sellOusdForUsdt(uint256 amount)
 static const uint32_t FLIPPER_BUY_OUSD_WITH_DAI_SELECTOR =
-    0x5981c746; // buyOusdWithDai(uint256 amount)
+    0x5981c746;  // buyOusdWithDai(uint256 amount)
 static const uint32_t FLIPPER_SELL_OUSD_FOR_DAI_SELECTOR =
-    0x8a095a0f; // sellOusdForDai(uint256 amount)
+    0x8a095a0f;  // sellOusdForDai(uint256 amount)
 static const uint32_t FLIPPER_BUY_OUSD_WITH_USDC_SELECTOR =
-    0xbfc11ffd; // buyOusdWithUsdc(uint256 amount)
+    0xbfc11ffd;  // buyOusdWithUsdc(uint256 amount)
 static const uint32_t FLIPPER_SELL_OUSD_FOR_USDC_SELECTOR =
-    0xc6b68169; // sellOusdForUsdc(uint256 amount)
+    0xc6b68169;  // sellOusdForUsdc(uint256 amount)
 static const uint32_t WRAP_SELECTOR =
-    0x6e553f65; // deposit(uint256 assets,address receiver)
+    0x6e553f65;  // deposit(uint256 assets,address receiver)
 static const uint32_t UNWRAP_SELECTOR =
-    0xba087652; // redeem(uint256 shares,address receiver,address owner)
+    0xba087652;  // redeem(uint256 shares,address receiver,address owner)
 
 // contract address check for:
 // VAULT_MINT_SELECTOR
@@ -137,37 +136,37 @@ const uint8_t CURVE_OUSD_POOL_ADDRESS[ADDRESS_LENGTH] = {
 // Function to dispatch calls from the ethereum app.
 void dispatch_plugin_calls(int message, void *parameters) {
   switch (message) {
-  case ETH_PLUGIN_INIT_CONTRACT:
-    handle_init_contract(parameters);
-    break;
-  case ETH_PLUGIN_PROVIDE_PARAMETER:
-    handle_provide_parameter(parameters);
-    break;
-  case ETH_PLUGIN_FINALIZE:
-    handle_finalize(parameters);
-    break;
-  case ETH_PLUGIN_PROVIDE_INFO:
-    handle_provide_token(parameters);
-    break;
-  case ETH_PLUGIN_QUERY_CONTRACT_ID:
-    handle_query_contract_id(parameters);
-    break;
-  case ETH_PLUGIN_QUERY_CONTRACT_UI:
-    handle_query_contract_ui(parameters);
-    break;
-  default:
-    PRINTF("Unhandled message %d\n", message);
-    break;
+    case ETH_PLUGIN_INIT_CONTRACT:
+      handle_init_contract(parameters);
+      break;
+    case ETH_PLUGIN_PROVIDE_PARAMETER:
+      handle_provide_parameter(parameters);
+      break;
+    case ETH_PLUGIN_FINALIZE:
+      handle_finalize(parameters);
+      break;
+    case ETH_PLUGIN_PROVIDE_INFO:
+      handle_provide_token(parameters);
+      break;
+    case ETH_PLUGIN_QUERY_CONTRACT_ID:
+      handle_query_contract_id(parameters);
+      break;
+    case ETH_PLUGIN_QUERY_CONTRACT_UI:
+      handle_query_contract_ui(parameters);
+      break;
+    default:
+      PRINTF("Unhandled message %d\n", message);
+      break;
   }
 }
 
 void handle_query_ui_exception(unsigned int *args) {
   switch (args[0]) {
-  case ETH_PLUGIN_QUERY_CONTRACT_UI:
-    ((ethQueryContractUI_t *)args[1])->result = ETH_PLUGIN_RESULT_ERROR;
-    break;
-  default:
-    break;
+    case ETH_PLUGIN_QUERY_CONTRACT_UI:
+      ((ethQueryContractUI_t *)args[1])->result = ETH_PLUGIN_RESULT_ERROR;
+      break;
+    default:
+      break;
   }
 }
 
@@ -218,13 +217,13 @@ __attribute__((section(".boot"))) int main(int arg0) {
     }
     CATCH_OTHER(e) {
       switch (e) {
-      // These exceptions are only generated on handle_query_contract_ui()
-      case 0x6502:
-      case EXCEPTION_OVERFLOW:
-        handle_query_ui_exception((unsigned int *)arg0);
-        break;
-      default:
-        break;
+        // These exceptions are only generated on handle_query_contract_ui()
+        case 0x6502:
+        case EXCEPTION_OVERFLOW:
+          handle_query_ui_exception((unsigned int *)arg0);
+          break;
+        default:
+          break;
       }
       PRINTF("Exception 0x%x caught\n", e);
     }
