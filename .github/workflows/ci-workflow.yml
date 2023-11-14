@@ -1,0 +1,164 @@
+name: Compilation & tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+  pull_request:
+
+jobs:
+  job_build_release_plugin:
+    name: Build release plugin
+    strategy:
+      matrix:
+        include:
+          - sdk: "$NANOS_SDK"
+            name: "nanos"
+          - sdk: "$NANOX_SDK"
+            name: "nanox"
+          - sdk: "$NANOSP_SDK"
+            name: "nanosp"
+          - sdk: "$STAX_SDK"
+            name: "stax"
+
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
+
+    steps:
+      - name: Clone
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Build
+        run: |
+          make BOLOS_SDK=${{ matrix.sdk }} -j
+
+  job_scan_build:
+    name: Clang Static Analyzer
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Build with Clang Static Analyzer
+        run: |
+          scan-build --use-cc=clang -analyze-headers -enable-checker security -enable-checker unix -enable-checker valist -o scan-build --status-bugs make default
+
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: scan-build
+          path: scan-build
+
+  job_build_debug_plugin:
+    name: Build debug plugin
+    strategy:
+      matrix:
+        include:
+          - sdk: "$NANOS_SDK"
+            name: "nanos"
+          - sdk: "$NANOX_SDK"
+            name: "nanox"
+          - sdk: "$NANOSP_SDK"
+            name: "nanosp"
+
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
+
+    steps:
+      - name: Clone
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Build
+        run: |
+          make DEBUG=1 BOLOS_SDK=${{ matrix.sdk }} -j
+
+      - name: Rename binary
+        run: |
+          mv bin/app.elf plugin_${{ matrix.name }}.elf
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: binaries
+          path: plugin_${{ matrix.name }}.elf
+
+  job_build_debug_app:
+    name: Build debug Ethereum app
+    strategy:
+      matrix:
+        include:
+          - sdk: "$NANOS_SDK"
+            name: "nanos"
+          - sdk: "$NANOX_SDK"
+            name: "nanox"
+          - sdk: "$NANOSP_SDK"
+            name: "nanosp"
+
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
+
+    steps:
+      - name: Checkout app-ethereum
+        uses: actions/checkout@v3
+        with:
+          repository: LedgerHQ/app-ethereum
+          ref: ${{ ((github.base_ref || github.ref_name) == 'main' && 'master') || (github.base_ref || github.ref_name) }}
+
+      - name: Build
+        run: |
+          make DEBUG=1 BYPASS_SIGNATURES=1 BOLOS_SDK=${{ matrix.sdk }} -j
+
+      - name: Rename binary
+        run: |
+          mv bin/app.elf ethereum_${{ matrix.name }}.elf
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: binaries
+          path: ethereum_${{ matrix.name }}.elf
+
+  jobs-e2e-tests:
+    name: E2E Tests
+    needs: [job_build_debug_plugin, job_build_debug_app]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download built binaries
+        uses: actions/download-artifact@v3
+        with:
+          name: binaries
+          path: tests/elfs/
+
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.19.0"
+
+      - name: Install yarn
+        run: |
+          npm install -g yarn
+
+      - name: Install JS deps
+        run: |
+          cd tests && yarn install
+
+      - name: Run Zemu tests
+        run: |
+          cd tests && yarn test
