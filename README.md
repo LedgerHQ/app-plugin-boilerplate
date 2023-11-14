@@ -30,17 +30,17 @@ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $
 ## Build
 
 The script will build a docker image and attach a console.
-When the docker image is running go to the "app-plugin-origindefi" folder and build the ".elf" files.
+When the docker image is running go to the "origin-app-plugin" folder and build the ".elf" files.
 ```shell
-cd app-plugin-origindefi/tests       # go to the tests folder in app-plugin-origindefi
+cd origin-app-plugin/tests       # go to the tests folder in origin-app-plugin
 ./build_local_test_elfs.sh      # run the script build_local_test_elfs.sh
 ```
 
 ## Tests
 
-To test the plugin go to the tests folder in a new console window from the "app-plugin-origindefi" and run the script "test"
+To test the plugin go to the tests folder in a new console window from the "origin-app-plugin" and run the script "test"
 ```shell
-cd app-plugin-origindefi/tests       # go to the tests folder in app-plugin-origindefi
+cd origin-app-plugin/tests       # go to the tests folder in origin-app-plugin
 yarn install
 yarn test                       # run the script test
 ```

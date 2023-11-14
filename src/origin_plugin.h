@@ -113,12 +113,12 @@ typedef enum {
 
 // EDIT THIS: Rename `BOILERPLATE` to be the same as the one initialized in
 // `main.c`.
-extern const uint32_t ORIGIN_DEFI_SELECTORS[NUM_SELECTORS];
+extern const uint32_t ORIGIN_SELECTORS[NUM_SELECTORS];
 
 // Shared global memory with Ethereum app. Must be at most 5 * 32 bytes.
 // EDIT THIS: This struct is used by your plugin to save the parameters you
 // parse. You will need to adapt this struct to your plugin.
-typedef struct origin_defi_parameters_t {
+typedef struct origin_parameters_t {
   // For display.
 
   uint8_t amount_sent[INT256_LENGTH];

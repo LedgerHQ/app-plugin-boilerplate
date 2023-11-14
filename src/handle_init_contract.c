@@ -1,4 +1,4 @@
-#include "origin_defi_plugin.h"
+#include "origin_plugin.h"
 
 static int find_selector(uint32_t selector, const uint32_t *selectors, size_t n,
                          selector_t *out) {
@@ -26,20 +26,20 @@ void handle_init_contract(void *parameters) {
 
   // Double check that the `context_t` struct is not bigger than the maximum
   // size (defined by `msg->pluginContextLength`).
-  if (msg->pluginContextLength < sizeof(origin_defi_parameters_t)) {
+  if (msg->pluginContextLength < sizeof(origin_parameters_t)) {
     PRINTF("Plugin parameters structure is bigger than allowed size\n");
     msg->result = ETH_PLUGIN_RESULT_ERROR;
     return;
   }
 
-  origin_defi_parameters_t *context =
-      (origin_defi_parameters_t *)msg->pluginContext;
+  origin_parameters_t *context =
+      (origin_parameters_t *)msg->pluginContext;
 
   // Initialize the context (to 0).
   memset(context, 0, sizeof(*context));
 
   uint32_t selector = U4BE(msg->selector, 0);
-  if (find_selector(selector, ORIGIN_DEFI_SELECTORS, NUM_SELECTORS,
+  if (find_selector(selector, ORIGIN_SELECTORS, NUM_SELECTORS,
                     &context->selectorIndex)) {
     msg->result = ETH_PLUGIN_RESULT_UNAVAILABLE;
     return;

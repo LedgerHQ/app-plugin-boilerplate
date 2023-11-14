@@ -22,7 +22,7 @@
 #include "cx.h"
 #include "os.h"
 
-#include "origin_defi_plugin.h"
+#include "origin_plugin.h"
 
 // List of selectors supported by this plugin.
 // EDIT THIS: Adapt the variable names and change the `0x` values to match your
@@ -75,7 +75,7 @@ static const uint32_t UNWRAP_SELECTOR =
 // Array of all the different boilerplate selectors. Make sure this follows the
 // same order as the enum defined in `boilerplate_plugin.h` EDIT THIS: Use the
 // names of the array declared above.
-const uint32_t ORIGIN_DEFI_SELECTORS[NUM_SELECTORS] = {
+const uint32_t ORIGIN_SELECTORS[NUM_SELECTORS] = {
     ZAPPER_DEPOSIT_ETH_SELECTOR,
     ZAPPER_DEPOSIT_SFRXETH_SELECTOR,
     VAULT_MINT_SELECTOR,
