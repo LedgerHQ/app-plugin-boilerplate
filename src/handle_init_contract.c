@@ -42,6 +42,15 @@ void handle_init_contract(void *parameters) {
         return;
     }
 
+    size_t index;
+    context->selectorIndex = index;
+    // check for overflow
+    if ((size_t) context->selectorIndex != index) {
+        PRINTF("Error: overflow detected on selector index!\n");
+        msg->result = ETH_PLUGIN_RESULT_ERROR;
+        return;
+    }
+
     // Set `next_param` to be the first field we expect to parse.
     // EDIT THIS: Adapt the `cases`, and set the `next_param` to be the first
     // parameter you expect to parse.
