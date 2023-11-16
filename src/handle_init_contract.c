@@ -23,8 +23,8 @@ void handle_init_contract(void *parameters) {
         return;
     }
 
-    // Double check that the `context_t` struct is not bigger than the maximum size (defined by
-    // `msg->pluginContextLength`).
+    // Double check that the `context_t` struct is not bigger than the maximum
+    // size (defined by `msg->pluginContextLength`).
     if (msg->pluginContextLength < sizeof(origin_parameters_t)) {
         PRINTF("Plugin parameters structure is bigger than allowed size\n");
         msg->result = ETH_PLUGIN_RESULT_ERROR;
@@ -39,15 +39,6 @@ void handle_init_contract(void *parameters) {
     uint32_t selector = U4BE(msg->selector, 0);
     if (find_selector(selector, ORIGIN_SELECTORS, NUM_SELECTORS, &context->selectorIndex)) {
         msg->result = ETH_PLUGIN_RESULT_UNAVAILABLE;
-        return;
-    }
-
-    size_t index;
-    context->selectorIndex = index;
-    // check for overflow
-    if ((size_t) context->selectorIndex != index) {
-        PRINTF("Error: overflow detected on selector index!\n");
-        msg->result = ETH_PLUGIN_RESULT_ERROR;
         return;
     }
 
