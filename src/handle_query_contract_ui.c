@@ -1,5 +1,10 @@
 #include "origin_plugin.h"
 
+// EDIT THIS: You need to adapt / remove the static functions (set_send_ui, set_receive_ui ...) to
+// match what you wish to display.
+
+// Set UI for the "Send" screen.
+// EDIT THIS: Adapt / remove this function to your needs.
 static void set_send_ui(ethQueryContractUI_t *msg, origin_parameters_t *context) {
     // set network ticker (ETH, BNB, etc) if needed
     if (ADDRESS_IS_NETWORK_TOKEN(context->contract_address_sent)) {
@@ -97,7 +102,8 @@ static void set_send_ui(ethQueryContractUI_t *msg, origin_parameters_t *context)
             return;
     }
 
-    // Convert to string.
+    // Converts the uint256 number located in `eth_amount` to its string representation and
+    // copies this to `msg->msg`.
     amountToString(context->amount_sent,
                    context->amount_length,
                    context->decimals_sent,
@@ -108,6 +114,7 @@ static void set_send_ui(ethQueryContractUI_t *msg, origin_parameters_t *context)
 }
 
 // Set UI for "Receive" screen.
+// EDIT THIS: Adapt / remove this function to your needs.
 static void set_receive_ui(ethQueryContractUI_t *msg, origin_parameters_t *context) {
     // set network ticker (ETH, BNB, etc) if needed
     if (ADDRESS_IS_NETWORK_TOKEN(context->contract_address_received)) {
@@ -217,16 +224,26 @@ static void set_warning_ui(ethQueryContractUI_t *msg,
     strlcpy(msg->msg, "Unknown token", msg->msgLength);
 }
 
+// Set UI for "Beneficiary" screen.
+// EDIT THIS: Adapt / remove this function to your needs.
 static void set_beneficiary_ui(ethQueryContractUI_t *msg, origin_parameters_t *context) {
     strlcpy(msg->title, "Beneficiary", msg->titleLength);
 
+    // Prefix the address with `0x`.
     msg->msg[0] = '0';
     msg->msg[1] = 'x';
 
-    getEthAddressStringFromBinary((uint8_t *) context->beneficiary,
-                                  msg->msg + 2,
-                                  msg->pluginSharedRW->sha3,
-                                  0);
+    // We need a random chainID for legacy reasons with `getEthAddressStringFromBinary`.
+    // Setting it to `0` will make it work with every chainID :)
+    uint64_t chainid = 0;
+
+    // Get the string representation of the address stored in `context->beneficiary`. Put it in
+    // `msg->msg`.
+    getEthAddressStringFromBinary(
+        (uint8_t *) context->beneficiary,
+        msg->msg + 2,  // +2 here because we've already prefixed with '0x'.
+        msg->pluginSharedRW->sha3,
+        chainid);
 }
 
 // Helper function that returns the enum corresponding to the screen that should
@@ -242,6 +259,7 @@ static screens_t get_screen(const ethQueryContractUI_t *msg, const origin_parame
 
     bool wrap = context->selectorIndex == WRAP || context->selectorIndex == UNWRAP;
 
+    // EDIT THIS: Adapt the cases for the screens you'd like to display.
     switch (index) {
         case 0:
             if (both_tokens_found) {
@@ -300,6 +318,10 @@ static screens_t get_screen(const ethQueryContractUI_t *msg, const origin_parame
 void handle_query_contract_ui(void *parameters) {
     ethQueryContractUI_t *msg = (ethQueryContractUI_t *) parameters;
     origin_parameters_t *context = (origin_parameters_t *) msg->pluginContext;
+    // msg->title is the upper line displayed on the device.
+    // msg->msg is the lower line displayed on the device.
+
+    // Clean the display fields.
     memset(msg->title, 0, msg->titleLength);
     memset(msg->msg, 0, msg->msgLength);
     msg->result = ETH_PLUGIN_RESULT_OK;
@@ -317,6 +339,8 @@ void handle_query_contract_ui(void *parameters) {
         case BENEFICIARY_SCREEN:
             set_beneficiary_ui(msg, context);
             break;
+
+        // Keep this
         default:
             PRINTF("Received an invalid screenIndex\n");
             msg->result = ETH_PLUGIN_RESULT_ERROR;

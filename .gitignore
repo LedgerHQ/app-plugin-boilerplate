@@ -24,3 +24,5 @@ tests/snapshots-tmp/
 
 # Directory storing the ethereum build output for tests run
 tests/ethereum_build/build/
+
+node_modules
