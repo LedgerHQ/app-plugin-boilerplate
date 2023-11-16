@@ -161,7 +161,7 @@ void handle_finalize(void *parameters);
 void handle_provide_token(void *parameters);
 void handle_query_contract_id(void *parameters);
 
-static inline check_token_sent(origin_parameters_t *context) {
+static inline bool check_token_sent(origin_parameters_t *context) {
     if (ADDRESS_IS_OETH(context->contract_address_sent)) {
         context->decimals_sent = OETH_DECIMALS;
         context->tokens_found |= TOKEN_SENT_FOUND;
@@ -183,7 +183,7 @@ static inline check_token_sent(origin_parameters_t *context) {
     return true;
 }
 
-static inline check_token_received(origin_parameters_t *context) {
+static inline bool check_token_received(origin_parameters_t *context) {
     if (ADDRESS_IS_OETH(context->contract_address_received)) {
         context->decimals_received = OETH_DECIMALS;
         context->tokens_found |= TOKEN_RECEIVED_FOUND;
