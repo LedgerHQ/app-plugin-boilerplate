@@ -4,7 +4,7 @@
 NANOS_SDK=$NANOS_SDK
 NANOSP_SDK=$NANOSP_SDK
 NANOX_SDK=$NANOX_SDK
-APP_ETHEREUM=${APP_ETHEREUM:-"../app-ethereum"}
+APP_ETHEREUM=${APP_ETHEREUM:-"../../app-ethereum"}
 
 set -e
 
