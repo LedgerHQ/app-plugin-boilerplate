@@ -41,7 +41,7 @@ Once in the container, go into the `fuzzing` folder to compile the fuzzer:
 cd fuzzing
 
 # cmake initialization
-cmake -DBOLOS_SDK=/opt/nanos-secure-sdk -DCMAKE_C_COMPILER=/usr/bin/clang -Bbuild -H.
+cmake -DBOLOS_SDK=/opt/nanox-secure-sdk -DCMAKE_C_COMPILER=/usr/bin/clang -Bbuild -H.
 
 # Fuzzer compilation
 make -C build
