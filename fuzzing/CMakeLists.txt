@@ -36,7 +36,7 @@ set(CMAKE_C_STANDARD_REQUIRED True)
 if (NOT DEFINED ENV{LIB_FUZZING_ENGINE})
     set(COMPILATION_FLAGS_ "-fsanitize=fuzzer,address,undefined,signed-integer-overflow")
 else()    
-    set(COMPILATION_FLAGS_ "$ENV{LIB_FUZZING_ENGINE} $ENV{CXXFLAGS}")
+    set(COMPILATION_FLAGS_ "$ENV{LIB_FUZZING_ENGINE} $ENV{CFLAGS}")
 endif()    
 string(REPLACE " " ";" COMPILATION_FLAGS ${COMPILATION_FLAGS_})
 
@@ -47,38 +47,63 @@ add_compile_options(-Wno-implicit-function-declaration)
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -ggdb2 -O3")
 
-set(ANGLE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../src")
+set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../src")
 set(ETH_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../ethereum-plugin-sdk")
 
 add_compile_definitions(
-        HAVE_SHA3
-        HAVE_HASH
-        HAVE_ECC
-        IO_HID_EP_LENGTH=64
-        APPNAME="PluginBoilerplate"
+    APPNAME="PluginBoilerplate"
 )
 
-add_library(angle
-        ${ANGLE_DIR}/handle_finalize.c
-        ${ANGLE_DIR}/handle_init_contract.c
-        ${ANGLE_DIR}/handle_provide_parameter.c
-        ${ANGLE_DIR}/handle_provide_token.c
-        ${ANGLE_DIR}/handle_query_contract_id.c
-        ${ANGLE_DIR}/handle_query_contract_ui.c
-        ${ANGLE_DIR}/plugin.c
-        ${ETH_DIR}/include/utils.c
-        ${ETH_DIR}/include/eth_internals.c
+add_compile_definitions(
+    IO_HID_EP_LENGTH=64
+    HAVE_ECC
+    HAVE_ECC_WEIERSTRASS
+    HAVE_SECP_CURVES
+    HAVE_ECC_TWISTED_EDWARDS
+    HAVE_ED_CURVES
+    HAVE_ECDSA
+    HAVE_EDDSA
+    HAVE_HASH
+    HAVE_BLAKE2
+    HAVE_SHA256
+    HAVE_SHA3
+    HAVE_SHA512
 )
 
-add_executable(fuzz fuzz.c mocks.c)
+include_directories(
+    ${BOLOS_SDK}/include
+    ${BOLOS_SDK}/lib_cxng/include
+    ${BOLOS_SDK}/lib_cxng/src
+    ${BOLOS_SDK}/target/nanox/include
+    ${ETH_DIR}/include
+    ${SRC_DIR}
+)
 
-target_link_libraries(fuzz PUBLIC angle)
+add_executable(fuzz
+    fuzz_plugin.c
+    mocks.c
+
+    ${SRC_DIR}/plugin.c
+    ${SRC_DIR}/handle_init_contract.c
+    ${SRC_DIR}/handle_provide_parameter.c
+    ${SRC_DIR}/handle_finalize.c
+    ${SRC_DIR}/handle_provide_token.c
+    ${SRC_DIR}/handle_query_contract_ui.c
+    ${SRC_DIR}/handle_query_contract_id.c
+
+    # Ethereum SDK
+    ${ETH_DIR}/include/eth_internals.c
+    ${ETH_DIR}/include/utils.c
+
+    # cxng
+    ${BOLOS_SDK}/lib_cxng/src/cx_hash.c
+    ${BOLOS_SDK}/lib_cxng/src/cx_sha256.c
+    ${BOLOS_SDK}/lib_cxng/src/cx_sha512.c
+    ${BOLOS_SDK}/lib_cxng/src/cx_sha3.c
+    ${BOLOS_SDK}/lib_cxng/src/cx_blake2b.c
+    ${BOLOS_SDK}/lib_cxng/src/cx_utils.c
+    ${BOLOS_SDK}/lib_cxng/src/cx_ram.c
+)
+
 target_compile_options(fuzz PUBLIC ${COMPILATION_FLAGS})
 target_link_options(fuzz PUBLIC ${COMPILATION_FLAGS})
-
-include_directories(".")
-include_directories(${ANGLE_DIR})
-include_directories(${ETH_DIR}/include)
-include_directories(${BOLOS_SDK}/lib_cxng/include)
-include_directories(${BOLOS_SDK}/lib_cxng/src)
-include_directories(${BOLOS_SDK}/include)
