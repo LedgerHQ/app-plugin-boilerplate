@@ -293,6 +293,7 @@ static screens_t get_screen(const ethQueryContractUI_t *msg, const origin_parame
             } else {
                 return RECEIVE_SCREEN;
             }
+            break;
         case 3:
             if (both_tokens_found) {
                 return ERROR;
@@ -308,6 +309,7 @@ static screens_t get_screen(const ethQueryContractUI_t *msg, const origin_parame
             } else if (both_tokens_not_found) {
                 return BENEFICIARY_SCREEN;
             }
+            break;
         default:
             return ERROR;
             break;
