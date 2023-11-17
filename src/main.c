@@ -191,9 +191,6 @@ __attribute__((section(".boot"))) int main(int arg0) {
     // those!
     BEGIN_TRY {
         TRY {
-            // Low-level black magic.
-            check_api_level(CX_COMPAT_APILEVEL);
-
             // Check if we are called from the dashboard.
             if (!arg0) {
                 // Called from dashboard, launch Ethereum app
