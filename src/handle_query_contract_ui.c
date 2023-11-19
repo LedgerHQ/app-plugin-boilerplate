@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include "origin_plugin.h"
 
 // EDIT THIS: You need to adapt / remove the static functions (set_send_ui, set_receive_ui ...) to
@@ -5,7 +6,7 @@
 
 // Set UI for the "Send" screen.
 // EDIT THIS: Adapt / remove this function to your needs.
-static void set_send_ui(ethQueryContractUI_t *msg, origin_parameters_t *context) {
+static bool set_send_ui(ethQueryContractUI_t *msg, origin_parameters_t *context) {
     // set network ticker (ETH, BNB, etc) if needed
     if (ADDRESS_IS_NETWORK_TOKEN(context->contract_address_sent)) {
         strlcpy(context->ticker_sent, msg->network_ticker, sizeof(context->ticker_sent));
@@ -99,23 +100,22 @@ static void set_send_ui(ethQueryContractUI_t *msg, origin_parameters_t *context)
         default:
             PRINTF("Unhandled selector Index: %d\n", context->selectorIndex);
             msg->result = ETH_PLUGIN_RESULT_ERROR;
-            return;
+            return false;
     }
 
     // Converts the uint256 number located in `eth_amount` to its string representation and
     // copies this to `msg->msg`.
-    amountToString(context->amount_sent,
-                   context->amount_length,
-                   context->decimals_sent,
-                   context->ticker_sent,
-                   msg->msg,
-                   msg->msgLength);
-    PRINTF("AMOUNT SENT: %s\n", msg->msg);
+    return amountToString(context->amount_sent,
+                          context->amount_length,
+                          context->decimals_sent,
+                          context->ticker_sent,
+                          msg->msg,
+                          msg->msgLength);
 }
 
 // Set UI for "Receive" screen.
 // EDIT THIS: Adapt / remove this function to your needs.
-static void set_receive_ui(ethQueryContractUI_t *msg, origin_parameters_t *context) {
+static bool set_receive_ui(ethQueryContractUI_t *msg, origin_parameters_t *context) {
     // set network ticker (ETH, BNB, etc) if needed
     if (ADDRESS_IS_NETWORK_TOKEN(context->contract_address_received)) {
         strlcpy(context->ticker_received, msg->network_ticker, sizeof(context->ticker_received));
@@ -204,29 +204,29 @@ static void set_receive_ui(ethQueryContractUI_t *msg, origin_parameters_t *conte
         default:
             PRINTF("Unhandled selector Index: %d\n", context->selectorIndex);
             msg->result = ETH_PLUGIN_RESULT_ERROR;
-            return;
+            return false;
     }
 
     // Convert to string.
-    amountToString(context->min_amount_received,
-                   context->amount_length,
-                   context->decimals_received,
-                   context->ticker_received,
-                   msg->msg,
-                   msg->msgLength);
-    PRINTF("AMOUNT RECEIVED: %s\n", msg->msg);
+    return amountToString(context->min_amount_received,
+                          context->amount_length,
+                          context->decimals_received,
+                          context->ticker_received,
+                          msg->msg,
+                          msg->msgLength);
 }
 
 // Set UI for "Warning" screen.
-static void set_warning_ui(ethQueryContractUI_t *msg,
+static bool set_warning_ui(ethQueryContractUI_t *msg,
                            const origin_parameters_t *context __attribute__((unused))) {
     strlcpy(msg->title, "WARNING", msg->titleLength);
     strlcpy(msg->msg, "Unknown token", msg->msgLength);
+    return true;
 }
 
 // Set UI for "Beneficiary" screen.
 // EDIT THIS: Adapt / remove this function to your needs.
-static void set_beneficiary_ui(ethQueryContractUI_t *msg, origin_parameters_t *context) {
+static bool set_beneficiary_ui(ethQueryContractUI_t *msg, origin_parameters_t *context) {
     strlcpy(msg->title, "Beneficiary", msg->titleLength);
 
     // Prefix the address with `0x`.
@@ -239,11 +239,10 @@ static void set_beneficiary_ui(ethQueryContractUI_t *msg, origin_parameters_t *c
 
     // Get the string representation of the address stored in `context->beneficiary`. Put it in
     // `msg->msg`.
-    getEthAddressStringFromBinary(
-        (uint8_t *) context->beneficiary,
-        msg->msg + 2,  // +2 here because we've already prefixed with '0x'.
-        msg->pluginSharedRW->sha3,
-        chainid);
+    return getEthAddressStringFromBinary((uint8_t *) context->beneficiary,
+                                          msg->msg + 2,  // +2 here because we've already prefixed with '0x'.
+                                          msg->pluginSharedRW->sha3,
+                                          chainid);
 }
 
 // Helper function that returns the enum corresponding to the screen that should
@@ -317,9 +316,9 @@ static screens_t get_screen(const ethQueryContractUI_t *msg, const origin_parame
     return ERROR;
 }
 
-void handle_query_contract_ui(void *parameters) {
-    ethQueryContractUI_t *msg = (ethQueryContractUI_t *) parameters;
+void handle_query_contract_ui(ethQueryContractUI_t *msg) {
     origin_parameters_t *context = (origin_parameters_t *) msg->pluginContext;
+    bool ret = false;
     // msg->title is the upper line displayed on the device.
     // msg->msg is the lower line displayed on the device.
 
@@ -330,22 +329,21 @@ void handle_query_contract_ui(void *parameters) {
     screens_t screen = get_screen(msg, context);
     switch (screen) {
         case SEND_SCREEN:
-            set_send_ui(msg, context);
+            ret = set_send_ui(msg, context);
             break;
         case RECEIVE_SCREEN:
-            set_receive_ui(msg, context);
+            ret = set_receive_ui(msg, context);
             break;
         case WARN_SCREEN:
-            set_warning_ui(msg, context);
+            ret = set_warning_ui(msg, context);
             break;
         case BENEFICIARY_SCREEN:
-            set_beneficiary_ui(msg, context);
+            ret = set_beneficiary_ui(msg, context);
             break;
 
         // Keep this
         default:
             PRINTF("Received an invalid screenIndex\n");
-            msg->result = ETH_PLUGIN_RESULT_ERROR;
-            return;
     }
+    msg->result = ret ? ETH_PLUGIN_RESULT_OK : ETH_PLUGIN_RESULT_ERROR;
 }

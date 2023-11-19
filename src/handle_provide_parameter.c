@@ -395,8 +395,7 @@ static void handle_wrap(ethPluginProvideParameter_t *msg, origin_parameters_t *c
     }
 }
 
-void handle_provide_parameter(void *parameters) {
-    ethPluginProvideParameter_t *msg = (ethPluginProvideParameter_t *) parameters;
+void handle_provide_parameter(ethPluginProvideParameter_t *msg) {
     origin_parameters_t *context = (origin_parameters_t *) msg->pluginContext;
     printf_hex_array("oeth plugin provide parameter: ", PARAMETER_LENGTH, msg->parameter);
 
