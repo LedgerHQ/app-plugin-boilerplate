@@ -154,12 +154,12 @@ typedef struct origin_parameters_t {
 // * 32. Do not remove this check.
 _Static_assert(sizeof(origin_parameters_t) <= 5 * 32, "Structure of parameters too big.");
 
-void handle_provide_parameter(void *parameters);
-void handle_query_contract_ui(void *parameters);
-void handle_init_contract(void *parameters);
-void handle_finalize(void *parameters);
-void handle_provide_token(void *parameters);
-void handle_query_contract_id(void *parameters);
+void handle_provide_parameter(ethPluginProvideParameter_t *msg);
+void handle_query_contract_ui(ethQueryContractUI_t *msg);
+void handle_init_contract(ethPluginInitContract_t *msg);
+void handle_finalize(ethPluginFinalize_t *msg);
+void handle_provide_token(ethPluginProvideInfo_t *msg);
+void handle_query_contract_id(ethQueryContractID_t *msg);
 
 static inline bool check_token_sent(origin_parameters_t *context) {
     if (ADDRESS_IS_OETH(context->contract_address_sent)) {

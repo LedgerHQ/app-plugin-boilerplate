@@ -1,7 +1,6 @@
 #include "origin_plugin.h"
 
-void handle_finalize(void *parameters) {
-    ethPluginFinalize_t *msg = (ethPluginFinalize_t *) parameters;
+void handle_finalize(ethPluginFinalize_t *msg) {
     origin_parameters_t *context = (origin_parameters_t *) msg->pluginContext;
     // EDIT THIS: Set the total number of screen you will need.
     msg->numScreens = 2;
