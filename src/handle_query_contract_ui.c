@@ -239,10 +239,11 @@ static bool set_beneficiary_ui(ethQueryContractUI_t *msg, origin_parameters_t *c
 
     // Get the string representation of the address stored in `context->beneficiary`. Put it in
     // `msg->msg`.
-    return getEthAddressStringFromBinary((uint8_t *) context->beneficiary,
-                                          msg->msg + 2,  // +2 here because we've already prefixed with '0x'.
-                                          msg->pluginSharedRW->sha3,
-                                          chainid);
+    return getEthAddressStringFromBinary(
+        (uint8_t *) context->beneficiary,
+        msg->msg + 2,  // +2 here because we've already prefixed with '0x'.
+        msg->pluginSharedRW->sha3,
+        chainid);
 }
 
 // Helper function that returns the enum corresponding to the screen that should

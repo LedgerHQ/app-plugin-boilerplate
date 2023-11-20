@@ -15,13 +15,9 @@
  *  limitations under the License.
  ********************************************************************************/
 
-#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
-
-#include "cx.h"
 #include "origin_plugin.h"
-#include "os.h"
 
 // List of selectors supported by this plugin.
 // EDIT THIS: Adapt the variable names and change the `0x` values to match your
