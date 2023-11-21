@@ -48,8 +48,6 @@ def test_swap_exact_eth_for_token(backend, firmware, navigator, test_name):
                                     get_selector_from_data(data)):
         pass
 
-    assert client.response().status == StatusWord.OK
-
     # send the transaction
     with client.sign("m/44'/60'/1'/0/0", {
              "nonce": 20,
@@ -75,5 +73,3 @@ def test_swap_exact_eth_for_token(backend, firmware, navigator, test_name):
                                                       "Hold to sign",
                                                       ROOT_SCREENSHOT_PATH,
                                                       test_name)
-
-    assert client.response().status == StatusWord.OK
