@@ -31,7 +31,7 @@ jobs:
     with:
       app_repository: LedgerHQ/app-ethereum
       app_branch_name: develop
-      flags: "DEBUG=1 BYPASS_SIGNATURES=1"
+      flags: "DEBUG=1 CAL_TEST_KEY=1"
       upload_app_binaries_artifact: ethereum_build_develop
 
   ragger_tests_with_ethereum_develop:
