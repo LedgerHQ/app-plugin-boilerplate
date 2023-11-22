@@ -24,9 +24,8 @@ include $(BOLOS_SDK)/Makefile.defines
 ########################################
 #        Mandatory configuration       #
 ########################################
-# EDIT THIS: Application name
-# Will be displayed on screen by the Ethereum app
-APPNAME = "PluginBoilerplate"
+# Application name
+APPNAME = "origin"
 
 # Application version
 APPVERSION_M = 1
@@ -82,8 +81,7 @@ PATH_APP_LOAD_PARAMS = "44'/60'"   # purpose=coin(44) / coin_type=Testnet(1)
 #   * It must at least contains one value.
 #   * Values can be the app ticker or anything else but should be unique.
 VARIANT_PARAM = COIN
-# EDIT THIS: Plugin ticker name
-VARIANT_VALUES = pbol
+VARIANT_VALUES = origin
 
 # Enabling DEBUG flag will enable PRINTF and disable optimizations
 #DEBUG = 1
