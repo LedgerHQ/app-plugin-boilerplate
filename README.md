@@ -1,5 +1,5 @@
 [![Ensure compliance with Ledger guidelines](https://github.com/OriginProtocol/origin-app-plugin/actions/workflows/guidelines_enforcer.yml/badge.svg?branch=develop)](https://github.com/OriginProtocol/origin-app-plugin/actions/workflows/guidelines_enforcer.yml)
-[![Compilation & tests](https://github.com/OriginProtocol/origin-app-plugin/actions/workflows/build_and_functional_tests.yml/badge.svg?branch=develop)](https://github.com/OriginProtocol/origin-app-plugin/actions/workflows/build_and_functional_tests.yml)
+[![Compilation & tests](https://github.com/OriginProtocol/origin-app-plugin/actions/workflows/ci-workflow.yml/badge.svg?branch=develop)](https://github.com/OriginProtocol/origin-app-plugin/actions/workflows/ci-workflow.yml)
 
 # Origin DeFi Ledger Plugin
 
