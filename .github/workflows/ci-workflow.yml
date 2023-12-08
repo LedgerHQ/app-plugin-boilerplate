@@ -21,8 +21,8 @@ jobs:
             name: "nanox"
           - sdk: "$NANOSP_SDK"
             name: "nanosp"
-          - sdk: "$STAX_SDK"
-            name: "stax"
+          # - sdk: "$STAX_SDK"
+          #   name: "stax"
 
     runs-on: ubuntu-latest
     container:
@@ -70,8 +70,8 @@ jobs:
             name: "nanox"
           - sdk: "$NANOSP_SDK"
             name: "nanosp"
-          - sdk: "$STAX_SDK"
-            name: "stax"
+          # - sdk: "$STAX_SDK"
+          #   name: "stax"
 
     runs-on: ubuntu-latest
     container:
@@ -108,8 +108,8 @@ jobs:
             name: "nanox"
           - sdk: "$NANOSP_SDK"
             name: "nanosp"
-          - sdk: "$STAX_SDK"
-            name: "stax"
+          # - sdk: "$STAX_SDK"
+          #   name: "stax"
 
     runs-on: ubuntu-latest
     container:
