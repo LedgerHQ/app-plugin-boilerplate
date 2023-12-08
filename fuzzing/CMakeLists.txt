@@ -93,7 +93,7 @@ add_executable(fuzz
 
     # Ethereum SDK
     ${ETH_DIR}/include/eth_internals.c
-    ${ETH_DIR}/include/utils.c
+    ${ETH_DIR}/include/plugin_utils.c
 
     # cxng
     ${BOLOS_SDK}/lib_cxng/src/cx_hash.c
