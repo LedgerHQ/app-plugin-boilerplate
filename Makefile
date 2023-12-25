@@ -15,8 +15,8 @@
 #   limitations under the License.
 # ****************************************************************************
 
-# EDIT THIS: Application name
-APPNAME = "PluginBoilerplate"
+# Application name
+APPNAME = "Origin"
 
 # Application version
 APPVERSION_M = 1
