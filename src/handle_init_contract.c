@@ -60,6 +60,7 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
     case UNISWAP_V3_ROUTER_EXACT_INPUT:
       context->skip += 2;
       context->next_param = BENEFICIARY;
+      break;
     case UNISWAP_ROUTER_EXACT_INPUT_SINGLE:
       break;
     case CURVE_ROUTER_EXCHANGE_MULTIPLE:
