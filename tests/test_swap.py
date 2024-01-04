@@ -19,26 +19,24 @@ ABIS_FOLDER = "%s/abis" % (os.path.dirname(__file__))
 
 PLUGIN_NAME = get_appname_from_makefile()
 
-with open("%s/0x000102030405060708090a0b0c0d0e0f10111213.abi.json" % (ABIS_FOLDER)) as file:
+with open("%s/0x0fa7c8350c8f028bc55899dbc1446ecd342958fe.abi.json" % (ABIS_FOLDER)) as file:
     contract = Web3().eth.contract(
         abi=json.load(file),
         # Get address from filename
         address=bytes.fromhex(os.path.basename(file.name).split(".")[0].split("x")[-1])
     )
 
-
-# EDIT THIS: build your own test
-def test_swap_exact_eth_for_token(backend, firmware, navigator, test_name):
+def test_batch_deposit(backend, firmware, navigator, test_name):
     client = EthAppClient(backend)
 
-    data = contract.encodeABI("swapExactETHForTokens", [
-        Web3.to_wei(28.5, "ether"),
+    # values taken from https://goerli.etherscan.io/tx/0xf711055fa03e17137c9891960237033711c1b75e5812a1edce1cf7f7c2d0d91b
+    data = contract.encodeABI("batchDeposit", [
+        bytes.fromhex('86cf59bf1295b5484d153e4cebf6132b65719958511ec6ff8f1e8c2dd4f704cd449b0984d5168a1eddc0e3221eef2bcc'),
+        bytes.fromhex('010000000000000000000000a1237efe3159197537f41f510f01d09394780f08'),
+        bytes.fromhex('a547573d76cdf47f843f16522f4312133fe78560f682e3659344ead855a7f309ebd6ccb882e4ddfae1b8b05c17b605b302276a226d3f6129fe23358e333beb350d95bf08bbbed85b03004198d31db7df4e2c347833c97d51d6c030528c28b60c'),
         [
-            bytes.fromhex("C02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"),
-            bytes.fromhex("6B3595068778DD592e39A122f4f5a5cF09C90fE2")
-        ],
-        bytes.fromhex("d8dA6BF26964aF9D7eEd9e03E53415D37aA96045"),
-        int(datetime.datetime(2023, 12, 25, 0, 0).timestamp())
+            b'0xa36e68c1081f5a546314ebc866f29e277e6052f20a0fac20cb9cb4bf00fae242'
+        ]
     ])
 
     # first setup the external plugin
@@ -55,8 +53,8 @@ def test_swap_exact_eth_for_token(backend, firmware, navigator, test_name):
              "maxPriorityFeePerGas": Web3.to_wei(1.5, "gwei"),
              "gas": 173290,
              "to": contract.address,
-             "value": Web3.to_wei(0.1, "ether"),
-             "chainId": ChainId.ETH,
+             "value": Web3.to_wei(32, "ether"),
+             "chainId": ChainId.GOR,
              "data": data
          }):
         # Validate the on-screen request by performing the navigation appropriate for this device

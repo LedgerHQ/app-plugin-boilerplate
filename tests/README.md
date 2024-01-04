@@ -10,37 +10,44 @@ The [Ragger](https://github.com/LedgerHQ/ragger) test framework (pytest based) i
 Both framework are developed by Ledger, if you have trouble using them, we invite you to get in touch with us on our [Discord](https://developers.ledger.com/contact/).
 For this reason, the usage of the Ragger framework for your tests is greatly recommended.
 
-
 ## Binaries
 
-In order to run the tests you need to provide the binaries for both the plugin and the Ethereum application.
+In order to run the tests you need to provide the binaries for BOTH the plugin and the Ethereum application.
 
 Compiling the plugin will produce the binary for the targeted device. They will be used as-is by the test framework.
 
 The binaries of the Ethereum application must be gathered and placed in the directory `tests/ethereum_build/`.
 Example of the correct file tree with Ethereum compiled for all targets.
-* `tests/ethereum_build/build/nanos/bin/app.elf`
-* `tests/ethereum_build/build/nanos2/bin/app.elf`
-* `tests/ethereum_build/build/nanox/bin/app.elf`
-* `tests/ethereum_build/build/stax/bin/app.elf`
+
+- `tests/ethereum_build/build/nanos/bin/app.elf`
+- `tests/ethereum_build/build/nanos2/bin/app.elf`
+- `tests/ethereum_build/build/nanox/bin/app.elf`
+- `tests/ethereum_build/build/stax/bin/app.elf`
 
 The first method is to go in the Ethereum project, compile the application, and dispatch the `build/` output directory.
-A second method is to re-use the Ethereum build used in the CI, and available as artifact. 
+A second, and easier, method is to re-use the Ethereum build used in the CI, and available as artifact.
 For example in the [plugin-boilerplate CI](https://github.com/LedgerHQ/app-plugin-boilerplate/actions/workflows/build_and_functional_tests.yml).
-
 
 ## Launching the tests
 
-The plugin boilerplate app comes with functional tests 
-
+The plugin boilerplate app comes with functional tests
 
 ### macOS / Windows
 
 To test your app on macOS or Windows, it is recommended to use [Ledger's VS Code extension](#with-vscode) to quickly setup a working test environment.
 
+For macOS:
+
+- Install X11
+- Change the security settings to not "Authenticate connections" (uncheck that box) and to "Allow connections from network clients" (check that one).
+- Restart X11 (important)
+- Run `xhost +local:docker` in the terminal
+
 You can use the following task (accessible in the **extension sidebar menu**) :
 
-* Use `Run tests`.
+- Use `Run tests`.
+
+Note: You might need to run `Generate golden snaphsots` if you change something in the display.
 
 ### Linux (Ubuntu)
 
