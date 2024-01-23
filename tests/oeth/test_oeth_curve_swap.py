@@ -130,3 +130,28 @@ def test_oeth_curve_swap_multiple_oeth_to_eth(backend, firmware, navigator, test
     ])
 
     run_test(contract_curve_router, data, backend, firmware, navigator, test_name)
+
+def test_oeth_curve_swap_multiple_eth_to_oeth_diff_route(backend, firmware, navigator, test_name):
+    data = contract_curve_router.encodeABI("exchange_multiple", [
+        [
+            bytes.fromhex("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"),
+            bytes.fromhex("94b17476a93b3262d87b9a326965d1e91f9c13e7"),
+            bytes.fromhex("94b17476a93b3262d87b9a326965d1e91f9c13e7"),
+            bytes.fromhex("94b17476a93b3262d87b9a326965d1e91f9c13e7"),
+            bytes.fromhex("94b17476a93b3262d87b9a326965d1e91f9c13e7"),
+            bytes.fromhex("94b17476a93b3262d87b9a326965d1e91f9c13e7"),
+            bytes.fromhex("94b17476a93b3262d87b9a326965d1e91f9c13e7"),
+            bytes.fromhex("94b17476a93b3262d87b9a326965d1e91f9c13e7"),
+            bytes.fromhex("856c4Efb76C1D1AE02e20CEB03A2A6a08b0b8dC3"),
+        ],
+        [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ],
+        Web3.to_wei(1, "ether"),
+        Web3.to_wei(0.941, "ether"),
+    ])
+
+    run_test(contract_curve_router, data, backend, firmware, navigator, test_name)

@@ -249,19 +249,25 @@ static void handle_curve_router_exchange(ethPluginProvideParameter_t *msg, conte
             context->next_param = TOKEN_RECEIVED;
             break;
         case TOKEN_RECEIVED:
-            PRINTF("Counter: %d\n", context->counter);
             context->counter += 1;
-            if (memcmp(&msg->parameter[PARAMETER_LENGTH - ADDRESS_LENGTH],
+            if (context->counter % 2 == 0) {
+                handle_token_received(msg, context);
+                if (context->counter == 8) {
+                    context->skip += 20 - context->counter;
+                    context->counter = 0;
+                    context->next_param = AMOUNT_SENT;
+                } else {
+                    context->next_param = TOKEN_RECEIVED;
+                }
+            } else if (memcmp(&msg->parameter[PARAMETER_LENGTH - ADDRESS_LENGTH],
                        NULL_ETH_ADDRESS,
                        ADDRESS_LENGTH) == 0) {
                 context->skip += 20 - context->counter;
                 context->counter = 0;
                 context->next_param = AMOUNT_SENT;
-            } else {
-                handle_token_received(msg, context);
-                context->next_param = TOKEN_RECEIVED;
             }
             break;
+
         case AMOUNT_SENT:
             handle_amount_sent(msg, context);
             context->next_param = MIN_AMOUNT_RECEIVED;
