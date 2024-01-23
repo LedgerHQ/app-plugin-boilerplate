@@ -11,10 +11,6 @@ Smart contracts covered by the plugin shall be described here:
 | -------------------- | -------------------------------------------- |
 | OETH Zapper          | `0x9858e47bcbbe6fbac040519b02d7cd4b2c470c66` |
 | OETH Vault           | `0x39254033945aa2e4809cc2977e7087bee48bd7ab` |
-| ETH/OETH Curve Pool  | `0x94b17476a93b3262d87b9a326965d1e91f9c13e7` |
-| Curve Router         | `0x99a58482bd75cbab83b27ec03ca68ff489b5788f` |
-| OUSD Vault           | `0xe75d77b1865ae93c7eaa3040b038d7aa7bc02f70` |
-| OUSD Flipper         | `0xcecad69d7d4ed6d52efcfa028af8732f27e08f70` |
 | UniswapV3 Router     | `0xe592427a0aece92de3edee1f18e0157c05861564` |
 | OUSD/3CRV Curve Pool | `0x87650d7bbfc3a9f10587d7778206671719d9910d` |
 | ETH/OETH Curve Pool  | `0x94b17476a93b3262d87b9a326965d1e91f9c13e7` |
