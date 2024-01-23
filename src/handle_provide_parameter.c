@@ -118,6 +118,8 @@ static void handle_token_received_curve_pool(ethPluginProvideParameter_t *msg, c
     printf_hex_array("TOKEN RECEIVED: ", ADDRESS_LENGTH, context->contract_address_received);
 }
 
+// deposit(uint256,address)
+// redeem(uint256,address,address)
 static void handle_wrap_and_unwrap(ethPluginProvideParameter_t *msg, context_t *context) {
     switch (context->next_param) {
         case AMOUNT_SENT:  
@@ -138,6 +140,7 @@ static void handle_wrap_and_unwrap(ethPluginProvideParameter_t *msg, context_t *
     }
 }
 
+// deposit()
 static void handle_zapper_deposit_eth(ethPluginProvideParameter_t *msg, context_t *context) {
     switch (context->next_param) {
         case NONE:
@@ -149,6 +152,7 @@ static void handle_zapper_deposit_eth(ethPluginProvideParameter_t *msg, context_
     }
 }
 
+// depositSFRXETH(uint256,uint256)
 static void handle_zapper_deposit_sfrxeth(ethPluginProvideParameter_t *msg, context_t *context) {
     switch (context->next_param) {
         case AMOUNT_SENT:
@@ -213,6 +217,7 @@ static void handle_vault_redeem(ethPluginProvideParameter_t *msg, context_t *con
 }
 
 // exchange(int128 i,int128 j,uint256 _dx,uint256 _min_dy)
+// exchange_underlying(int128 i,int128 j,uint256 _dx,uint256 _min_dy)
 static void handle_curve_pool_exchange(ethPluginProvideParameter_t *msg, context_t *context) {
     switch (context->next_param) {
         case TOKEN_SENT:
