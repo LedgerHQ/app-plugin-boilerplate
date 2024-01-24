@@ -2,23 +2,16 @@
 [![Compilation & tests](https://github.com/LedgerHQ/app-plugin-boilerplate/actions/workflows/build_and_functional_tests.yml/badge.svg?branch=develop)](https://github.com/LedgerHQ/app-plugin-boilerplate/actions/workflows/build_and_functional_tests.yml)
 
 
-# app-plugin-boilerplate
+# app-plugin-origin
 
-This repo is meant to be a forkable example of a plugin.
-
-Plugins are lightweight applications that go hand-in-hand with the Ethereum
-Application on a Nano (S, S plus, X) and Stax devices.
-
-They allow users to safely interact with smart contracts by parsing the
-transaction data and displaying its content in a human-readable way. This is
-done on a "per contract" basis, meaning a plugin is required for every DApp.
-
-The code has been commented, and special "EDIT THIS" comments indicate where
-developers are expected to adapt the code to their own needs.
-
-It is STRONGLY recommended to follow the
-[plugin guide](https://developers.ledger.com/docs/dapp/embedded-plugin/code-overview/)
-in order to better understand the flow and the context for plugins.
+Ledger's recommended [plugin guide](https://developers.ledger.com/docs/dapp/embedded-plugin/code-overview/) is out-dated and doesn't work since they introduced a lot of new changes. Here's a simple way to get started with this repo:
+1. Clone this repo (along with git submodules)
+2. Install [Xquartz](https://www.xquartz.org/) and make sure you have enabled "Allow connections from network clients" enabled under "Security" settings.
+3. Install and start Docker (Note: If Docker is already running, quit and start it after starting Xquartz, otherwise docker cannot connect to Xquartz).
+4. Install the [Ledger Dev Tools VS Code plugin](https://marketplace.visualstudio.com/items?itemName=LedgerHQ.ledger-dev-tools#:~:text=ledger%2Dvscode%2Dextension,Plus%2C%20Nano%20X%2C%20Stax) and makes sure it's enabled
+5. Once you have installed the plugin and open the repo, the plugin should by default try to create and start the containers. If it doesn't, you can simply click "Update Container" under "Ledger Dev Tools" in the Activity Side Bar on VS Code.
+6. On the "Ledger Dev Tools" side bar, Select a target and then click on Build. 
+7. Once build is complete, click on "Run tests" to run the tests
 
 ## Ethereum SDK
 
@@ -33,8 +26,12 @@ the code is compiled and tested on the latest version of the SDK.
 
 ## Documentation
 
-The documentation about the plugin shall be added in [PLUGIN_SPECIFICATON.md](https://github.com/LedgerHQ/app-plugin-boilerplate/blob/develop/PLUGIN_SPECIFICATION.md). It shall includes at least the smart contracts and functions supported by the plugin.
+The documentation about the plugin is in [PLUGIN_SPECIFICATON.md](https://github.com/LedgerHQ/app-plugin-boilerplate/blob/develop/PLUGIN_SPECIFICATION.md). It includes the smart contracts and functions supported by the plugin.
 
 ## Formatting
 
 The C source code is expected to be formatted with `clang-format` 11.0.0 or higher.
+
+```
+clang-format -style=Google -i src/*
+```

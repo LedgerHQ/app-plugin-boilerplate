@@ -1,5 +1,5 @@
-#include "plugin_utils.h"
 #include "plugin.h"
+#include "plugin_utils.h"
 
 // Called once to init.
 void handle_init_contract(ethPluginInitContract_t *msg) {
@@ -10,8 +10,8 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
         return;
     }
 
-    // Double check that the `context_t` struct is not bigger than the maximum size (defined by
-    // `msg->pluginContextLength`).
+    // Double check that the `context_t` struct is not bigger than the maximum
+    // size (defined by `msg->pluginContextLength`).
     if (msg->pluginContextLength < sizeof(context_t)) {
         PRINTF("Plugin parameters structure is bigger than allowed size\n");
         msg->result = ETH_PLUGIN_RESULT_ERROR;
@@ -38,14 +38,45 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
     }
 
     // Set `next_param` to be the first field we expect to parse.
-    // EDIT THIS: Adapt the `cases`, and set the `next_param` to be the first parameter you expect
-    // to parse.
     switch (context->selectorIndex) {
-        case SWAP_EXACT_ETH_FOR_TOKENS:
-            context->next_param = MIN_AMOUNT_RECEIVED;
+        case ZAPPER_DEPOSIT_ETH:
+            context->next_param = NONE;
             break;
-        case BOILERPLATE_DUMMY_2:
-            context->next_param = TOKEN_RECEIVED;
+        case CURVE_POOL_EXCHANGE:
+        case CURVE_POOL_EXCHANGE_UNDERLYING:
+            if (memcmp(CURVE_OETH_POOL_ADDRESS,
+                       msg->pluginSharedRO->txContent->destination,
+                       ADDRESS_LENGTH) == 0 ||
+                memcmp(CURVE_OUSD_POOL_ADDRESS,
+                       msg->pluginSharedRO->txContent->destination,
+                       ADDRESS_LENGTH) == 0) {
+                context->next_param = TOKEN_SENT;
+                break;
+            }
+            PRINTF("Missing selectorIndex: %d\n", context->selectorIndex);
+            msg->result = ETH_PLUGIN_RESULT_ERROR;
+            return;
+        case UNISWAP_V3_ROUTER_EXACT_INPUT:
+            context->skip += 2;
+            context->next_param = BENEFICIARY;
+            break;
+        case UNISWAP_ROUTER_EXACT_INPUT_SINGLE:
+            break;
+        case CURVE_ROUTER_EXCHANGE_MULTIPLE:
+        case VAULT_MINT:
+            context->next_param = TOKEN_SENT;
+            break;
+        case FLIPPER_BUY_OUSD_WITH_USDT:
+        case FLIPPER_SELL_OUSD_FOR_USDT:
+        case FLIPPER_BUY_OUSD_WITH_DAI:
+        case FLIPPER_SELL_OUSD_FOR_DAI:
+        case FLIPPER_BUY_OUSD_WITH_USDC:
+        case FLIPPER_SELL_OUSD_FOR_USDC:
+        case ZAPPER_DEPOSIT_SFRXETH:
+        case VAULT_REDEEM:
+        case WRAP:
+        case UNWRAP:
+            context->next_param = AMOUNT_SENT;
             break;
         // Keep this
         default:
