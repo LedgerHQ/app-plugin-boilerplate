@@ -117,7 +117,6 @@ typedef struct context_s {
     uint8_t decimals_received;
     uint8_t skip;
 
-    bool valid;
     uint8_t amount_length;
 
     // For parsing data.
