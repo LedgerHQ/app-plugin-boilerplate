@@ -122,11 +122,11 @@ static void handle_token_received_curve_pool(ethPluginProvideParameter_t *msg, c
 // redeem(uint256,address,address)
 static void handle_wrap_and_unwrap(ethPluginProvideParameter_t *msg, context_t *context) {
     switch (context->next_param) {
-        case AMOUNT_SENT:  
+        case AMOUNT_SENT:
             handle_amount_sent(msg, context);
             context->next_param = BENEFICIARY;
             break;
-        case BENEFICIARY: 
+        case BENEFICIARY:
             handle_beneficiary(msg, context);
             context->next_param = NONE;
             break;
@@ -265,8 +265,8 @@ static void handle_curve_router_exchange(ethPluginProvideParameter_t *msg, conte
                     context->next_param = TOKEN_RECEIVED;
                 }
             } else if (memcmp(&msg->parameter[PARAMETER_LENGTH - ADDRESS_LENGTH],
-                       NULL_ETH_ADDRESS,
-                       ADDRESS_LENGTH) == 0) {
+                              NULL_ETH_ADDRESS,
+                              ADDRESS_LENGTH) == 0) {
                 context->skip += 20 - context->counter;
                 context->counter = 0;
                 context->next_param = AMOUNT_SENT;
@@ -303,17 +303,18 @@ static void handle_uniswap_v3_exchange(ethPluginProvideParameter_t *msg, context
         case PARAM_OFFSET:
             // Jump to actual data offset
             context->offset = U2BE(msg->parameter, PARAMETER_LENGTH - 2);
-            context->go_to_offset = true; 
+            context->go_to_offset = true;
             context->next_param = PATH_OFFSET;
             break;
         case PATH_OFFSET:
             // Load path offset (but don't jump yet)
-            context->offset = msg->parameterOffset + U2BE(msg->parameter, PARAMETER_LENGTH - 2) - SELECTOR_SIZE;
+            context->offset =
+                msg->parameterOffset + U2BE(msg->parameter, PARAMETER_LENGTH - 2) - SELECTOR_SIZE;
             context->next_param = BENEFICIARY;
             break;
         case BENEFICIARY:
             handle_beneficiary(msg, context);
-            context->skip += 1; // Skip `deadline`
+            context->skip += 1;  // Skip `deadline`
             context->next_param = AMOUNT_SENT;
             break;
         case AMOUNT_SENT:
