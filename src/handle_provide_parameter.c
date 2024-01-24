@@ -18,7 +18,7 @@ static void handle_min_amount_received(ethPluginProvideParameter_t *msg, context
 
 static void handle_token_sent(ethPluginProvideParameter_t *msg, context_t *context) {
     memset(context->contract_address_sent, 0, sizeof(context->contract_address_sent));
-memcpy(context->contract_address_sent,
+    memcpy(context->contract_address_sent,
            &msg->parameter[PARAMETER_LENGTH - ADDRESS_LENGTH],
            ADDRESS_LENGTH);
     printf_hex_array("TOKEN SENT: ", ADDRESS_LENGTH, context->contract_address_sent);
@@ -32,7 +32,7 @@ static void handle_token_sent_curve_pool(ethPluginProvideParameter_t *msg, conte
                           ADDRESS_LENGTH) == 0;
 
     if (is_oeth) {
-        switch (msg->parameter[PARAMETER_LENGTH - 1]) {
+        switch (U2BE(msg->parameter, PARAMETER_LENGTH - 2)) {
             case 0:
                 memcpy(context->contract_address_sent, NULL_ETH_ADDRESS, ADDRESS_LENGTH);
                 break;
@@ -44,7 +44,7 @@ static void handle_token_sent_curve_pool(ethPluginProvideParameter_t *msg, conte
                 break;
         }
     } else {
-        switch (msg->parameter[PARAMETER_LENGTH - 1]) {
+        switch (U2BE(msg->parameter, PARAMETER_LENGTH - 2)) {
             case 0:
                 memcpy(context->contract_address_sent, OUSD_ADDRESS, ADDRESS_LENGTH);
                 break;
@@ -85,7 +85,7 @@ static void handle_token_received_curve_pool(ethPluginProvideParameter_t *msg, c
     // determine token addresses of curve pools based on contract address and
     // value of i/j params
     if (is_oeth) {
-        switch (msg->parameter[PARAMETER_LENGTH - 1]) {
+        switch (U2BE(msg->parameter, PARAMETER_LENGTH - 2)) {
             case 0:
                 memcpy(context->contract_address_received, NULL_ETH_ADDRESS, ADDRESS_LENGTH);
                 break;
@@ -97,7 +97,7 @@ static void handle_token_received_curve_pool(ethPluginProvideParameter_t *msg, c
                 break;
         }
     } else {
-        switch (msg->parameter[PARAMETER_LENGTH - 1]) {
+        switch (U2BE(msg->parameter, PARAMETER_LENGTH - 2)) {
             case 0:
                 memcpy(context->contract_address_received, OUSD_ADDRESS, ADDRESS_LENGTH);
                 break;
