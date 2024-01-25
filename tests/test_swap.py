@@ -3,6 +3,7 @@ import json
 import os
 
 import datetime
+import time
 
 from web3 import Web3
 from eth_typing import ChainId
@@ -16,10 +17,10 @@ from .utils import get_appname_from_makefile
 
 ROOT_SCREENSHOT_PATH = Path(__file__).parent
 ABIS_FOLDER = "%s/abis" % (os.path.dirname(__file__))
-
+print("PATH: ", ROOT_SCREENSHOT_PATH)
 PLUGIN_NAME = get_appname_from_makefile()
 
-with open("%s/0x000102030405060708090a0b0c0d0e0f10111213.abi.json" % (ABIS_FOLDER)) as file:
+with open("%s/0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D.abi.json" % (ABIS_FOLDER)) as file:
     contract = Web3().eth.contract(
         abi=json.load(file),
         # Get address from filename
@@ -30,16 +31,19 @@ with open("%s/0x000102030405060708090a0b0c0d0e0f10111213.abi.json" % (ABIS_FOLDE
 # EDIT THIS: build your own test
 def test_swap_exact_eth_for_token(backend, firmware, navigator, test_name):
     client = EthAppClient(backend)
+    # print(client)
 
     data = contract.encodeABI("swapExactETHForTokens", [
-        Web3.to_wei(28.5, "ether"),
+        400000000,
         [
             bytes.fromhex("C02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"),
-            bytes.fromhex("6B3595068778DD592e39A122f4f5a5cF09C90fE2")
+            bytes.fromhex("A0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48")
         ],
         bytes.fromhex("d8dA6BF26964aF9D7eEd9e03E53415D37aA96045"),
-        int(datetime.datetime(2023, 12, 25, 0, 0).timestamp())
+        int(datetime.datetime(2024, 12, 25, 0, 0).timestamp())
     ])
+
+    print("data: ", data)
 
     # first setup the external plugin
     with client.set_external_plugin(PLUGIN_NAME,
@@ -55,17 +59,22 @@ def test_swap_exact_eth_for_token(backend, firmware, navigator, test_name):
              "maxPriorityFeePerGas": Web3.to_wei(1.5, "gwei"),
              "gas": 173290,
              "to": contract.address,
-             "value": Web3.to_wei(0.1, "ether"),
+             "value": Web3.to_wei(2, "ether"),
              "chainId": ChainId.ETH,
              "data": data
          }):
-        # Validate the on-screen request by performing the navigation appropriate for this device
+    #     # Validate the on-screen request by performing the navigation appropriate for this device
         if firmware.device.startswith("nano"):
             navigator.navigate_until_text_and_compare(NavInsID.RIGHT_CLICK,
                                                       [NavInsID.BOTH_CLICK],
                                                       "Accept",
                                                       ROOT_SCREENSHOT_PATH,
                                                       test_name)
+            time_before = time.time()
+            time.sleep(5)
+
+            time_after = int(time.time() - time_before)
+            print("hello")
         else:
             navigator.navigate_until_text_and_compare(NavInsID.USE_CASE_REVIEW_TAP,
                                                       [NavInsID.USE_CASE_REVIEW_CONFIRM,
@@ -73,3 +82,5 @@ def test_swap_exact_eth_for_token(backend, firmware, navigator, test_name):
                                                       "Hold to sign",
                                                       ROOT_SCREENSHOT_PATH,
                                                       test_name)
+            
+

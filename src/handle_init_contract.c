@@ -3,6 +3,7 @@
 
 // Called once to init.
 void handle_init_contract(ethPluginInitContract_t *msg) {
+    PRINTF("Expand pulgin handle_init_contract");
     // Make sure we are running a compatible version.
     if (msg->interfaceVersion != ETH_PLUGIN_INTERFACE_VERSION_LATEST) {
         // If not the case, return the `UNAVAILABLE` status.
@@ -44,10 +45,14 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
         case SWAP_EXACT_ETH_FOR_TOKENS:
             context->next_param = MIN_AMOUNT_RECEIVED;
             break;
+        case SWAP_EXACT_TOKENS_FOR_ETH:
+            context->next_param = AMOUNT_SENT;
+            break;
+        // case SWAP_EXACT_TOKENS_FOR_TOKENS:
+        //     context-skip +
         case BOILERPLATE_DUMMY_2:
             context->next_param = TOKEN_RECEIVED;
             break;
-        // Keep this
         default:
             PRINTF("Missing selectorIndex: %d\n", context->selectorIndex);
             msg->result = ETH_PLUGIN_RESULT_ERROR;

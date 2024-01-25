@@ -15,7 +15,25 @@ void handle_finalize(ethPluginFinalize_t *msg) {
 
     // EDIT THIS: set `tokenLookup1` (and maybe `tokenLookup2`) to point to
     // token addresses you will info for (such as decimals, ticker...).
-    msg->tokenLookup1 = context->token_received;
+    if(context->token_sent != NULL) {
+        msg->tokenLookup1 = context->token_sent;
+        printf_hex_array("setting token sent to: ",
+                        ADDRESS_LENGTH,
+                        context->token_sent);
+    } else {
+        msg->tokenLookup1 = NULL;
+    }
+
+    if(context->token_received != NULL) {
+        msg->tokenLookup2 = context->token_received;
+        printf_hex_array("setting token recieved to: ",
+                        ADDRESS_LENGTH,
+                        context->token_received);
+    } else {
+        msg->tokenLookup2 = NULL;
+    }
+
+
 
     msg->result = ETH_PLUGIN_RESULT_OK;
 }

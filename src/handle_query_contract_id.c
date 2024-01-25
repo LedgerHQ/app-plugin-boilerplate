@@ -13,7 +13,12 @@ void handle_query_contract_id(ethQueryContractID_t *msg) {
     if (context->selectorIndex == SWAP_EXACT_ETH_FOR_TOKENS) {
         strlcpy(msg->version, "Swap", msg->versionLength);
         msg->result = ETH_PLUGIN_RESULT_OK;
-    } else {
+    } else if (context->selectorIndex == SWAP_EXACT_TOKENS_FOR_ETH){
+        strlcpy(msg->version, "Swap", msg->versionLength);
+        msg->result = ETH_PLUGIN_RESULT_OK;
+    }
+    
+    else {
         PRINTF("Selector index: %d not supported\n", context->selectorIndex);
         msg->result = ETH_PLUGIN_RESULT_ERROR;
     }

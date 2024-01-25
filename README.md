@@ -38,3 +38,7 @@ The documentation about the plugin shall be added in [PLUGIN_SPECIFICATON.md](ht
 ## Formatting
 
 The C source code is expected to be formatted with `clang-format` 11.0.0 or higher.
+
+
+pytest ./tests/ --tb=short -sv --device nanos
+pytest --device nanos tests/test_swap.py --golden_run -v
