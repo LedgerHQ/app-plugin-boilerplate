@@ -54,8 +54,8 @@ extern const uint32_t SELECTORS[SELECTOR_COUNT];
 // Enumeration used to parse the smart contract data.
 // EDIT THIS: Adapt the parameter names here.
 typedef enum {
-    AMOUNT_SENT = 0,
-    MIN_AMOUNT_RECEIVED = 0,
+    AMOUNT_SENT,
+    MIN_AMOUNT_RECEIVED,
     TOKEN_SENT,
     TOKEN_RECEIVED,
     BENEFICIARY,
