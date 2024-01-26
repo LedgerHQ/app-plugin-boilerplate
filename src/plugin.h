@@ -1,6 +1,6 @@
 /*******************************************************************************
- *   Plugin Boilerplate
- *   (c) 2023 Ledger
+ *   Expand Plugin Ledger
+ *   2024
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -54,8 +54,8 @@ extern const uint32_t SELECTORS[SELECTOR_COUNT];
 // Enumeration used to parse the smart contract data.
 // EDIT THIS: Adapt the parameter names here.
 typedef enum {
-    AMOUNT_SENT = 0,
-    MIN_AMOUNT_RECEIVED = 0,
+    AMOUNT_SENT,
+    MIN_AMOUNT_RECEIVED,
     TOKEN_SENT,
     TOKEN_RECEIVED,
     BENEFICIARY,

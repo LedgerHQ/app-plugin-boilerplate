@@ -49,6 +49,7 @@ static void handle_swap_exact_tokens_for_eth (ethPluginProvideParameter_t *msg, 
         context->go_to_offset = false;
     }
 
+    PRINTF("amount_sent %d amount_reci: %d", AMOUNT_SENT, MIN_AMOUNT_RECEIVED);
     switch (context->next_param) {
         case AMOUNT_SENT:
             copy_parameter(context->amount_sent,
@@ -56,12 +57,12 @@ static void handle_swap_exact_tokens_for_eth (ethPluginProvideParameter_t *msg, 
                            sizeof(context->amount_sent));
             context->next_param = MIN_AMOUNT_RECEIVED;
             break;
-        // case MIN_AMOUNT_RECEIVED:
-        //     copy_parameter(context->amount_received, 
-        //                     msg->parameter,
-        //                     sizeof(context->amount_received));
-        //     context->next_param = PATH_OFFSET;
-        //     break;
+        case MIN_AMOUNT_RECEIVED:
+            copy_parameter(context->amount_received, 
+                            msg->parameter,
+                            sizeof(context->amount_received));
+            context->next_param = PATH_OFFSET;
+            break;
         case PATH_OFFSET:  // path
             context->offset = U2BE(msg->parameter, PARAMETER_LENGTH - 2);
             context->next_param = BENEFICIARY;
