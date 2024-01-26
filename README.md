@@ -2,9 +2,8 @@
 [![Compilation & tests](https://github.com/LedgerHQ/app-plugin-boilerplate/actions/workflows/build_and_functional_tests.yml/badge.svg?branch=develop)](https://github.com/LedgerHQ/app-plugin-boilerplate/actions/workflows/build_and_functional_tests.yml)
 
 
-# app-plugin-boilerplate
+# app-plugin-expand
 
-This repo is meant to be a forkable example of a plugin.
 
 Plugins are lightweight applications that go hand-in-hand with the Ethereum
 Application on a Nano (S, S plus, X) and Stax devices.
