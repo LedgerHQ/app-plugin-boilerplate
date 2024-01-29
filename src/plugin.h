@@ -1,6 +1,5 @@
 /*******************************************************************************
- *   Expand Plugin Ledger
- *   2024
+ *   Plugin Expand
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -33,12 +32,11 @@
 // A Xmacro below will create for you:
 //     - an enum named selector_t with every NAME
 //     - a map named SELECTORS associating each NAME with it's value
-#define SELECTORS_LIST(X)                    \
-    X(SWAP_EXACT_ETH_FOR_TOKENS, 0x7ff36ab5) \
+#define SELECTORS_LIST(X)                           \
+    X(SWAP_EXACT_ETH_FOR_TOKENS, 0x7ff36ab5)         \
     X(SWAP_EXACT_TOKENS_FOR_ETH, 0x18cbafe5)          \
-    X(BOILERPLATE_DUMMY_2, 0x13374242)                 \
-    X(SWAP_EXACT_TOKENS_FOR_TOKENS, 0x38ed1739)
-
+    X(SWAP_EXACT_TOKENS_FOR_TOKENS, 0x38ed1739)        \
+    X(APPROVE, 0x095ea7b3)
 
 // This enum will be automatically expanded to hold all selector names.
 // The value SELECTOR_COUNT can be used to get the number of defined selectors
@@ -52,7 +50,6 @@ typedef enum selector_e {
 extern const uint32_t SELECTORS[SELECTOR_COUNT];
 
 // Enumeration used to parse the smart contract data.
-// EDIT THIS: Adapt the parameter names here.
 typedef enum {
     AMOUNT_SENT,
     MIN_AMOUNT_RECEIVED,
@@ -65,7 +62,6 @@ typedef enum {
 } parameter;
 
 // Shared global memory with Ethereum app. Must be at most 5 * 32 bytes.
-// EDIT THIS: This struct is used by your plugin to save the parameters you parse. You
 // will need to adapt this struct to your plugin.
 typedef struct context_s {
     // For display.
@@ -149,7 +145,6 @@ static inline const char *get_ticker_for_address(uint8_t address[ADDRESS_LENGTH]
     } else if (ADDRESS_IS_DAI(address)) {
         return DAI_TICKER; 
     } else if (ADDRESS_IS_USDC(address)) {
-        PRINTF("its USDC");
         return USDC_TICKER;
     }
 }
@@ -166,7 +161,12 @@ static inline void printf_hex_array(const char *title __attribute__((unused)),
                     
 static inline const uint8_t get_decimals_for_ticker(const char *ticker __attribute__((unused))) {
     if(strcmp(ticker, USDC_TICKER)== 0) {
-        PRINTF("itz USDC TICKER");
         return USDC_DECIMALS;
+    } else if(strcmp(ticker, WETH_TICKER) == 0) {
+        return WEI_TO_ETHER;
+    } else if(strcmp(ticker, DAI_TICKER) == 0) {
+        return WEI_TO_ETHER;
+    } else {
+        return WETH_TICKER;
     }
 }

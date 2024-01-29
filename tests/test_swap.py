@@ -17,7 +17,6 @@ from .utils import get_appname_from_makefile
 
 ROOT_SCREENSHOT_PATH = Path(__file__).parent
 ABIS_FOLDER = "%s/abis" % (os.path.dirname(__file__))
-print("PATH: ", ROOT_SCREENSHOT_PATH)
 PLUGIN_NAME = get_appname_from_makefile()
 
 with open("%s/0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D.abi.json" % (ABIS_FOLDER)) as file:
@@ -70,11 +69,6 @@ def test_swap_exact_eth_for_token(backend, firmware, navigator, test_name):
                                                       "Accept",
                                                       ROOT_SCREENSHOT_PATH,
                                                       test_name)
-            time_before = time.time()
-            time.sleep(5)
-
-            time_after = int(time.time() - time_before)
-            print("hello")
         else:
             navigator.navigate_until_text_and_compare(NavInsID.USE_CASE_REVIEW_TAP,
                                                       [NavInsID.USE_CASE_REVIEW_CONFIRM,

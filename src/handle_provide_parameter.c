@@ -49,7 +49,6 @@ static void handle_swap_exact_tokens_for_eth (ethPluginProvideParameter_t *msg, 
         context->go_to_offset = false;
     }
 
-    PRINTF("amount_sent %d amount_reci: %d", AMOUNT_SENT, MIN_AMOUNT_RECEIVED);
     switch (context->next_param) {
         case AMOUNT_SENT:
             copy_parameter(context->amount_sent,
@@ -73,16 +72,39 @@ static void handle_swap_exact_tokens_for_eth (ethPluginProvideParameter_t *msg, 
             context->go_to_offset = true;
             break;
         case PATH_LENGTH:
-            context->offset = msg->parameterOffset - SELECTOR_SIZE + PARAMETER_LENGTH;
-            context->go_to_offset = true;
+            // context->offset = msg->parameterOffset - SELECTOR_SIZE + PARAMETER_LENGTH;
+            // context->go_to_offset = true;
+            // context->skip += 1;
             context->next_param = TOKEN_SENT;
             break;
         case TOKEN_SENT:
             copy_address(context->token_sent, msg->parameter, sizeof(context->token_sent));
             context->next_param = TOKEN_RECEIVED;
+            if(context->selectorIndex == SWAP_EXACT_TOKENS_FOR_TOKENS){
+                context->skip += 1;
+            }
             break;
         case TOKEN_RECEIVED:  // path[1] -> contract address of token received
             copy_address(context->token_received, msg->parameter, sizeof(context->token_received));
+            context->next_param = UNEXPECTED_PARAMETER;
+            break;
+        default:
+            PRINTF("Param not supported: %d\n", context->next_param);
+            msg->result = ETH_PLUGIN_RESULT_ERROR;
+            break;
+    }
+}
+
+static void handle_approve_erc20 (ethPluginProvideParameter_t *msg, context_t *context) {
+
+    switch (context->next_param) {
+        case BENEFICIARY: 
+            copy_address(context->beneficiary, msg->parameter, sizeof(context->beneficiary));
+            printf_hex_array("BENEFICIARY: ", ADDRESS_LENGTH, context->beneficiary);
+            context->next_param = AMOUNT_SENT;
+            break;
+        case AMOUNT_SENT:
+            copy_parameter(context->amount_sent, msg->parameter, sizeof(context->amount_sent));
             context->next_param = UNEXPECTED_PARAMETER;
             break;
         default:
@@ -115,10 +137,12 @@ void handle_provide_parameter(ethPluginProvideParameter_t *msg) {
             handle_swap_exact_eth_for_tokens(msg, context);
             break;
         case SWAP_EXACT_TOKENS_FOR_ETH:
+        case SWAP_EXACT_TOKENS_FOR_TOKENS:
             handle_swap_exact_tokens_for_eth(msg, context);
-            PRINTF("insideC",msg, "completed");
             break;
-        case BOILERPLATE_DUMMY_2:
+        case APPROVE:
+            PRINTF("Running Approve\n");
+            handle_approve_erc20(msg, context);
             break;
         default:
             PRINTF("Selector Index not supported: %d\n", context->selectorIndex);

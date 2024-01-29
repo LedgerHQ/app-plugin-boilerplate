@@ -39,19 +39,17 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
     }
 
     // Set `next_param` to be the first field we expect to parse.
-    // EDIT THIS: Adapt the `cases`, and set the `next_param` to be the first parameter you expect
     // to parse.
     switch (context->selectorIndex) {
         case SWAP_EXACT_ETH_FOR_TOKENS:
             context->next_param = MIN_AMOUNT_RECEIVED;
             break;
         case SWAP_EXACT_TOKENS_FOR_ETH:
+        case SWAP_EXACT_TOKENS_FOR_TOKENS:
             context->next_param = AMOUNT_SENT;
             break;
-        // case SWAP_EXACT_TOKENS_FOR_TOKENS:
-        //     context-skip +
-        case BOILERPLATE_DUMMY_2:
-            context->next_param = TOKEN_RECEIVED;
+        case APPROVE:
+            context->next_param = BENEFICIARY;
             break;
         default:
             PRINTF("Missing selectorIndex: %d\n", context->selectorIndex);
