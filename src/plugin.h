@@ -117,14 +117,15 @@ typedef struct context_s {
     uint8_t decimals_received;
     uint8_t skip;
 
+    bool go_to_offset;  // If set, will force the parsing to iterate through parameters until
+                        // `offset` is reached.
     uint8_t amount_length;
 
     // For parsing data.
     uint8_t next_param;  // Set to be the next param we expect to parse.
     uint8_t counter;
     uint16_t offset;    // Offset at which the array or struct starts.
-    bool go_to_offset;  // If set, will force the parsing to iterate through parameters until
-                        // `offset` is reached.
+
     // For both parsing and display.
     selector_t selectorIndex;
 } context_t;
