@@ -41,7 +41,5 @@ void handle_finalize(ethPluginFinalize_t *msg) {
 
     }
 
-
-
     msg->result = ETH_PLUGIN_RESULT_OK;
 }

@@ -1,7 +1,6 @@
 from pathlib import Path
 import json
 import os
-import datetime
 from web3 import Web3
 from eth_typing import ChainId
 from ledger_app_clients.ethereum.client import EthAppClient, StatusWord
