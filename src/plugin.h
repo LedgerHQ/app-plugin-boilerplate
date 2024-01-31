@@ -124,7 +124,7 @@ typedef struct context_s {
     // For parsing data.
     uint8_t next_param;  // Set to be the next param we expect to parse.
     uint8_t counter;
-    uint16_t offset;    // Offset at which the array or struct starts.
+    uint16_t offset;  // Offset at which the array or struct starts.
 
     // For both parsing and display.
     selector_t selectorIndex;
