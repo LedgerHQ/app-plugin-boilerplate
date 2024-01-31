@@ -20,6 +20,8 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
 
     context_t *context = (context_t *) msg->pluginContext;
 
+    bool is_fuzz_test = context->next_param == 99;
+
     // Initialize the context (to 0).
     memset(context, 0, sizeof(*context));
 
@@ -44,17 +46,19 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
             break;
         case CURVE_POOL_EXCHANGE:
         case CURVE_POOL_EXCHANGE_UNDERLYING:
-            if (&msg->pluginSharedRO->txContent != NULL &&
-                (memcmp(CURVE_OETH_POOL_ADDRESS,
-                        msg->pluginSharedRO->txContent->destination,
-                        ADDRESS_LENGTH) == 0 ||
-                 memcmp(CURVE_OUSD_POOL_ADDRESS,
-                        msg->pluginSharedRO->txContent->destination,
-                        ADDRESS_LENGTH) == 0)) {
+            if (is_fuzz_test) {
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+                return;
+            }
+            if (memcmp(CURVE_OETH_POOL_ADDRESS,
+                       msg->pluginSharedRO->txContent->destination,
+                       ADDRESS_LENGTH) == 0 ||
+                memcmp(CURVE_OUSD_POOL_ADDRESS,
+                       msg->pluginSharedRO->txContent->destination,
+                       ADDRESS_LENGTH) == 0) {
                 context->next_param = TOKEN_SENT;
                 break;
             }
-            PRINTF("Missing selectorIndex: %d\n", context->selectorIndex);
             msg->result = ETH_PLUGIN_RESULT_ERROR;
             return;
         case UNISWAP_V3_ROUTER_EXACT_INPUT:
