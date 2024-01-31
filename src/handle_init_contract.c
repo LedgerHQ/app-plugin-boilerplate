@@ -44,12 +44,13 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
             break;
         case CURVE_POOL_EXCHANGE:
         case CURVE_POOL_EXCHANGE_UNDERLYING:
-            if (memcmp(CURVE_OETH_POOL_ADDRESS,
-                       msg->pluginSharedRO->txContent->destination,
-                       ADDRESS_LENGTH) == 0 ||
-                memcmp(CURVE_OUSD_POOL_ADDRESS,
-                       msg->pluginSharedRO->txContent->destination,
-                       ADDRESS_LENGTH) == 0) {
+            if (&msg->pluginSharedRO->txContent != NULL &&
+                (memcmp(CURVE_OETH_POOL_ADDRESS,
+                        msg->pluginSharedRO->txContent->destination,
+                        ADDRESS_LENGTH) == 0 ||
+                 memcmp(CURVE_OUSD_POOL_ADDRESS,
+                        msg->pluginSharedRO->txContent->destination,
+                        ADDRESS_LENGTH) == 0)) {
                 context->next_param = TOKEN_SENT;
                 break;
             }

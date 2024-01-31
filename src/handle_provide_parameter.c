@@ -347,6 +347,11 @@ static void handle_uniswap_v3_exchange(ethPluginProvideParameter_t *msg, context
             context->next_param = TOKEN_RECEIVED_REST;
             break;
         case TOKEN_RECEIVED_REST:
+            if ((PARAMETER_LENGTH - (context->offset - ADDRESS_LENGTH) % PARAMETER_LENGTH) > 20) {
+                context->next_param = NONE;
+                break;
+            }
+
             // copy rest of address in case it overflows into the next param
             memcpy(&context->contract_address_received[PARAMETER_LENGTH -
                                                        (context->offset - ADDRESS_LENGTH) %
