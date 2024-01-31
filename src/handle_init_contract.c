@@ -47,6 +47,12 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
         case CURVE_POOL_EXCHANGE:
         case CURVE_POOL_EXCHANGE_UNDERLYING:
             if (is_fuzz_test) {
+                // Workaround to revert during fuzz tests.
+                // Since `txContent->destination` isn't populated during fuzz tests,
+                // it'll throw a null pointer exception causing the fuzz tests
+                // to fail on CI. Right way would be to pass some value to
+                // `txContent->destination` but that breaks a lot of
+                // other fuzz tests.
                 msg->result = ETH_PLUGIN_RESULT_ERROR;
                 return;
             }
