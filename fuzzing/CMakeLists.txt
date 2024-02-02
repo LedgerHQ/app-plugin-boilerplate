@@ -75,7 +75,7 @@ include_directories(
     ${BOLOS_SDK}/lib_cxng/include
     ${BOLOS_SDK}/lib_cxng/src
     ${BOLOS_SDK}/target/nanox/include
-    ${ETH_DIR}/include
+    ${ETH_DIR}/src
     ${SRC_DIR}
 )
 
@@ -92,8 +92,8 @@ add_executable(fuzz
     ${SRC_DIR}/handle_query_contract_id.c
 
     # Ethereum SDK
-    ${ETH_DIR}/include/eth_internals.c
-    ${ETH_DIR}/include/plugin_utils.c
+    ${ETH_DIR}/src/common_utils.c
+    ${ETH_DIR}/src/plugin_utils.c
 
     # cxng
     ${BOLOS_SDK}/lib_cxng/src/cx_hash.c
