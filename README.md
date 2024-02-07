@@ -33,5 +33,5 @@ The documentation about the plugin is in [PLUGIN_SPECIFICATON.md](https://github
 The C source code is expected to be formatted with `clang-format` 11.0.0 or higher.
 
 ```
-clang-format -style=Google -i src/*
+clang-format -i src/*
 ```

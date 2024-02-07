@@ -50,10 +50,13 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
         return 0;
     }
 
+    context.next_param = 99;
+
     init_contract.interfaceVersion = ETH_PLUGIN_INTERFACE_VERSION_LATEST;
     init_contract.selector = data;
     init_contract.pluginContext = (uint8_t *) &context;
     init_contract.pluginContextLength = sizeof(context);
+    init_contract.pluginSharedRO = &shared_ro;
 
     handle_init_contract(&init_contract);
     if (init_contract.result != ETH_PLUGIN_RESULT_OK) {

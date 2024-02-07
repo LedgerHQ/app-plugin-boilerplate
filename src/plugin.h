@@ -92,6 +92,8 @@ typedef enum {
     AMOUNT_SENT,
     MIN_AMOUNT_RECEIVED,
     BENEFICIARY,
+    PARAM_OFFSET,
+    PATH_OFFSET,
     PATH_LENGTH,
     UNEXPECTED_PARAMETER,
     NONE,
@@ -115,7 +117,8 @@ typedef struct context_s {
     uint8_t decimals_received;
     uint8_t skip;
 
-    bool valid;
+    bool go_to_offset;  // If set, will force the parsing to iterate through parameters until
+                        // `offset` is reached.
     uint8_t amount_length;
 
     // For parsing data.
