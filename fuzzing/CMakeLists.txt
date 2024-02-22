@@ -65,6 +65,7 @@ add_compile_definitions(
     HAVE_EDDSA
     HAVE_HASH
     HAVE_BLAKE2
+    HAVE_SHA224
     HAVE_SHA256
     HAVE_SHA3
     HAVE_SHA512
