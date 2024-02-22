@@ -17,15 +17,16 @@ In order to run the tests you need to provide the binaries for both the plugin a
 
 Compiling the plugin will produce the binary for the targeted device. They will be used as-is by the test framework.
 
-The binaries of the Ethereum application must be gathered and placed in the directory `tests/ethereum_build/`.
+The binaries of the Ethereum application must be gathered and placed in the directory `tests/.test_dependencies/ethereum/`.
 Example of the correct file tree with Ethereum compiled for all targets.
-* `tests/ethereum_build/build/nanos/bin/app.elf`
-* `tests/ethereum_build/build/nanos2/bin/app.elf`
-* `tests/ethereum_build/build/nanox/bin/app.elf`
-* `tests/ethereum_build/build/stax/bin/app.elf`
+* `tests/.test_dependencies/ethereum/build/nanos/bin/app.elf`
+* `tests/.test_dependencies/ethereum/build/nanos2/bin/app.elf`
+* `tests/.test_dependencies/ethereum/build/nanox/bin/app.elf`
+* `tests/.test_dependencies/ethereum/build/stax/bin/app.elf`
 
-The first method is to go in the Ethereum project, compile the application, and dispatch the `build/` output directory.
-A second method is to re-use the Ethereum build used in the CI, and available as artifact. 
+The first method is to use the Ledger VSCode extension to automatically manage dependencies
+The second method is to go in the Ethereum project, compile the application, and dispatch the `build/` output directory.
+A third method is to re-use the Ethereum build used in the CI, and available as artifact. 
 For example in the [plugin-boilerplate CI](https://github.com/LedgerHQ/app-plugin-boilerplate/actions/workflows/build_and_functional_tests.yml).
 
 

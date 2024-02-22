@@ -43,4 +43,4 @@ jobs:
     with:
       download_app_binaries_artifact: plugin_binaries
       additional_app_binaries_artifact: ethereum_build_develop
-      additional_app_binaries_artifact_dir: ./tests/ethereum_build/build
+      additional_app_binaries_artifact_dir: ./tests/.test_dependencies/ethereum/build
