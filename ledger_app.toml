@@ -7,9 +7,10 @@ devices = ["nanos", "nanox", "nanos+", "stax"]
 pytest_directory = "./tests/"
 
 [tests.dependencies]
-testing_with_prod = [
-    {url = "https://github.com/LedgerHQ/app-ethereum", ref = "master", use_case = "use_test_keys"},
-]
 testing_with_latest = [
     {url = "https://github.com/LedgerHQ/app-ethereum", ref = "develop", use_case = "use_test_keys"},
+]
+
+testing_with_prod = [
+    {url = "https://github.com/LedgerHQ/app-ethereum", ref = "master", use_case = "use_test_keys"},
 ]
