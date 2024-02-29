@@ -1,4 +1,8 @@
+import pytest
+
 from ragger.conftest import configuration
+from .utils import WalletAddr
+
 
 ###########################
 ### CONFIGURATION START ###
@@ -20,3 +24,7 @@ configuration.OPTIONAL.BACKEND_SCOPE = "class"
 
 # Pull all features from the base ragger conftest using the overridden configuration
 pytest_plugins = ("ragger.conftest.base_conftest", )
+
+@pytest.fixture
+def wallet_addr(backend):
+    return WalletAddr(backend)
