@@ -24,12 +24,20 @@ static void handle_token_sent(ethPluginProvideParameter_t *msg, context_t *conte
     printf_hex_array("TOKEN SENT: ", ADDRESS_LENGTH, context->contract_address_sent);
 }
 
-static void handle_token_sent_curve_pool(ethPluginProvideParameter_t *msg, context_t *context) {
+static bool handle_token_sent_curve_pool(ethPluginProvideParameter_t *msg, context_t *context) {
     memset(context->contract_address_sent, 0, sizeof(context->contract_address_sent));
 
     bool is_oeth = memcmp(CURVE_OETH_POOL_ADDRESS,
                           msg->pluginSharedRO->txContent->destination,
                           ADDRESS_LENGTH) == 0;
+
+    // Ensure the everything but the last 2 bits are zero
+    for (uint32_t i = 2; i <= INT128_LENGTH / 2; i++) {
+        if (U2BE(msg->parameter, PARAMETER_LENGTH - (2 * i)) != 0) {
+            PRINTF("Unsupported Token\n");
+            return false;
+        }
+    }
 
     if (is_oeth) {
         switch (U2BE(msg->parameter, PARAMETER_LENGTH - 2)) {
@@ -41,7 +49,7 @@ static void handle_token_sent_curve_pool(ethPluginProvideParameter_t *msg, conte
                 break;
             default:
                 PRINTF("Param not supported\n");
-                break;
+                return false;
         }
     } else {
         switch (U2BE(msg->parameter, PARAMETER_LENGTH - 2)) {
@@ -59,11 +67,13 @@ static void handle_token_sent_curve_pool(ethPluginProvideParameter_t *msg, conte
                 break;
             default:
                 PRINTF("Param not supported\n");
-                break;
+                return false;
         }
     }
 
     printf_hex_array("TOKEN SENT: ", ADDRESS_LENGTH, context->contract_address_sent);
+
+    return true;
 }
 
 static void handle_token_received(ethPluginProvideParameter_t *msg, context_t *context) {
@@ -75,12 +85,20 @@ static void handle_token_received(ethPluginProvideParameter_t *msg, context_t *c
     printf_hex_array("TOKEN RECEIVED: ", ADDRESS_LENGTH, context->contract_address_received);
 }
 
-static void handle_token_received_curve_pool(ethPluginProvideParameter_t *msg, context_t *context) {
+static bool handle_token_received_curve_pool(ethPluginProvideParameter_t *msg, context_t *context) {
     memset(context->contract_address_received, 0, sizeof(context->contract_address_received));
 
     bool is_oeth = memcmp(CURVE_OETH_POOL_ADDRESS,
                           msg->pluginSharedRO->txContent->destination,
                           ADDRESS_LENGTH) == 0;
+
+    // Ensure the everything but the last 2 bits are zero
+    for (uint32_t i = 2; i <= INT128_LENGTH / 2; i++) {
+        if (U2BE(msg->parameter, PARAMETER_LENGTH - (2 * i)) != 0) {
+            PRINTF("Unsupported Token\n");
+            return false;
+        }
+    }
 
     // determine token addresses of curve pools based on contract address and
     // value of i/j params
@@ -94,6 +112,7 @@ static void handle_token_received_curve_pool(ethPluginProvideParameter_t *msg, c
                 break;
             default:
                 PRINTF("Param not supported\n");
+                return false;
                 break;
         }
     } else {
@@ -112,10 +131,14 @@ static void handle_token_received_curve_pool(ethPluginProvideParameter_t *msg, c
                 break;
             default:
                 PRINTF("Param not supported\n");
+                return false;
                 break;
         }
     }
+
     printf_hex_array("TOKEN RECEIVED: ", ADDRESS_LENGTH, context->contract_address_received);
+
+    return true;
 }
 
 // deposit(uint256,address)
@@ -221,12 +244,18 @@ static void handle_vault_redeem(ethPluginProvideParameter_t *msg, context_t *con
 static void handle_curve_pool_exchange(ethPluginProvideParameter_t *msg, context_t *context) {
     switch (context->next_param) {
         case TOKEN_SENT:
-            handle_token_sent_curve_pool(msg, context);
-            context->next_param = TOKEN_RECEIVED;
+            if (handle_token_sent_curve_pool(msg, context)) {
+                context->next_param = TOKEN_RECEIVED;
+            } else {
+                context->next_param = UNEXPECTED_PARAMETER;
+            }
             break;
         case TOKEN_RECEIVED:
-            handle_token_received_curve_pool(msg, context);
-            context->next_param = AMOUNT_SENT;
+            if (handle_token_received_curve_pool(msg, context)) {
+                context->next_param = AMOUNT_SENT;
+            } else {
+                context->next_param = UNEXPECTED_PARAMETER;
+            }
             break;
         case AMOUNT_SENT:
             handle_amount_sent(msg, context);
@@ -250,8 +279,15 @@ static void handle_curve_pool_exchange(ethPluginProvideParameter_t *msg, context
 static void handle_curve_router_exchange(ethPluginProvideParameter_t *msg, context_t *context) {
     switch (context->next_param) {
         case TOKEN_SENT:
-            handle_token_sent(msg, context);
-            context->next_param = TOKEN_RECEIVED;
+            if (memcmp(&msg->parameter[PARAMETER_LENGTH - ADDRESS_LENGTH],
+                       NULL_ETH_ADDRESS,
+                       ADDRESS_LENGTH) == 0) {
+                // First token in the route cannot be null
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+            } else {
+                handle_token_sent(msg, context);
+                context->next_param = TOKEN_RECEIVED;
+            }
             break;
         case TOKEN_RECEIVED:
             context->counter += 1;
