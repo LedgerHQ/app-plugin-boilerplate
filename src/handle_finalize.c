@@ -7,8 +7,6 @@ void handle_finalize(ethPluginFinalize_t *msg) {
 
     switch (context->selectorIndex) {
         case CLAIM_REGULAR_ACCOUNT:
-            msg->numScreens = 3;
-            break;
         case CLAIM_MULTI_SIGNATURE_ACCOUNT:
             msg->numScreens = 3;
             break;

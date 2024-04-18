@@ -55,7 +55,7 @@ To start with, follow the steps below:
 
 ## Documentation
 
-The documentation about the plugin can be found in [PLUGIN_SPECIFICATON.md](https://github.com/LedgerHQ/app-plugin-boilerplate/blob/develop/PLUGIN_SPECIFICATION.md). It includes the smart contracts and functions supported by the plugin.
+The documentation about the plugin can be found in [PLUGIN_SPECIFICATON.md](PLUGIN_SPECIFICATION.md). It includes the smart contracts and functions supported by the plugin.
 
 ## Formatting
 
