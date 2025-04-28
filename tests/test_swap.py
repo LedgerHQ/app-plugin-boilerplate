@@ -32,7 +32,7 @@ with open("%s/0x000102030405060708090a0b0c0d0e0f10111213.abi.json" % (ABIS_FOLDE
 def test_swap_exact_eth_for_token(backend, firmware, navigator, test_name, wallet_addr):
     client = EthAppClient(backend)
 
-    data = contract.encodeABI("swapExactETHForTokens", [
+    data = contract.encode_abi("swapExactETHForTokens", [
         Web3.to_wei(28.5, "ether"),
         [
             bytes.fromhex("C02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"),
