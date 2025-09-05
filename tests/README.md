@@ -37,6 +37,7 @@ $ tree -a -L 3 .test_dependencies/
     ├── .ethereum_application_build_goes_there
     └── build
         ├── flex
+        ├── apex_p
         ├── nanos
         ├── nanos2
         ├── nanox

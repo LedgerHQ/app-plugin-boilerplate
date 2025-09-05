@@ -7,7 +7,7 @@
 This repo is meant to be a forkable example of a plugin.
 
 Plugins are lightweight applications that go hand-in-hand with the Ethereum
-Application on a Nano (S plus, X), Stax and Flex devices.
+Application on Ledger devices.
 
 They allow users to safely interact with smart contracts by parsing the
 transaction data and displaying its content in a human-readable way. This is
