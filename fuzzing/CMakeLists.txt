@@ -73,6 +73,8 @@ add_compile_definitions(
 
 include_directories(
     ${BOLOS_SDK}/include
+    ${BOLOS_SDK}/io/include
+    ${BOLOS_SDK}/io_legacy/include
     ${BOLOS_SDK}/lib_standard_app
     ${BOLOS_SDK}/lib_cxng/include
     ${BOLOS_SDK}/lib_cxng/src
