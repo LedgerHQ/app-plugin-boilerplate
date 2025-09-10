@@ -45,7 +45,7 @@ add_compile_options(-Wall -Wextra -g -pedantic)
 add_compile_options(-Wno-implicit-function-declaration)
 # Flag depending on the Build Type
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -ggdb2 -O3")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -ggdb2 -O3 -Wno-gnu-zero-variadic-macro-arguments")
 
 set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../src")
 set(ETH_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../ethereum-plugin-sdk")
@@ -69,10 +69,13 @@ add_compile_definitions(
     HAVE_SHA256
     HAVE_SHA3
     HAVE_SHA512
+    OS_IO_SEPH_BUFFER_SIZE=300
 )
 
 include_directories(
     ${BOLOS_SDK}/include
+    ${BOLOS_SDK}/io/include
+    ${BOLOS_SDK}/io_legacy//include
     ${BOLOS_SDK}/lib_standard_app
     ${BOLOS_SDK}/lib_cxng/include
     ${BOLOS_SDK}/lib_cxng/src
