@@ -8,8 +8,8 @@
 static bool set_send_ui(ethQueryContractUI_t *msg) {
     strlcpy(msg->title, "Send", msg->titleLength);
 
-    const uint8_t *eth_amount = msg->pluginSharedRO->txContent->value.value;
-    uint8_t eth_amount_size = msg->pluginSharedRO->txContent->value.length;
+    const uint8_t *eth_amount = msg->txContent->value.value;
+    uint8_t eth_amount_size = msg->txContent->value.length;
 
     // Converts the uint256 number located in `eth_amount` to its string representation and
     // copies this to `msg->msg`.
