@@ -1,4 +1,5 @@
 #include "plugin.h"
+#include "bip32_utils.h"
 
 // set a small size to detect possible overflows
 #define NAME_LENGTH    3u
@@ -42,11 +43,21 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
     }
     memcpy(&content, data + 4, sizeof(txContent_t));
 
+    // Use path: m/44'/60'/0'/0/0
+    bip32_path_t bip32;
+    bip32.length = 5;
+    bip32.path[0] = 44 | 0x80000000;
+    bip32.path[1] = 60 | 0x80000000;
+    bip32.path[2] = 0 | 0x80000000;
+    bip32.path[3] = 0;
+    bip32.path[4] = 0;
+
     init_contract.interfaceVersion = ETH_PLUGIN_INTERFACE_VERSION_LATEST;
     init_contract.selector = data;
     init_contract.txContent = &content;
     init_contract.pluginContext = (uint8_t *) &context;
     init_contract.pluginContextLength = sizeof(context);
+    init_contract.bip32 = &bip32;
 
     handle_init_contract(&init_contract);
     if (init_contract.result != ETH_PLUGIN_RESULT_OK) {

@@ -40,9 +40,7 @@ size_t strlcpy(char *dst, const char *src, size_t size) {
 cx_err_t cx_keccak_256_hash_iovec(const cx_iovec_t *iovec,
                                   size_t iovec_len,
                                   uint8_t digest[static CX_KECCAK_256_SIZE]) {
-    UNUSED(iovec);
-    UNUSED(iovec_len);
-    UNUSED(digest);
+    memset(digest, 0, CX_KECCAK_256_SIZE);
     return CX_OK;
 }
 
@@ -55,4 +53,17 @@ void __attribute__((noreturn)) os_sched_exit(bolos_task_status_t exit_code) {
 
 void *pic(void *p) {
     return p;
+}
+
+WARN_UNUSED_RESULT cx_err_t bip32_derive_with_seed_get_pubkey_256(unsigned int derivation_mode,
+                                                                  cx_curve_t curve,
+                                                                  const uint32_t *path,
+                                                                  size_t path_len,
+                                                                  uint8_t raw_pubkey[static 65],
+                                                                  uint8_t *chain_code,
+                                                                  cx_md_t hashID,
+                                                                  unsigned char *seed,
+                                                                  size_t seed_len) {
+    memset(raw_pubkey, 0, 65);
+    return CX_OK;
 }
