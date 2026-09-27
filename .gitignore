@@ -32,3 +32,6 @@ tests/.test_dependencies/*
 !tests/.test_dependencies/ethereum/
 tests/.test_dependencies/ethereum/*
 !tests/.test_dependencies/ethereum/.ethereum_application_build_goes_there
+compile_commands.json*
+.cache
+.omc

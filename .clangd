@@ -1,0 +1,15 @@
+CompileFlags:
+  Remove:
+    - --target=*
+    - --sysroot=*
+    - -mcpu=*
+    - -mthumb
+    - -mlittle-endian
+    - -mno-unaligned-access
+    - -momit-leaf-frame-pointer
+    - -fropi
+    - -frwpi
+    - -isystem*
+    - -nostdinc*
+Diagnostics:
+  UnusedIncludes: None

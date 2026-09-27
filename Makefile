@@ -16,7 +16,7 @@
 # ****************************************************************************
 
 # EDIT THIS: Application name
-APPNAME = "PluginBoilerplate"
+APPNAME = "ERC8009"
 
 # Application version
 APPVERSION_M = 1
