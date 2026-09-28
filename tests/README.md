@@ -87,11 +87,34 @@ pytest -v tests/ --device all
 Please refer to the Ragger repository for a documentation on the many parameters and features offered by the framework.
 
 
-## Developing your tests
+## ERC8009 ragger tests (Stax only)
 
-The test provided in `test_swap.py` is a simple test of a successful parsing, display, and signature of smart contract `swapExactETHForTokens`.
+Build the plugin for Stax (`BOLOS_SDK=$STAX_SDK make DEBUG=1`, see the top-level README) and
+place an app-ethereum `use_test_keys` build in `tests/.test_dependencies/` (see "Compiling the
+binaries" above), then run, inside the `ledger-dev` container:
 
-When forking the boilerplate to develop your own plugin, you will need to adapt the tests to use your own smart contract.
+```shell
+pytest tests/ --device stax
+```
+
+`--golden_run` rewrites `tests/snapshots/stax/`.
+
+- `test_erc8009_sign.py`: the 14 selectors, the full screen matrix, 29 pairs, legacy tx, the
+  unsupported selector `0xece10c06` and the real Sepolia calldatas. Screens are snapshotted up to
+  "Hold to sign" and their text must equal the pairs of `tests/erc8009_model.py`.
+- `test_erc8009_adversarial.py`: edge-case screens (`Send`, pulls in diffs, no BalanceProxy pulls).
+- `test_erc8009_reject.py`: every ERROR rule (crafter mutators) with Blind signing ON: `6A80` on any
+  chunk, live home screen (`/events`), plugin reason code in the Speculos output; each class starts
+  with a FALLBACK control that must reach the blind-signing warning.
+- `test_erc8009_fallback.py`, `test_settings_labels.py`.
+- `helpers.py` holds the shared flows; the Speculos output of each test is kept in
+  `tests/snapshots-tmp/stax/<test>/speculos.log`, and `screens.json` next to the tmp snapshots of a
+  review holds the model pairs and the live screen texts. `tests/snapshots/REVIEW.md` records the
+  golden review.
+- `conftest.py` runs every Speculos in a fresh `tests/snapshots-tmp/speculos-NNN/` on a private copy
+  of the Ethereum ELF with `--save-nvram`, and copies the saved NVRAM into that ELF after settings
+  changes: Speculos 0.27 re-maps the calling app from its ELF at every `os_lib_end`, which otherwise
+  reverts settings such as «Blind signing» after each plugin call.
 
 
 ## Using the [Ledger Ethereum client](https://pypi.org/project/ledger-app-clients.ethereum/)
@@ -113,3 +136,19 @@ ABIs are obtainable from a website like [Etherscan](https://etherscan.io/) for e
 
 The Ragger client can also easily verify a transaction's signature by recovering the Ethereum address of the wallet that signed the transaction.<br/>
 Testing the UI is crucial but so is testing the signatures we produce.
+
+## ERC8009 calldata crafter, fixtures and reference model
+
+- `tests/abis/<ChecksumAddress>.abi.json`: ABIs copied from the Sepolia deployment artifacts of
+  BalanceProxy, ApproveRouter, PermitRouter and SafeRouter.
+- `tests/erc8009_crafter.py` (stdlib + `eth_abi` + `eth_utils`): `Call` dataclasses, canonical
+  `encode()`/`decode()` for the 14 supported selectors, `scenario()` and the tx builders
+  `tx_eip1559()`/`tx_legacy()` for `EthAppClient.sign()`, `canonical_call()`,
+  `random_call()`, and the negative mutators `MUTATORS` / `mutate(name, call)` — each one names
+  the first check it violates (see `erc8009_reason_t` in `src/plugin.h`).
+- `tests/fixtures/<selector>_<function>.json`: one canonical signing example per selector
+  (ETH + Sepolia USDC guards), with the tx dict and the screen pairs the model expects.
+- `tests/fixtures/sepolia/`: real Sepolia transactions to the 4 contracts, fetched with
+  read-only GET requests. See its `README.md`.
+- `tests/erc8009_model.py`: the independent reference model of the plugin's parsing, validation
+  and screen contract. Tests compare the plugin against it.

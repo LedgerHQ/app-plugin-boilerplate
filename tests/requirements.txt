@@ -1,3 +1,8 @@
-ledger_app_clients.ethereum
-pytest
-ragger[speculos,ledgercomm]
+speculos==0.27.0
+ledger_app_clients.ethereum==0.6.0
+pytest==9.1.1
+ragger[speculos,ledgercomm]==1.47.3
+pytest-timeout==2.4.0
+web3==7.16.0
+eth_abi==6.0.0
+hypothesis==6.168.3

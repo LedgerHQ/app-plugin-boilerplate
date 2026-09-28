@@ -7,7 +7,7 @@ endif()
 # project information
 project(Fuzzer
         VERSION 1.0
-        DESCRIPTION "Contract parser of Boilerplate plugin app"
+        DESCRIPTION "Contract parser of the ERC8009 plugin app"
         LANGUAGES C)
 
 # guard against bad build-type strings
@@ -34,11 +34,27 @@ set(CMAKE_C_STANDARD_REQUIRED True)
 
 # compatible with ClusterFuzzLite
 if (NOT DEFINED ENV{LIB_FUZZING_ENGINE})
-    set(COMPILATION_FLAGS_ "-fsanitize=fuzzer,address,undefined,signed-integer-overflow")
+    if (APPLE AND CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
+        # Apple Clang has no libFuzzer runtime: instrument here, link Homebrew LLVM's static one.
+        set(COMPILATION_FLAGS_ "-fsanitize=address,undefined -fsanitize-coverage=inline-8bit-counters,indirect-calls,trace-cmp,pc-table -fno-sanitize-recover=all -fshort-enums -funsigned-char -g -O1")
+        set(LINK_FLAGS_ "-fsanitize=address,undefined")
+        set(LIBFUZZER_LIB "/opt/homebrew/opt/llvm/lib/clang/19/lib/darwin/libclang_rt.fuzzer_osx.a" CACHE FILEPATH "Static libFuzzer runtime")
+        if (NOT EXISTS "${LIBFUZZER_LIB}")
+            message(FATAL_ERROR "LIBFUZZER_LIB not found: ${LIBFUZZER_LIB}")
+        endif()
+    else()
+        if (APPLE)
+            message(WARNING "Homebrew LLVM ASan hangs at startup on macOS 26; configure with CC=\"$(xcrun -f clang)\"")
+        endif()
+        set(COMPILATION_FLAGS_ "-fsanitize=fuzzer,address,undefined,signed-integer-overflow -fno-sanitize-recover=all -fshort-enums -funsigned-char -g -O1")
+        set(LINK_FLAGS_ "${COMPILATION_FLAGS_}")
+    endif()
 else()
-    set(COMPILATION_FLAGS_ "$ENV{LIB_FUZZING_ENGINE} $ENV{CFLAGS}")
+    set(COMPILATION_FLAGS_ "$ENV{LIB_FUZZING_ENGINE} $ENV{CFLAGS} -fshort-enums -funsigned-char")
+    set(LINK_FLAGS_ "${COMPILATION_FLAGS_}")
 endif()
 string(REPLACE " " ";" COMPILATION_FLAGS ${COMPILATION_FLAGS_})
+string(REPLACE " " ";" LINK_FLAGS ${LINK_FLAGS_})
 
 add_compile_options(-Wall -Wextra -g -pedantic)
 # Just to limit compilation warnings of the plugin sources
@@ -47,11 +63,16 @@ add_compile_options(-Wno-implicit-function-declaration)
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -ggdb2 -O3 -Wno-gnu-zero-variadic-macro-arguments")
 
-set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../src")
+if (APPLE)
+    add_compile_options(-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -include ${CMAKE_CURRENT_SOURCE_DIR}/macos_shim.h)
+endif()
+
+set(PLUGIN_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../src" CACHE PATH "Plugin sources to fuzz")
+set(SRC_DIR "${PLUGIN_SRC_DIR}")
 set(ETH_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../ethereum-plugin-sdk")
 
 add_compile_definitions(
-    APPNAME="PluginBoilerplate"
+    APPNAME="ERC8009"
 )
 
 add_compile_definitions(
@@ -117,4 +138,8 @@ add_executable(fuzz
 )
 
 target_compile_options(fuzz PUBLIC ${COMPILATION_FLAGS})
-target_link_options(fuzz PUBLIC ${COMPILATION_FLAGS})
+target_link_options(fuzz PUBLIC ${LINK_FLAGS})
+
+if (DEFINED LIBFUZZER_LIB)
+    target_link_libraries(fuzz PUBLIC ${LIBFUZZER_LIB} c++)
+endif()

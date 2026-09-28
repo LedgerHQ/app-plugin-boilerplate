@@ -7,10 +7,6 @@ devices = ["nanox", "nanos+", "stax", "flex", "apex_p"]
 pytest_directory = "./tests/"
 
 [tests.dependencies]
-testing_with_latest = [
-    {url = "https://github.com/LedgerHQ/app-ethereum", ref = "develop", use_case = "use_test_keys"},
-]
-
-testing_with_prod = [
-    {url = "https://github.com/LedgerHQ/app-ethereum", ref = "master", use_case = "use_test_keys"},
+testing_with_pinned = [
+    {url = "https://github.com/LedgerHQ/app-ethereum", ref = "stax_1.10.1_1.22.5_sdk_v26.6.2", use_case = "use_test_keys"},
 ]

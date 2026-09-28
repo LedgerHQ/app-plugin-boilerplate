@@ -35,3 +35,5 @@ tests/.test_dependencies/ethereum/*
 compile_commands.json*
 .cache
 .omc
+.hypothesis/
+.pytest_cache/

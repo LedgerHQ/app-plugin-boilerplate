@@ -1,5 +1,5 @@
 /*******************************************************************************
- *   Plugin Boilerplate
+ *   ERC-8009 plugin
  *   (c) 2023 Ledger
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,15 @@
 #include <stdint.h>
 #include "plugin.h"
 
-// This array will be automatically expanded to map all selector_t names with the correct value.
-// Do not modify !
 const uint32_t SELECTORS[SELECTOR_COUNT] = {SELECTORS_LIST(TO_VALUE)};
+
+eth_plugin_result_t erc8009_error(context_t *context, uint8_t reason, uint32_t offset) {
+    // The first ERROR is frozen: later calls keep reporting it.
+    if (context->outcome != OUTCOME_ERROR) {
+        context->outcome = OUTCOME_ERROR;
+        context->reason = reason;
+    }
+    PRINTF("ERC8009 E:%u off=%u\n", (unsigned) context->reason, (unsigned) offset);
+    (void) offset;
+    return ETH_PLUGIN_RESULT_ERROR;
+}

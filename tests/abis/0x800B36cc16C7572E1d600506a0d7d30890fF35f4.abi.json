@@ -1,0 +1,299 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "target",
+        "type": "address"
+      },
+      {
+        "internalType": "int256",
+        "name": "balance",
+        "type": "int256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "actual",
+        "type": "uint256"
+      }
+    ],
+    "name": "ERC8009BalanceConstraintViolation",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "target",
+        "type": "address"
+      },
+      {
+        "internalType": "int256",
+        "name": "expected",
+        "type": "int256"
+      },
+      {
+        "internalType": "int256",
+        "name": "actual",
+        "type": "int256"
+      }
+    ],
+    "name": "ERC8009BalanceDiffConstraintViolation",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "target",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      },
+      {
+        "internalType": "bytes",
+        "name": "returnData",
+        "type": "bytes"
+      }
+    ],
+    "name": "ERC8009CallFailed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ReentrancyGuardReentrantCall",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "SafeCastOverflowedUintToInt",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "target",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          },
+          {
+            "internalType": "int256",
+            "name": "balance",
+            "type": "int256"
+          }
+        ],
+        "internalType": "struct IBalanceProxy.Balance[]",
+        "name": "postBalances",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "target",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "token",
+                "type": "address"
+              },
+              {
+                "internalType": "int256",
+                "name": "balance",
+                "type": "int256"
+              }
+            ],
+            "internalType": "struct IBalanceProxy.Balance",
+            "name": "balance",
+            "type": "tuple"
+          },
+          {
+            "internalType": "bool",
+            "name": "useTransfer",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct IBalanceProxy.Approval[]",
+        "name": "approvals",
+        "type": "tuple[]"
+      },
+      {
+        "internalType": "address",
+        "name": "target",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "target",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          },
+          {
+            "internalType": "int256",
+            "name": "balance",
+            "type": "int256"
+          }
+        ],
+        "internalType": "struct IBalanceProxy.Balance[]",
+        "name": "withdrawals",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "proxyCall",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "target",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          },
+          {
+            "internalType": "int256",
+            "name": "balance",
+            "type": "int256"
+          }
+        ],
+        "internalType": "struct IBalanceProxy.Balance[]",
+        "name": "diffs",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "target",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "token",
+                "type": "address"
+              },
+              {
+                "internalType": "int256",
+                "name": "balance",
+                "type": "int256"
+              }
+            ],
+            "internalType": "struct IBalanceProxy.Balance",
+            "name": "balance",
+            "type": "tuple"
+          },
+          {
+            "internalType": "bool",
+            "name": "useTransfer",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct IBalanceProxy.Approval[]",
+        "name": "approvals",
+        "type": "tuple[]"
+      },
+      {
+        "internalType": "address",
+        "name": "target",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "target",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          },
+          {
+            "internalType": "int256",
+            "name": "balance",
+            "type": "int256"
+          }
+        ],
+        "internalType": "struct IBalanceProxy.Balance[]",
+        "name": "withdrawals",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "proxyCallDiffs",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
+  }
+]
